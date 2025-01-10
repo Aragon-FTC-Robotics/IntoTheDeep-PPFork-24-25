@@ -42,7 +42,7 @@ public class Colorsensor {
         float r = sensedcolors.red;
         float g = sensedcolors.green;
         float b = sensedcolors.blue;
-
+        
         // Convert RGB to HSV
         colorHSV = rgbToHsv(r, g, b);
         Log.d("colorsensor","Converted HSV: Hue=" + colorHSV[0] + ", Saturation=" + colorHSV[1] + ", Value=" + colorHSV[2]);
