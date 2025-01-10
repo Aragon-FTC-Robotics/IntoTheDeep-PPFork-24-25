@@ -36,6 +36,10 @@ public class Colorsensor {
         float g = sensedcolors.green;
         float b = sensedcolors.blue;
 
+        if (Objects.nonNull(sensedcolors)) {
+            Log.d("colorsensor", "Raw RGBA: Red=" + sensedcolors.red + ", Green=" + sensedcolors.green + ", Blue=" + sensedcolors.blue);
+        }
+
         Log.d("colorsensor","Converted HSV: Hue=" + colorHSV[0] + ", Saturation=" + colorHSV[1] + ", Value=" + colorHSV[2]);
 
         // Convert RGB to HSV
@@ -86,6 +90,8 @@ public class Colorsensor {
                 h += 360;
             }
         }
+        Log.d("colorsensor", "RGB to HSV: R=" + r + ", G=" + g + ", B=" + b + " => H=" + h + ", S=" + s + ", V=" + v);
+
         return new float[] {h, s, v};
     }
 }
