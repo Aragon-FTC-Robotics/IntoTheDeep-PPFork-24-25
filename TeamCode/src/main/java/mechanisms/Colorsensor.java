@@ -16,7 +16,7 @@ public class Colorsensor {
 
     public float[] colorHSV = {0, 0, 0}; //defaut
     float gain = 30.0f;
-    public float[] redHigherHSV = {0, 1, 1}; //(Hue, Saturation, Value)
+    public float[] redHigherHSV = {10, 1, 1}; //(Hue, Saturation, Value)
     public float[] redLowerHSV = {0, 0.4f, 0.4f};
     public float[] yellowHigherHSV = {60, 1, 1};
     public float[] yellowLowerHSV = {45, 0.4f, 0.4f};
@@ -40,6 +40,10 @@ public class Colorsensor {
             Log.d("colorsensor", "Raw RGBA: Red=" + sensedcolors.red + ", Green=" + sensedcolors.green + ", Blue=" + sensedcolors.blue);
         }
 
+        r = r / 255.0f;
+        g = g / 255.0f;
+        b = b / 255.0f;
+        
         // Convert RGB to HSV
         colorHSV = rgbToHsv(r, g, b);
         Log.d("colorsensor","Converted HSV: Hue=" + colorHSV[0] + ", Saturation=" + colorHSV[1] + ", Value=" + colorHSV[2]);
