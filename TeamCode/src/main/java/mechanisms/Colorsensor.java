@@ -40,9 +40,9 @@ public class Colorsensor {
             Log.d("colorsensor", "Raw RGBA: Red=" + sensedcolors.red + ", Green=" + sensedcolors.green + ", Blue=" + sensedcolors.blue);
         }
 
-        r = r / 255.0f;
-        g = g / 255.0f;
-        b = b / 255.0f;
+        r = r * 255.0f;
+        g = g * 255.0f;
+        b = b * 255.0f;
         
         // Convert RGB to HSV
         colorHSV = rgbToHsv(r, g, b);
