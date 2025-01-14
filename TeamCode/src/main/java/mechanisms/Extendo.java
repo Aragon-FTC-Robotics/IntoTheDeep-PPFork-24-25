@@ -44,4 +44,7 @@ public class Extendo {
         extendo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         targetPos = MIN;
     }
+    public void setPower(double power){
+        extendo.setPower(power);
+    }
 }

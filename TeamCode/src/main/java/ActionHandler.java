@@ -234,13 +234,13 @@ public class ActionHandler {
 
             //reset extendo
             case RESETEXTENDO:
-                if (elapsedMs >= 1000) {
+                if (elapsedMs >= 1500) {
                     extendo.DANGEROUS_RESET_ENCODERS();
                     currentActionState = ActionState.IDLE;
                 }
                 break;
             case RESETSLIDES:
-                if (elapsedMs >= 1000){
+                if (elapsedMs >= 1500){
                     slides.DANGEROUS_RESET_ENCODERS();
                     currentActionState = ActionState.IDLE;
                 }
@@ -413,13 +413,13 @@ public class ActionHandler {
     }
 
     private void resetExtendo() {
-        extendo.setTargetPos(-700);
+        extendo.setPower(-0.3);
         currentActionState = ActionState.RESETEXTENDO;
         timer.reset();
     }
 
     private void resetSlides() {
-        slides.setTargetPos(-100);
+        slides.setPower(-0.3);
         currentActionState = ActionState.RESETSLIDES;
         timer.reset();
     }
