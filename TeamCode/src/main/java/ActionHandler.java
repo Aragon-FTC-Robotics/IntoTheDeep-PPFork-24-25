@@ -1,3 +1,5 @@
+import android.util.Log;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -15,8 +17,8 @@ public class ActionHandler {
     private IntakeWrist intakeWrist;
     private Colorsensor colorSensor;
 
-    private boolean intaking, transferring = false;
-    private boolean extendoout = false;
+    private static boolean intaking, transferring = false;
+    private static boolean extendoout = false;
 
     private String alliance;
 
@@ -35,13 +37,12 @@ public class ActionHandler {
         TRANSFER_STAGE_5,
         CLIP, //delay to wrist move
         WALLPICKUP,
-        GETOFFWALL,
         HIGHBUCKET, //slides up BEFORE
         SLIDESDOWN, //extendo in
         RESETEXTENDO,
         RESETSLIDES,
         RESETINTAKEWRIST_STAGE_1, RESETINTAKEWRIST_STAGE_2,
-        NUDGE1, NUDGE2, NUDGE3, NUDGE4
+        NUDGE1, NUDGE2, NUDGE3, CLIPPOS, NUDGE4
     }
 
     public void init(Slides s, Extendo e, Bar b, Wrist w, Intake f, Claw c, IntakeWrist iw, Colorsensor cs, String alliance) {
@@ -54,6 +55,10 @@ public class ActionHandler {
         intakeWrist = iw;
         colorSensor = cs;
         this.alliance = alliance;
+        bar.setState(Bar.BarState.NEUTRAL);
+        claw.setState(Claw.ClawState.CLOSE);
+        wrist.setState(Wrist.wristState.NEUTRAL);
+        extendo.setTargetPos(Extendo.MIN);
     }
 
     public void Loop(Gamepad gp1, Gamepad gp2) {
@@ -104,15 +109,26 @@ public class ActionHandler {
         //extendo
         if (gp1.right_bumper){
             extendo.setTargetPos(Extendo.MAX);
+            extendoout = true;
         }
-        if (gp1.right_trigger > 0.5){
-            intake.setState(Intake.intakeState.OUT);
+        if (gp1.right_trigger > 0.8){
+            extendo.setTargetPos(Extendo.MAX);
+            extendoout = true;
+            if (intakeWrist.currentState != IntakeWrist.intakeWristState.IN) {
+                if (isExtendoout()) {
+                    intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
+                } else {
+                    intakeWrist.setState(IntakeWrist.intakeWristState.SUPEROUT);
+                }
+            }
         }
-        if (gp1.left_trigger > 0.5){
+        if (gp1.left_trigger > 0.8){
+            intakeWrist.setState(IntakeWrist.intakeWristState.IN);
             extendo.setTargetPos(Extendo.MIN);
+            extendoout = false;
         }
         if (gp1.options) {
-            intake.setState(Intake.intakeState.STOP);
+            intake.setState(Intake.intakeState.OUT);
         }
 
         //reset
@@ -126,14 +142,9 @@ public class ActionHandler {
             gp1.rumbleBlips(3);
             gp2.rumbleBlips(3);
         }
-        //reset all
         if (gp1.dpad_down) {
             resetExtendo();
             resetSlides();
-            intaking = false;
-            extendoout = false;
-            gp1.rumbleBlips(1);
-            gp2.rumbleBlips(1);
         }
 
         TimedActions();
@@ -145,30 +156,40 @@ public class ActionHandler {
         switch (currentActionState) {
             //transfer
             case TRANSFER_STAGE_1:
-                if (elapsedMs >= 500) {
+                if (elapsedMs >= 200) {
                     extendo.setTargetPos(Extendo.MIN);
+                    extendoout = false;
                     currentActionState = ActionState.TRANSFER_STAGE_2;
                     timer.reset();
                 }
                 break;
             case TRANSFER_STAGE_2:
-                if (elapsedMs >= 500) {
-                    bar.setState(Bar.BarState.TRANSFER);
-                    wrist.setState(Wrist.wristState.TRANSFER);
+                if (elapsedMs >= 100) {
+//                    intake.setState(Intake.intakeState.OUT);
+                    claw.setState(Claw.ClawState.OPEN);
+                    Log.d("hello", "hello!!");
                     currentActionState = ActionState.TRANSFER_STAGE_3;
                     timer.reset();
                 }
                 break;
             case TRANSFER_STAGE_3:
-                if (elapsedMs >= 500) {
-                    claw.setState(Claw.ClawState.CLOSE);
+                if (elapsedMs >= 1000) {
+                    bar.setState(Bar.BarState.TRANSFER);
+                    wrist.setState(Wrist.wristState.TRANSFER);
                     currentActionState = ActionState.TRANSFER_STAGE_4;
                     timer.reset();
                 }
                 break;
             case TRANSFER_STAGE_4:
+                if (elapsedMs >= 250) {
+                    claw.setState(Claw.ClawState.CLOSE);
+                    currentActionState = ActionState.TRANSFER_STAGE_5;
+                    timer.reset();
+                }
+                break;
+            case TRANSFER_STAGE_5:
                 if (elapsedMs >= 500) {
-                    bar.setState(Bar.BarState.TRANSFERUP);
+//                    bar.setState(Bar.BarState.NEUTRAL);
                     currentActionState = ActionState.IDLE;
                     transferring = false;
                 }
@@ -191,21 +212,16 @@ public class ActionHandler {
 
             //wall pickup
             case WALLPICKUP:
-                if (elapsedMs >= 700){
+                if (elapsedMs >= 500){
                     bar.setState(Bar.BarState.WALL);
+                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                     currentActionState = ActionState.IDLE;
                 }
                 break;
-            case GETOFFWALL:
-                if (elapsedMs >= 700){
-                    bar.setState(Bar.BarState.CLIP);
-                    wrist.setState(Wrist.wristState.CLIP);
-                    currentActionState = ActionState.IDLE;
-                }
 
             //clipping
             case CLIP:
-                if (elapsedMs >= 220) {
+                if (elapsedMs >= 200) {
                     claw.setState(Claw.ClawState.OPEN);
                     currentActionState = ActionState.IDLE;
                 }
@@ -218,8 +234,13 @@ public class ActionHandler {
                     currentActionState = ActionState.IDLE;
                 }
                 break;
+            case RESETSLIDES:
+                if (elapsedMs >= 1000){
+                    slides.DANGEROUS_RESET_ENCODERS();
+                    currentActionState = ActionState.IDLE;
+                }
 
-            //reset intake wrist
+                //reset intake wrist
             case RESETINTAKEWRIST_STAGE_1:
                 if (elapsedMs >= 500) {
                     intakeWrist.setState(IntakeWrist.intakeWristState.IN);
@@ -264,6 +285,13 @@ public class ActionHandler {
                     currentActionState = ActionState.IDLE;
                 }
                 break;
+            case CLIPPOS:
+                if (elapsedMs >= 500) {
+                    bar.setState(Bar.BarState.CLIP);
+                    wrist.setState(Wrist.wristState.CLIP);
+                    currentActionState = ActionState.IDLE;
+                }
+                break;
 
             default:
                 currentActionState = ActionState.IDLE;
@@ -272,15 +300,14 @@ public class ActionHandler {
     }
 
     private void wallPickup() {
-        claw.setState(Claw.ClawState.OPEN);
+        slides.setTargetPos(Slides.GROUND);
         wrist.setState(Wrist.wristState.WALL);
-
         currentActionState = ActionState.WALLPICKUP;
         timer.reset();
     }
     public void clippos() {
         slides.setTargetPos(Slides.MED);
-        currentActionState = ActionState.GETOFFWALL;
+        currentActionState = ActionState.CLIPPOS;
         timer.reset();
     }
     public void clip_down(){
@@ -292,7 +319,11 @@ public class ActionHandler {
     private void intake() {
         intaking = true;
         intake.setState(Intake.intakeState.IN);
-        intakeWrist.setState(IntakeWrist.intakeWristState.SUPEROUT);
+        if (extendoout) {
+            intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
+        } else {
+            intakeWrist.setState(IntakeWrist.intakeWristState.SUPEROUT);
+        }
     }
 
     private void resetIntakeWrist() {
@@ -303,12 +334,12 @@ public class ActionHandler {
     }
 
     private void transfer() {
-        bar.setState(Bar.BarState.TRANSFERUP);
+        bar.setState(Bar.BarState.NEUTRAL);
         wrist.setState(Wrist.wristState.TRANSFER);
-        claw.setState(Claw.ClawState.OPEN);
         intakeWrist.setState(IntakeWrist.intakeWristState.IN);
         currentActionState = ActionState.TRANSFER_STAGE_1;
         timer.reset();
+        intake.setState(Intake.intakeState.STOP);
         intaking = false;
     }
 
@@ -318,13 +349,12 @@ public class ActionHandler {
         wrist.setState(Wrist.wristState.TRANSFER);
         currentActionState = ActionState.NUDGE1;
         timer.reset();
-
     }
 
     public void intakeCheck() { //Thanks chatgpt
         if (intaking) {
             // Wait for 300ms before checking again
-            if (intakeTimer.milliseconds() >= 300) {
+            if (intakeTimer.milliseconds() >= 600) {
                 if (!waitingForSecondCheck) {
                     // First check: Determine if the color is correct
                     boolean correctColor = (alliance.equals("red") && (colorSensor.sensorIsRed() || colorSensor.sensorIsYellow()))
@@ -383,9 +413,14 @@ public class ActionHandler {
         timer.reset();
     }
 
-    private void resetSlides(){
+    private void resetSlides() {
         slides.setTargetPos(-100);
         currentActionState = ActionState.RESETSLIDES;
         timer.reset();
     }
+    public boolean isIntaking() {
+        return intaking;
+    }
+    public boolean isTransferring() {return transferring;}
+    public boolean isExtendoout() {return extendoout;}
 }
