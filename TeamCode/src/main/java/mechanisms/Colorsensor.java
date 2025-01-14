@@ -1,5 +1,7 @@
 package mechanisms;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
