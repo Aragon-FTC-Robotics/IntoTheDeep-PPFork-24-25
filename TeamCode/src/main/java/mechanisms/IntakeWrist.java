@@ -5,11 +5,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class IntakeWrist {
     private Servo intakeWrist;
-    public enum intakeWristState {IN, OUT, SUPEROUT};
+    public enum intakeWristState {IN, OUT, SUPEROUT, TRANSFER};
     public intakeWristState currentState = intakeWristState.IN;
     public final double IN = 0.000;
-    public final double OUT = 0.850; //Extendo out
-    public final double SUPEROUT = 0.92; //Extendo in
+    public final double OUT = 0.8; //Extendo out
+    public final double SUPEROUT = 0.8; //Extendo in
+    public final double TRANSFER = 0.2;
     public void init(HardwareMap hm) {
         intakeWrist = hm.get(Servo.class, "intakeWrist");
     }
@@ -23,6 +24,9 @@ public class IntakeWrist {
                 break;
             case SUPEROUT:
                 setPosition(SUPEROUT);
+                break;
+            case TRANSFER:
+                setPosition(TRANSFER);
                 break;
         }
     }
