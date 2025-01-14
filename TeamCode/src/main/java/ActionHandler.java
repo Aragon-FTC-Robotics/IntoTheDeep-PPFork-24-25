@@ -16,6 +16,7 @@ public class ActionHandler {
     private Colorsensor colorSensor;
 
     private boolean intaking, transferring = false;
+    private boolean extendoout = false;
 
     private String alliance;
 
@@ -38,6 +39,7 @@ public class ActionHandler {
         HIGHBUCKET, //slides up BEFORE
         SLIDESDOWN, //extendo in
         RESETEXTENDO,
+        RESETSLIDES,
         RESETINTAKEWRIST_STAGE_1, RESETINTAKEWRIST_STAGE_2,
         NUDGE1, NUDGE2, NUDGE3, NUDGE4
     }
@@ -124,8 +126,14 @@ public class ActionHandler {
             gp1.rumbleBlips(3);
             gp2.rumbleBlips(3);
         }
+        //reset all
         if (gp1.dpad_down) {
             resetExtendo();
+            resetSlides();
+            intaking = false;
+            extendoout = false;
+            gp1.rumbleBlips(1);
+            gp2.rumbleBlips(1);
         }
 
         TimedActions();
@@ -372,6 +380,12 @@ public class ActionHandler {
     private void resetExtendo() {
         extendo.setTargetPos(-700);
         currentActionState = ActionState.RESETEXTENDO;
+        timer.reset();
+    }
+
+    private void resetSlides(){
+        slides.setTargetPos(-100);
+        currentActionState = ActionState.RESETSLIDES;
         timer.reset();
     }
 }
