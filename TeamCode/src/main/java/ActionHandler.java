@@ -145,6 +145,10 @@ public class ActionHandler {
         if (gp1.dpad_down) {
             resetExtendo();
             resetSlides();
+            intaking = false;
+            extendoout = false;
+            gp1.rumbleBlips(1);
+            gp2.rumbleBlips(1);
         }
 
         TimedActions();
