@@ -42,7 +42,7 @@ public class ActionHandler {
         RESETEXTENDO,
         RESETSLIDES,
         RESETINTAKEWRIST_STAGE_1, RESETINTAKEWRIST_STAGE_2,
-        NUDGE1, NUDGE2, NUDGE3, CLIPPOS, NUDGE4
+        NUDGE1, NUDGE2, NUDGE3, CLIPPOS, TRANSFER_STAGE_6, NUDGE4
     }
 
     public void init(Slides s, Extendo e, Bar b, Wrist w, Intake f, Claw c, IntakeWrist iw, Colorsensor cs, String alliance) {
@@ -142,15 +142,7 @@ public class ActionHandler {
             gp1.rumbleBlips(3);
             gp2.rumbleBlips(3);
         }
-        if (gp1.dpad_down) {
-            resetExtendo();
-            resetSlides();
-            intaking = false;
-            transferring = false;
-            extendoout = false;
-            gp1.rumbleBlips(1);
-            gp2.rumbleBlips(1);
-        }
+
 
         TimedActions();
     }
@@ -194,9 +186,17 @@ public class ActionHandler {
                 break;
             case TRANSFER_STAGE_5:
                 if (elapsedMs >= 500) {
-//                    bar.setState(Bar.BarState.NEUTRAL);
-                    currentActionState = ActionState.IDLE;
+                    bar.setState(Bar.BarState.NEUTRAL);
+                    wrist.setState(Wrist.wristState.NEUTRAL);
+                    currentActionState = ActionState.TRANSFER_STAGE_6;
+                    timer.reset();
+                }
+                break;
+            case TRANSFER_STAGE_6:
+                if (elapsedMs >= 500) {
+                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                     transferring = false;
+                    currentActionState = ActionState.IDLE;
                 }
                 break;
 
@@ -341,7 +341,7 @@ public class ActionHandler {
     private void transfer() {
         bar.setState(Bar.BarState.NEUTRAL);
         wrist.setState(Wrist.wristState.TRANSFER);
-        intakeWrist.setState(IntakeWrist.intakeWristState.IN);
+        intakeWrist.setState(IntakeWrist.intakeWristState.TRANSFER);
         currentActionState = ActionState.TRANSFER_STAGE_1;
         timer.reset();
         intake.setState(Intake.intakeState.STOP);

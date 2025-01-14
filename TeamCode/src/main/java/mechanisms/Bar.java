@@ -10,10 +10,10 @@ public class Bar {
     public enum BarState {TRANSFER, WALL, BUCKET, CLIP, NEUTRAL}
     public BarState currentState = BarState.NEUTRAL;
 
-    public final double TRANSFER = 0.77; //as of jan 10 new intake
+    public final double TRANSFER = 0.72; //as of jan 10 omni intake
     public final double WALL = 0.85;
     public final double BUCKET = 0.20;
-    public final double CLIP = 0.402;
+    public final double CLIP = 0.40;
     public static final double NEUTRAL = 0.6;
 
     public void init(HardwareMap hm) {
