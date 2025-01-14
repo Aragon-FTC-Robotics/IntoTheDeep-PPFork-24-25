@@ -16,12 +16,17 @@ public class Colorsensor {
 
     public float[] colorHSV = {0, 0, 0}; //defaut
     float gain = 30.0f;
-    public float[] redHigherHSV = {10, 1, 1}; //(Hue, Saturation, Value)
-    public float[] redLowerHSV = {0, 0.4f, 0.4f};
+    public float[] redHigherHighHSV = {359, 1, 1}; //(Hue, Saturation, Value)
+    public float[] redHigherLowHSV = {320, 0.6f, 0.6f};
+
+    public float [] redLowerHighHSV = {20, 1, 1};
+    public float[] redLowerLowHSV = {0, 0.6f, 0.6f};
+
     public float[] yellowHigherHSV = {60, 1, 1};
-    public float[] yellowLowerHSV = {45, 0.4f, 0.4f};
-    public float[] blueHigherHSV = {300, 1, 1};
-    public float[] blueLowerHSV = {240, 0.4f, 0.4f};
+    public float[] yellowLowerHSV = {45, 0.6f, 0.6f};
+
+    public float[] blueHigherHSV = {270, 1, 1};
+    public float[] blueLowerHSV = {200, 0.6f, 0.6f};
     public void init(HardwareMap hm) {
         colorSensor = hm.get(NormalizedColorSensor.class, "sensor_color");
         colorSensor.setGain(gain);
@@ -52,7 +57,7 @@ public class Colorsensor {
         return new float[] {colorHSV[0],colorHSV[1],colorHSV[2]};
     }
     public boolean sensorIsRed() {
-        return colorInRange(colorHSV,redLowerHSV,redHigherHSV);
+        return colorInRange(colorHSV,redLowerHighHSV,redLowerLowHSV) || colorInRange(colorHSV, redHigherLowHSV, redHigherHighHSV);
     }
     public boolean sensorIsYellow() {
         return colorInRange(colorHSV,yellowLowerHSV,yellowHigherHSV);
