@@ -1,5 +1,7 @@
 package mechanisms;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -42,12 +44,10 @@ public class Colorsensor {
         float b = sensedcolors.blue;
 
         if (Objects.nonNull(sensedcolors)) {
-            Log.d("colorsensor", "Raw RGBA: Red=" + sensedcolors.red + ", Green=" + sensedcolors.green + ", Blue=" + sensedcolors.blue);
+            telemetry.addData("red", sensedcolors.red);
+            telemetry.addData("green", sensedcolors.green);
+            telemetry.addData("blue", sensedcolors.blue);
         }
-
-        r = r * 255.0f;
-        g = g * 255.0f;
-        b = b * 255.0f;
         
         // Convert RGB to HSV
         colorHSV = rgbToHsv(r, g, b);
