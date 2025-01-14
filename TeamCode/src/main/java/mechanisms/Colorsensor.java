@@ -51,7 +51,6 @@ public class Colorsensor {
         return new float[] {colorHSV[0],colorHSV[1],colorHSV[2]};
     }
     public boolean sensorIsRed() {
-
         return colorInRange(colorHSV,redLowerLowHSV,redLowerHighHSV) || colorInRange(colorHSV, redHigherLowHSV, redHigherHighHSV);
     }
     public boolean sensorIsYellow() {
