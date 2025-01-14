@@ -414,7 +414,7 @@ public class ActionHandler {
     }
 
     private void resetSlides() {
-        slides.setTargetPos(-200);
+        slides.setTargetPos(-100);
         currentActionState = ActionState.RESETSLIDES;
         timer.reset();
     }
