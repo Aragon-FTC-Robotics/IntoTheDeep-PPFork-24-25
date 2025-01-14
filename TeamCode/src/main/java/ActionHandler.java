@@ -40,6 +40,7 @@ public class ActionHandler {
         HIGHBUCKET, //slides up BEFORE
         SLIDESDOWN, //extendo in
         RESETEXTENDO,
+        RESETSLIDES,
         RESETINTAKEWRIST_STAGE_1, RESETINTAKEWRIST_STAGE_2,
         NUDGE1, NUDGE2, NUDGE3, CLIPPOS, NUDGE4
     }
@@ -143,6 +144,7 @@ public class ActionHandler {
         }
         if (gp1.dpad_down) {
             resetExtendo();
+            resetSlides();
         }
 
         TimedActions();
@@ -232,6 +234,11 @@ public class ActionHandler {
                     currentActionState = ActionState.IDLE;
                 }
                 break;
+            case RESETSLIDES:
+                if (elapsedMs >= 1000){
+                    slides.DANGEROUS_RESET_ENCODERS();
+                    currentActionState = ActionState.IDLE;
+                }
 
             //reset intake wrist
             case RESETINTAKEWRIST_STAGE_1:
@@ -403,6 +410,12 @@ public class ActionHandler {
     private void resetExtendo() {
         extendo.setTargetPos(-700);
         currentActionState = ActionState.RESETEXTENDO;
+        timer.reset();
+    }
+
+    private void resetSlides() {
+        slides.setTargetPos(-200);
+        currentActionState = ActionState.RESETSLIDES;
         timer.reset();
     }
     public boolean isIntaking() {
