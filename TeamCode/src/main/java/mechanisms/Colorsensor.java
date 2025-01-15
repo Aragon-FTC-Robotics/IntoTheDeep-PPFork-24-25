@@ -1,7 +1,5 @@
 package mechanisms;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -50,7 +48,7 @@ public class Colorsensor {
         return new float[] {colorHSV[0],colorHSV[1],colorHSV[2]};
     }
     public boolean sensorIsRed() {
-        return colorInRange(colorHSV,redLowerHighHSV,redLowerLowHSV) || colorInRange(colorHSV, redHigherLowHSV, redHigherHighHSV);
+        return colorInRange(colorHSV,redLowerLowHSV,redLowerHighHSV) || colorInRange(colorHSV, redHigherLowHSV, redHigherHighHSV);
     }
     public boolean sensorIsYellow() {
         return colorInRange(colorHSV,yellowLowerHSV,yellowHigherHSV);
