@@ -242,12 +242,16 @@ public class ActionHandler {
             case RESETEXTENDO:
                 if (elapsedMs >= 1000) {
                     extendo.DANGEROUS_RESET_ENCODERS();
+                    extendo.setPower(0);
+                    extendo.usingpid = true;
                     currentActionState = ActionState.IDLE;
                 }
                 break;
             case RESETSLIDES:
                 if (elapsedMs >= 1000){
                     slides.DANGEROUS_RESET_ENCODERS();
+                    slides.setPower(0);
+                    slides.usingpid = true;
                     currentActionState = ActionState.IDLE;
                 }
                 break;

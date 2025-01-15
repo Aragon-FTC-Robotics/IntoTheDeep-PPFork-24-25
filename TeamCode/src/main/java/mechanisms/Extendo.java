@@ -12,7 +12,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Extendo {
     private PIDController controller; //from arcrobotics
-    private double pid, power;
+    private double pid, pidpower;
+    public double power;
     public static double p=0.010, i=0, d=0.00015, f=0;
     private DcMotorEx extendo;
 //    public enum extendoState {IN, OUT, MED};
@@ -20,6 +21,9 @@ public class Extendo {
     public static final int MIN = -400;
     public static final int MED = 900;
     private int targetPos = 0;
+
+    public boolean usingpid = true;
+
     public void init(HardwareMap hm) {
         controller = new PIDController(p,i,d);
         extendo = hm.get(DcMotorEx.class, "extendo");
@@ -27,11 +31,16 @@ public class Extendo {
         extendo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
     public void Loop() {
-        controller.setPID(p,i,d);
-        pid = controller.calculate(extendo.getCurrentPosition(), targetPos);
-        double ff = f;
-        power = pid + ff;
-        extendo.setPower(power);
+        if (usingpid) {
+            controller.setPID(p, i, d);
+            pid = controller.calculate(extendo.getCurrentPosition(), targetPos);
+            double ff = f;
+            pidpower = pid + ff;
+            extendo.setPower(pidpower);
+        }
+        else {
+            extendo.setPower(power);
+        }
     }
     public void setTargetPos(int targetPos) {
         this.targetPos = targetPos;
@@ -46,6 +55,7 @@ public class Extendo {
     }
 
     public void setPower(double power) {
+        usingpid = false;
         this.power = power;
     }
 }

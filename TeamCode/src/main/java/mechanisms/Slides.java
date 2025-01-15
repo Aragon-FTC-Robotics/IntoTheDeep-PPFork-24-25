@@ -12,13 +12,15 @@ public class Slides {
     public static double f=0;
     DcMotorEx slideLeft;
     DcMotorEx slideRight;
-    private double pid, power;
+    private double pid, pidpower;
+    public double power;
     public static final int GROUND = -30;
     public static final int LOW = 200;
     public static final int MED = 1000;
     public static final int HIGH = 2700;
     public int targetPos = 0;
 
+    public boolean usingpid = true;
 
     public void init(HardwareMap hm) {
         controller = new PIDController(p,i,d);
@@ -35,13 +37,19 @@ public class Slides {
     }
 
     public void Loop() {
-        controller.setPID(p,i,d);
-        pid = controller.calculate(slideLeft.getCurrentPosition(), targetPos);
+        if (usingpid){
+            controller.setPID(p,i,d);
+            pid = controller.calculate(slideLeft.getCurrentPosition(), targetPos);
 //        double ff = Math.cos(Math.toRadians(target / ticks_in_degree)) * f;
-        double ff = 0;
-        power = pid + ff;
-        slideLeft.setPower(power);
-        slideRight.setPower(power);
+            double ff = 0;
+            pidpower = pid + ff;
+            slideLeft.setPower(pidpower);
+            slideRight.setPower(pidpower);
+        }
+        else {
+            slideLeft.setPower(power);
+            slideRight.setPower(power);
+        }
     }
     public void setTargetPos(int targetPos) {
         this.targetPos = targetPos;
@@ -57,6 +65,7 @@ public class Slides {
     }
 
     public void setPower(double power){
+        usingpid = false;
         this.power = power;
     }
 }
