@@ -42,7 +42,8 @@ public class ActionHandler {
         SLIDESDOWN, //extendo in
         RESETEXTENDO,
         RESETSLIDES,
-        NUDGE1, NUDGE2, NUDGE3, CLIPPOS, TRANSFER_STAGE_6, NUDGE4
+        NUDGE1, NUDGE2, NUDGE3, CLIPPOS, TRANSFER_STAGE_6, NUDGE4,
+        FLIP
     }
 
     public void init(Slides s, Extendo e, Bar b, Wrist w, Intake f, Claw c, IntakeWrist iw, Colorsensor cs, LEDlight l, String alliance) {
@@ -88,6 +89,13 @@ public class ActionHandler {
             intake();
         }
         intakeCheck();
+
+        //flip
+        if (gp1.a){
+            intake.setState(Intake.intakeState.OUT);
+            currentActionState = ActionState.FLIP;
+            timer.reset();
+        }
 
         if (gp1.left_bumper && !transferring) {
             transfer();
@@ -168,7 +176,7 @@ public class ActionHandler {
                 }
                 break;
             case TRANSFER_STAGE_2:
-                if (elapsedMs >= 100) {
+                if (elapsedMs >= 600) {
 //                    intake.setState(Intake.intakeState.OUT);
                     claw.setState(Claw.ClawState.OPEN);
                     Log.d("hello", "hello!!");
@@ -257,6 +265,13 @@ public class ActionHandler {
                 }
                 break;
 
+            //flip
+            case FLIP:
+                if (elapsedMs >= 150){
+                    intake.setState(Intake.intakeState.IN);
+                    currentActionState = ActionState.IDLE;
+                }
+                break;
 
             //nudge sample in intake
             case NUDGE1:
@@ -422,15 +437,19 @@ public class ActionHandler {
     public void light(){
         if (colorSensor.sensorIsRed()){
             light.setState(LEDlight.LEDState.RED);
+            Log.d("LED", "RED");
         }
         if (colorSensor.sensorIsBlue()){
             light.setState(LEDlight.LEDState.BLUE);
+            Log.d("LED", "BLUE");
         }
         if (colorSensor.sensorIsYellow()){
             light.setState(LEDlight.LEDState.YELLOW);
+            Log.d("LED", "YELLOW");
         }
         else {
             light.setState(LEDlight.LEDState.WHITE);
+            Log.d("LED", "WHITE");
         }
     }
 }

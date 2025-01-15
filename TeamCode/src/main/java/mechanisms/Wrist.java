@@ -12,7 +12,7 @@ public class Wrist {
     public final double TRANSFER = 0.17; //as of jan 13 w/ omni intake
     public final double WALL = 0.40;
     public final double BUCKET = 0.90;
-    public final double CLIP = 0.33;
+    public final double CLIP = 0.31;
     public final double NEUTRAL = 0.00;
 
     public void init(HardwareMap hm) {
