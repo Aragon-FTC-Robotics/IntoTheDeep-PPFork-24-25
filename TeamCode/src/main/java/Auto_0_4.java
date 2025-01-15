@@ -140,7 +140,7 @@ public class Auto_0_4 extends OpMode {
                 if (pathTime.getElapsedTimeSeconds() > 3) {
                     intake.setState(Intake.intakeState.STOP);
                     extendo.setTargetPos(Extendo.MIN);
-                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
+                    intakeWrist.setState(IntakeWrist.intakeWristState.TRANSFER);
                     follower.followPath(score1, true); //Samp 1 -> bucket
                     setPathState(4);
                 }
@@ -168,6 +168,7 @@ public class Auto_0_4 extends OpMode {
                 break;
             case 7:
                 if (pathTime.getElapsedTimeSeconds() > 2) {
+                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                     claw.setState(Claw.ClawState.OPEN);
                     setPathState(701);
                 }
@@ -198,7 +199,7 @@ public class Auto_0_4 extends OpMode {
                 if (pathTime.getElapsedTimeSeconds() > 3) {
                     intake.setState(Intake.intakeState.STOP);
                     extendo.setTargetPos(Extendo.MIN);
-                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
+                    intakeWrist.setState(IntakeWrist.intakeWristState.TRANSFER);
                     follower.followPath(score2, true); //Samp 2 -> bucket
                     setPathState(10);
                 }
@@ -226,6 +227,7 @@ public class Auto_0_4 extends OpMode {
                 break;
             case 13:
                 if (pathTime.getElapsedTimeSeconds() > 2) {
+                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                     claw.setState(Claw.ClawState.OPEN);
                     setPathState(1301);
                 }
@@ -256,7 +258,7 @@ public class Auto_0_4 extends OpMode {
                 if (pathTime.getElapsedTimeSeconds() > 3) {
                     intake.setState(Intake.intakeState.STOP);
                     extendo.setTargetPos(Extendo.MIN);
-                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
+                    intakeWrist.setState(IntakeWrist.intakeWristState.TRANSFER);
                     follower.followPath(score3, true); //Samp 3 -> bucket
                     setPathState(16);
                 }
@@ -284,6 +286,7 @@ public class Auto_0_4 extends OpMode {
                 break;
             case 19:
                 if (pathTime.getElapsedTimeSeconds() > 2) {
+                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                     claw.setState(Claw.ClawState.OPEN);
                     setPathState(1901);
                 }
@@ -295,10 +298,10 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 20:
-                if (pathTime.getElapsedTimeSeconds() > 1) {
+                if (pathTime.getElapsedTimeSeconds() > 0.5) {
                     slides.setTargetPos(Slides.GROUND); //Hopefully no lvl 4
-                    bar.setState(Bar.BarState.BUCKET);
-                    wrist.setState(Wrist.wristState.BUCKET);
+                    bar.setState(Bar.BarState.CLIP);
+                    wrist.setState(Wrist.wristState.CLIP);
                     setPathState(-1);
                 }
                 break;
