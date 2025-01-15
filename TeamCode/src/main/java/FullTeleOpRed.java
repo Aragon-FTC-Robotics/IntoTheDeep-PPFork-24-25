@@ -20,12 +20,13 @@ public class FullTeleOpRed extends LinearOpMode {
     public IntakeWrist intakeWrist = new IntakeWrist();
     public Wrist wrist = new Wrist();
     public ActionHandler actionHandler = new ActionHandler();
+    public LEDlight led = new LEDlight();
     public ElapsedTime loopTimer = new ElapsedTime();
     public ElapsedTime opTimer = new ElapsedTime();
     public Gamepad gp1;
     public Gamepad gp2;
     private double loopTime, opTime;
-    private double[] highestTime = new double[2];
+    private double[] highestTime;
     @Override
     public void waitForStart() {
         super.waitForStart();
@@ -42,7 +43,8 @@ public class FullTeleOpRed extends LinearOpMode {
         intakeWrist.init(hardwareMap);
         slides.init(hardwareMap);
         wrist.init(hardwareMap);
-        actionHandler.init(slides,extendo,bar,wrist,intake,claw,intakeWrist,colorsensor, "red");
+        led.init(hardwareMap);
+        actionHandler.init(slides,extendo,bar,wrist,intake,claw,intakeWrist,colorsensor,led, "red");
 
         gp1 = gamepad1;
         gp2 = gamepad2;
@@ -63,6 +65,7 @@ public class FullTeleOpRed extends LinearOpMode {
             intakeWrist.Loop();
             slides.Loop();
             wrist.Loop();
+            led.Loop();
             actionHandler.Loop(gp1, gp2); // :)
             telemetry.addData("High time (ms)", highestTime[0] + "; at " + highestTime[1]);
             telemetry.addData("intaking? extendoing? transferring?", actionHandler.isIntaking() + " / " + actionHandler.isExtendoout() + " / " + actionHandler.isTransferring());

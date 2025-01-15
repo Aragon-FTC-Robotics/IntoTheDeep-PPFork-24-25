@@ -14,7 +14,7 @@ public class LEDlight {
     public final double WHITE = 1;
 
     public void init(HardwareMap hm){
-        LED = hm.get(Servo.class, "LED");
+        LED = hm.get(Servo.class, "shiny");
     }
 
     public void Loop(){
