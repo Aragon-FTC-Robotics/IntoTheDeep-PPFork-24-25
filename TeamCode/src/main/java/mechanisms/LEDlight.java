@@ -31,4 +31,8 @@ public class LEDlight {
                 LED.setPosition(WHITE);
         }
     }
+
+    public void setState(LEDState currentState) {
+        this.currentState = currentState;
+    }
 }
