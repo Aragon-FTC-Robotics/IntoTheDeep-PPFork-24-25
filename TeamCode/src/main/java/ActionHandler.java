@@ -250,6 +250,7 @@ public class ActionHandler {
                     slides.DANGEROUS_RESET_ENCODERS();
                     currentActionState = ActionState.IDLE;
                 }
+                break;
 
 
             //nudge sample in intake

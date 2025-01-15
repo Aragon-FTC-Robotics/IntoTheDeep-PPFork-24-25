@@ -18,6 +18,8 @@ public class Slides {
     public static final int MED = 1000;
     public static final int HIGH = 2700;
     public int targetPos = 0;
+
+
     public void init(HardwareMap hm) {
         controller = new PIDController(p,i,d);
         slideLeft = hm.get(DcMotorEx.class, "slideLeft");
