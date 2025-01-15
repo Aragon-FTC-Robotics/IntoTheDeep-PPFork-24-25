@@ -16,6 +16,7 @@ public class ActionHandler {
     private Claw claw;
     private IntakeWrist intakeWrist;
     private Colorsensor colorSensor;
+    private LEDlight light;
 
     private static boolean intaking, transferring = false;
     private static boolean extendoout = false;
@@ -45,7 +46,7 @@ public class ActionHandler {
         NUDGE1, NUDGE2, NUDGE3, CLIPPOS, TRANSFER_STAGE_6, NUDGE4
     }
 
-    public void init(Slides s, Extendo e, Bar b, Wrist w, Intake f, Claw c, IntakeWrist iw, Colorsensor cs, String alliance) {
+    public void init(Slides s, Extendo e, Bar b, Wrist w, Intake f, Claw c, IntakeWrist iw, Colorsensor cs, LEDlight l, String alliance) {
         slides = s;
         extendo = e;
         bar = b;
@@ -54,11 +55,13 @@ public class ActionHandler {
         claw = c;
         intakeWrist = iw;
         colorSensor = cs;
+        light = l;
         this.alliance = alliance;
         bar.setState(Bar.BarState.NEUTRAL);
         claw.setState(Claw.ClawState.CLOSE);
         wrist.setState(Wrist.wristState.NEUTRAL);
         extendo.setTargetPos(Extendo.MIN);
+        light.setState(LEDlight.LEDState.WHITE);
     }
 
     public void Loop(Gamepad gp1, Gamepad gp2) {
@@ -143,7 +146,7 @@ public class ActionHandler {
             gp2.rumbleBlips(3);
         }
 
-
+        light();
         TimedActions();
     }
 
@@ -428,4 +431,19 @@ public class ActionHandler {
     }
     public boolean isTransferring() {return transferring;}
     public boolean isExtendoout() {return extendoout;}
+
+    public void light(){
+        if (colorSensor.sensorIsRed()){
+            light.setState(LEDlight.LEDState.RED);
+        }
+        if (colorSensor.sensorIsBlue()){
+            light.setState(LEDlight.LEDState.BLUE);
+        }
+        if (colorSensor.sensorIsYellow()){
+            light.setState(LEDlight.LEDState.YELLOW);
+        }
+        else {
+            light.setState(LEDlight.LEDState.WHITE);
+        }
+    }
 }
