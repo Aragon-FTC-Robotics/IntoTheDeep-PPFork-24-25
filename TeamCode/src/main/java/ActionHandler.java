@@ -131,10 +131,11 @@ public class ActionHandler {
         }
         if (gp1.options) {
             intake.setState(Intake.intakeState.OUT);
+            intaking = false;
         }
 
         //reset
-        if (gp1.touchpad_finger_1 && gp1.touchpad_finger_2 & gp2.touchpad_finger_1 && gp2.touchpad_finger_2) {
+        if (gp1.touchpad_finger_1 && gp1.touchpad_finger_2 && gp2.touchpad_finger_1 && gp2.touchpad_finger_2) {
             resetExtendo();
             resetSlides();
             gp1.rumbleBlips(1);
