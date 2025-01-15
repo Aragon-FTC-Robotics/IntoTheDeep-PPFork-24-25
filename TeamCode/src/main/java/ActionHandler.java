@@ -66,17 +66,17 @@ public class ActionHandler {
 
     public void Loop(Gamepad gp1, Gamepad gp2) {
         //clip
-        if (gp2.x) {
+        if (gp2.x && !transferring && !intaking) {
             wallPickup();
         }
         if (gp2.left_bumper) {
             claw.setState(Claw.ClawState.CLOSE);
         }
 
-        if (gp2.y) {
+        if (gp2.y && !transferring && !intaking) {
             clippos();
         }
-        if (gp2.a) {
+        if (gp2.a && !transferring && !intaking) {
             clip_down();
         }
         if (gp2.b){
@@ -85,19 +85,19 @@ public class ActionHandler {
         }
 
         //intake
-        if (gp1.y && !intaking) {
+        if (gp1.y  && !transferring && !intaking) {
             intake();
         }
         intakeCheck();
 
         //flip
-        if (gp1.a){
+        if (gp1.a && !transferring && !intaking){
             intake.setState(Intake.intakeState.OUT);
             currentActionState = ActionState.FLIP;
             timer.reset();
         }
 
-        if (gp1.left_bumper && !transferring) {
+        if (gp1.left_bumper && !transferring && !intaking) {
             transfer();
             transferring = true;
         }
@@ -105,14 +105,14 @@ public class ActionHandler {
             nudge();
         }
 
-        if (gp2.dpad_up) {
+        if (gp2.dpad_up && !transferring && !intaking) {
             highBucket();
         }
         if (gp2.right_bumper){
             claw.setState(Claw.ClawState.OPEN);
         }
 
-        if (gp2.dpad_down) {
+        if (gp2.dpad_down && !transferring && !intaking) {
             slidesDown();
         }
 
