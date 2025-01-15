@@ -42,7 +42,6 @@ public class ActionHandler {
         SLIDESDOWN, //extendo in
         RESETEXTENDO,
         RESETSLIDES,
-        RESETINTAKEWRIST_STAGE_1, RESETINTAKEWRIST_STAGE_2,
         NUDGE1, NUDGE2, NUDGE3, CLIPPOS, TRANSFER_STAGE_6, NUDGE4
     }
 
@@ -135,9 +134,13 @@ public class ActionHandler {
         }
 
         //reset
-//        if (gp1.left_trigger > 0.5) {
-//            resetIntakeWrist();
-//        }
+        if (gp1.touchpad_finger_1 && gp1.touchpad_finger_2 & gp2.touchpad_finger_1 && gp2.touchpad_finger_2) {
+            resetExtendo();
+            resetSlides();
+            gp1.rumbleBlips(1);
+            gp2.rumbleBlips(1);
+        }
+
         if (gp1.touchpad_finger_1 && gp1.touchpad_finger_2){
             intakeWrist.setState(IntakeWrist.intakeWristState.IN);
             intake.setState(Intake.intakeState.STOP);
@@ -248,21 +251,6 @@ public class ActionHandler {
                     currentActionState = ActionState.IDLE;
                 }
 
-            //reset intake wrist
-            case RESETINTAKEWRIST_STAGE_1:
-                if (elapsedMs >= 500) {
-                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
-                    currentActionState = ActionState.RESETINTAKEWRIST_STAGE_2;
-                    timer.reset();
-                }
-                break;
-            case RESETINTAKEWRIST_STAGE_2:
-                if (elapsedMs >= 500) {
-                    intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
-                    intake.setState(Intake.intakeState.IN);
-                    currentActionState = ActionState.IDLE;
-                }
-                break;
 
             //nudge sample in intake
             case NUDGE1:
@@ -332,13 +320,6 @@ public class ActionHandler {
         } else {
             intakeWrist.setState(IntakeWrist.intakeWristState.SUPEROUT);
         }
-    }
-
-    private void resetIntakeWrist() {
-        intake.setState(Intake.intakeState.STOP);
-        intaking = false;
-        currentActionState = ActionState.RESETINTAKEWRIST_STAGE_1;
-        timer.reset();
     }
 
     private void transfer() {
@@ -416,13 +397,13 @@ public class ActionHandler {
     }
 
     private void resetExtendo() {
-        extendo.setTargetPos(-700);
+        extendo.setPower(-0.3);
         currentActionState = ActionState.RESETEXTENDO;
         timer.reset();
     }
 
     private void resetSlides() {
-        slides.setTargetPos(-100);
+        slides.setPower(-0.3);
         currentActionState = ActionState.RESETSLIDES;
         timer.reset();
     }
