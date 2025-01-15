@@ -1,3 +1,5 @@
+import android.util.Log;
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
 import com.pedropathing.pathgen.BezierCurve;
@@ -131,13 +133,12 @@ public class Auto_5_0 extends OpMode {
                 slides.setTargetPos(Slides.MED);
                 bar.setState(Bar.BarState.CLIP);
                 wrist.setState(Wrist.wristState.CLIP);
-                claw.setState(Claw.ClawState.CLOSE);
                 follower.followPath(scorePreload, true);
                 setPathState(1);
                 break;
             case 1:
                 if (!follower.isBusy()) {
-                    //Hello!
+                    Log.d("Hello!", "It's my birthday!");
                     setPathState(101);
                 }
                 break;
@@ -155,7 +156,7 @@ public class Auto_5_0 extends OpMode {
                 }
                 break;
             case 3:
-                if (pathTime.getElapsedTimeSeconds()>1) {
+                if (pathTime.getElapsedTimeSeconds()>2) {
                     extendo.setTargetPos(Extendo.MAX);
                     intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
                     setPathState(4);
@@ -197,7 +198,6 @@ public class Auto_5_0 extends OpMode {
                     setPathState(10);
                 }
                 break;
-
             case 10:
                 if (pathTime.getElapsedTimeSeconds() > 0.5) { //expected to be too early as of jan 5
                     extendo.setTargetPos(Extendo.MIN);
@@ -210,10 +210,15 @@ public class Auto_5_0 extends OpMode {
             case 11:
                 if (!follower.isBusy()) {
                     slides.setTargetPos(Slides.MED);
-                    bar.setState(Bar.BarState.CLIP);
-                    wrist.setState(Wrist.wristState.CLIP);
                     claw.setState(Claw.ClawState.CLOSE);
                     follower.followPath(score1);
+                    setPathState(1101);
+                }
+                break;
+            case 1101:
+                if (pathTime.getElapsedTimeSeconds()>0.75) {
+                    bar.setState(Bar.BarState.CLIP);
+                    wrist.setState(Wrist.wristState.CLIP);
                     setPathState(12);
                 }
                 break;
@@ -240,10 +245,15 @@ public class Auto_5_0 extends OpMode {
             case 15:
                 if (!follower.isBusy()) {
                     slides.setTargetPos(Slides.MED);
-                    bar.setState(Bar.BarState.CLIP);
-                    wrist.setState(Wrist.wristState.CLIP);
                     claw.setState(Claw.ClawState.CLOSE);
                     follower.followPath(score2);
+                    setPathState(1501);
+                }
+                break;
+            case 1501:
+                if (pathTime.getElapsedTimeSeconds() > 0.75) {
+                    bar.setState(Bar.BarState.CLIP);
+                    wrist.setState(Wrist.wristState.CLIP);
                     setPathState(16);
                 }
                 break;
@@ -270,10 +280,15 @@ public class Auto_5_0 extends OpMode {
             case 19:
                 if (!follower.isBusy()) {
                     slides.setTargetPos(Slides.MED);
-                    bar.setState(Bar.BarState.CLIP);
-                    wrist.setState(Wrist.wristState.CLIP);
                     claw.setState(Claw.ClawState.CLOSE);
                     follower.followPath(score3);
+                    setPathState(1901);
+                }
+                break;
+            case 1901:
+                if (pathTime.getElapsedTimeSeconds()>0.75) {
+                    bar.setState(Bar.BarState.CLIP);
+                    wrist.setState(Wrist.wristState.CLIP);
                     setPathState(20);
                 }
                 break;
@@ -300,10 +315,15 @@ public class Auto_5_0 extends OpMode {
             case 23:
                 if (!follower.isBusy()) {
                     slides.setTargetPos(Slides.MED);
-                    bar.setState(Bar.BarState.CLIP);
-                    wrist.setState(Wrist.wristState.CLIP);
                     claw.setState(Claw.ClawState.CLOSE);
                     follower.followPath(score4);
+                    setPathState(2301);
+                }
+                break;
+            case 2301:
+                if (pathTime.getElapsedTimeSeconds()>0.75) {
+                    bar.setState(Bar.BarState.CLIP);
+                    wrist.setState(Wrist.wristState.CLIP);
                     setPathState(24);
                 }
                 break;
@@ -322,7 +342,7 @@ public class Auto_5_0 extends OpMode {
                 break;
             case 26:
                 if (pathTime.getElapsedTimeSeconds() > 0.5) { //set bar wrist to a init-able position
-                    setPathState(27);
+                    setPathState(-1);
                 }
                 break;
         }
@@ -359,8 +379,7 @@ public class Auto_5_0 extends OpMode {
         wrist.init(hardwareMap);
 
         claw.setState(Claw.ClawState.CLOSE);
-        bar.setState(Bar.BarState.NEUTRAL);
-        wrist.setState(Wrist.wristState.NEUTRAL);
+        claw.Loop(); //update Position
 
     }
     @Override
