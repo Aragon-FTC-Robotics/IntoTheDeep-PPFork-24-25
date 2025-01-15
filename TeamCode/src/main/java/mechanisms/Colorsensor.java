@@ -17,7 +17,7 @@ public class Colorsensor {
     NormalizedRGBA sensedcolors;
 
     public float[] colorHSV = {0, 0, 0}; //defaut
-    float gain = 30.0f;
+    public static float gain = 30.0f;
     public float[] redHigherHighHSV = {359, 1, 1}; //(Hue, Saturation, Value)
     public float[] redHigherLowHSV = {320, 0.6f, 0.6f};
 
