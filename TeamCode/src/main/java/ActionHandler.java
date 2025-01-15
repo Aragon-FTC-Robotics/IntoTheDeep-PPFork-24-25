@@ -176,7 +176,7 @@ public class ActionHandler {
                 }
                 break;
             case TRANSFER_STAGE_2:
-                if (elapsedMs >= 600) {
+                if (elapsedMs >= 800) {
 //                    intake.setState(Intake.intakeState.OUT);
                     claw.setState(Claw.ClawState.OPEN);
                     Log.d("hello", "hello!!");
@@ -267,7 +267,7 @@ public class ActionHandler {
 
             //flip
             case FLIP:
-                if (elapsedMs >= 150){
+                if (elapsedMs >= 170){
                     intake.setState(Intake.intakeState.IN);
                     currentActionState = ActionState.IDLE;
                 }
