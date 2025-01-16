@@ -62,9 +62,9 @@ public class ActionHandler {
         colorSensor = cs;
         light = l;
         this.alliance = alliance;
-        bar.setState(Bar.BarState.NEUTRAL);
+        bar.setState(Bar.BarState.WALL);
         claw.setState(Claw.ClawState.CLOSE);
-        wrist.setState(Wrist.wristState.NEUTRAL);
+        wrist.setState(Wrist.wristState.WALL);
         extendo.setTargetPos(Extendo.MIN);
         light.setState(LEDlight.LEDState.WHITE);
         transferring = false;

@@ -339,8 +339,8 @@ public class Auto_0_4 extends OpMode {
         wrist.init(hardwareMap);
 
         claw.setState(Claw.ClawState.CLOSE);
-        bar.setState(Bar.BarState.NEUTRAL);
-        wrist.setState(Wrist.wristState.NEUTRAL);
+        bar.setState(Bar.BarState.WALL);
+        wrist.setState(Wrist.wristState.WALL);
         claw.Loop(); //Runs loop once to move to position
         bar.Loop();
         wrist.Loop();

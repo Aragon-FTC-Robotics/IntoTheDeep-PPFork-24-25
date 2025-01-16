@@ -40,19 +40,19 @@ public class Auto_5_0 extends OpMode {
 
     //Clip x: 41.29411764705882
     private static final Pose STARTPOSE = new Pose(-65.25+72, -12+72, Math.toRadians(0));
-    private static final Pose PRELOADPOSE = new Pose(-30.467+72, -2.9+72, Math.toRadians(0));
+    private static final Pose PRELOADPOSE = new Pose(-29.667+72, -2.9+72, Math.toRadians(0));
     private static final Pose PREPARE1POSE = new Pose(-14.489+72, -46.716+72, Math.toRadians(0));
     private static final Pose PREPARE1CONTROL = new Pose(10.294, 57.647, Math.toRadians(0));
     private static final Pose PUSH1POSE = new Pose(-57.524+72, -43.633+72, Math.toRadians(0));
     private static final Pose PREPARE2POSE = new Pose(-17.629+72, -57.676+72, Math.toRadians(0));
     private static final Pose PREPARE2CONTROL = new Pose(75.176,30.882, Math.toRadians(0));
     private static final Pose PUSH2POSE = new Pose(-58.897+72, -57.339+72, Math.toRadians(0));
-    private static final Pose PREPARE3POSE = new Pose(-13.878+72, -61.211+72, Math.toRadians(0));
+    private static final Pose PREPARE3POSE = new Pose(-13.878+72, -62.211+72, Math.toRadians(0));
     private static final Pose PREPARE3CONTROL = new Pose(82.235,15, Math.toRadians(0));
     private static final Pose PUSH3POSE = new Pose(-54.478+72, -35.570+72, Math.toRadians(0));
     private static final Pose PUSH3CONTROL = new Pose(6, 1.588, Math.toRadians(0));
     private static final Pose PUSH3TOWALLCONTROL = new Pose(66, 33);
-    private static final Pose WALLPOSE = new Pose(-61.820+72, -44.185+72, Math.toRadians(180));
+    private static final Pose WALLPOSE = new Pose(-65.820+72, -44.185+72, Math.toRadians(180));
     private static final Pose SCORE1POSE = new Pose(-36+72, 1.6+72, Math.toRadians(0));
     private static final Pose SCORE2POSE = new Pose(-36+72, 1.6+72+2, Math.toRadians(0));
     private static final Pose SCORE3POSE = new Pose(-36+72, 1.677+72+4, Math.toRadians(0));
@@ -161,7 +161,6 @@ public class Auto_5_0 extends OpMode {
                 break;
             case 3:
                 if (!follower.isBusy()) {
-                    follower.setMaxPower(1d);
                     follower.followPath(push1, true);
                     setPathState(4);
                 }
@@ -186,7 +185,6 @@ public class Auto_5_0 extends OpMode {
                 break;
             case 7:
                 if (!follower.isBusy()) {
-                    follower.setMaxPower(0.7);
                     wrist.setState(Wrist.wristState.WALL);
                     follower.followPath(push3, true);
                     setPathState(8);
@@ -221,6 +219,7 @@ public class Auto_5_0 extends OpMode {
             case 1101:
                 if (pathTime.getElapsedTimeSeconds()>0.75) {
                     slides.setTargetPos(Slides.MED);
+                    setPathState(1102);
                 }
                 break;
             case 1102:
@@ -267,7 +266,7 @@ public class Auto_5_0 extends OpMode {
                 if (pathTime.getElapsedTimeSeconds() > 0.75) {
                     bar.setState(Bar.BarState.CLIP);
                     wrist.setState(Wrist.wristState.CLIP);
-                    setPathState(1502);
+                    setPathState(16);
                 }
                 break;
             case 16:
@@ -399,8 +398,8 @@ public class Auto_5_0 extends OpMode {
         slides.init(hardwareMap);
         wrist.init(hardwareMap);
 
-        bar.setState(Bar.BarState.NEUTRAL);
-        wrist.setState(Wrist.wristState.NEUTRAL);
+        bar.setState(Bar.BarState.WALL);
+        wrist.setState(Wrist.wristState.WALL);
         claw.setState(Claw.ClawState.CLOSE);
         claw.Loop(); //update Position
         bar.Loop();
