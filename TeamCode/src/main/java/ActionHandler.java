@@ -27,6 +27,11 @@ public class ActionHandler {
     private ElapsedTime intakeTimer = new ElapsedTime();
     private boolean waitingForSecondCheck = false;
 
+    public ColorState currentColor = ColorState.NOTHING;
+    enum ColorState{
+        NOTHING, BLUE, RED, YELLOW
+    }
+
     public ActionState currentActionState = ActionState.IDLE;
 
     enum ActionState {
@@ -103,6 +108,7 @@ public class ActionHandler {
         if (gp1.left_bumper && !transferring) {
             transfer();
             transferring = true;
+            currentColor = ColorState.NOTHING;
         }
         if (gp2.left_stick_button && gp2.right_stick_button) {
             nudge();
@@ -143,6 +149,7 @@ public class ActionHandler {
         if (gp1.options) {
             intake.setState(Intake.intakeState.OUT);
             intaking = false;
+            currentColor = ColorState.NOTHING;
         }
 
         //reset
