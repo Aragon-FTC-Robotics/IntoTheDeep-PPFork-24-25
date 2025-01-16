@@ -39,20 +39,23 @@ public class Auto_5_0 extends OpMode {
 
 
     //Clip x: 41.29411764705882
-    private static final Pose STARTPOSE = new Pose(6.75, 60, Math.toRadians(0));
-    private static final Pose PRELOADPOSE = new Pose(41.294, 64.5, Math.toRadians(0));
-    private static final Pose PREPARE1POSE = new Pose(37.514, 42.882, Math.toRadians(-47));
-    private static final Pose PREPARE1CONTROL = new Pose(19.235, 57.882);
-    private static final Pose PUSH1POSE = new Pose(25.514, 43.235, Math.toRadians(-121));
-    private static final Pose PREPARE2POSE = new Pose(37.514, 32.882, Math.toRadians(-47));
-    private static final Pose PUSH2POSE = new Pose(25.514, 32.882, Math.toRadians(-121));
-    private static final Pose PREPARE3POSE = new Pose(37.514, 22.882, Math.toRadians(-47));
-    private static final Pose PUSH3POSE = new Pose(10.337, 34.059, Math.toRadians(180));
-    private static final Pose WALLPOSE = new Pose(6.75, 34.059, Math.toRadians(180));
-    private static final Pose SCORE1POSE = new Pose(41.294, 66.5, Math.toRadians(0));
-    private static final Pose SCORE2POSE = new Pose(41.294, 68.5, Math.toRadians(0));
-    private static final Pose SCORE3POSE = new Pose(41.294, 70.5, Math.toRadians(0));
-    private static final Pose SCORE4POSE = new Pose(41.294, 72.5, Math.toRadians(0));
+    private static final Pose STARTPOSE = new Pose(-65.25+72, -12+72, Math.toRadians(0));
+    private static final Pose PRELOADPOSE = new Pose(-29.467+72, -6.11+72, Math.toRadians(0));
+    private static final Pose PREPARE1POSE = new Pose(-14.489+72, -39.716+72, Math.toRadians(0));
+    private static final Pose PREPARE1CONTROL = new Pose(5.294, 47.647, Math.toRadians(0));
+    private static final Pose PUSH1POSE = new Pose(-57.524+72, -43.633+72, Math.toRadians(0));
+    private static final Pose PREPARE2POSE = new Pose(-17.629+72, -53.676+72, Math.toRadians(0));
+    private static final Pose PREPARE2CONTROL = new Pose(75.176,30.882, Math.toRadians(0));
+    private static final Pose PUSH2POSE = new Pose(-58.897+72, -53.339+72, Math.toRadians(0));
+    private static final Pose PREPARE3POSE = new Pose(-13.878+72, -62.211+72, Math.toRadians(0));
+    private static final Pose PREPARE3CONTROL = new Pose(82.235,15, Math.toRadians(0));
+    private static final Pose PUSH3POSE = new Pose(-54.478+72, -35.570+72, Math.toRadians(0));
+    private static final Pose PUSH3CONTROL = new Pose(6, 1.588, Math.toRadians(0));
+    private static final Pose WALLPOSE = new Pose(-69.820+72, -32.185+72, Math.toRadians(180));
+    private static final Pose SCORE1POSE = new Pose(-33.951+72, 1.677+72, Math.toRadians(0));
+    private static final Pose SCORE2POSE = new Pose(-33.951+72+1.5, 1.677+72, Math.toRadians(0));
+    private static final Pose SCORE3POSE = new Pose(-33.951+72+3, 1.677+72, Math.toRadians(0));
+    private static final Pose SCORE4POSE = new Pose(-33.951+72+4.5, 1.677+72, Math.toRadians(0));
     private static final Pose PARKPOSE = new Pose(8.396, 6.882, Math.toRadians(-10));
     private static final Pose PARKCONTROL = new Pose(7.235, 70.235);
 
@@ -73,7 +76,7 @@ public class Auto_5_0 extends OpMode {
                 .setLinearHeadingInterpolation(PREPARE1POSE.getHeading(), PUSH1POSE.getHeading())
                 .build();
         prepare2 = follower.pathBuilder()
-                .addPath(new Path(new BezierLine(new Point(PUSH1POSE), new Point(PREPARE2POSE))))
+                .addPath(new Path(new BezierCurve(new Point(PUSH1POSE), new Point(PREPARE2CONTROL), new Point(PREPARE2POSE))))
                 .setLinearHeadingInterpolation(PUSH1POSE.getHeading(), PREPARE2POSE.getHeading())
                 .build();
         push2 = follower.pathBuilder()
@@ -81,16 +84,16 @@ public class Auto_5_0 extends OpMode {
                 .setLinearHeadingInterpolation(PREPARE2POSE.getHeading(), PUSH2POSE.getHeading())
                 .build();
         prepare3 = follower.pathBuilder()
-                .addPath(new Path(new BezierLine(new Point(PUSH2POSE), new Point(PREPARE3POSE))))
+                .addPath(new Path(new BezierCurve(new Point(PUSH2POSE),new Point(PREPARE3CONTROL), new Point(PREPARE3POSE))))
                 .setLinearHeadingInterpolation(PUSH2POSE.getHeading(), PREPARE3POSE.getHeading())
                 .build();
         push3 = follower.pathBuilder()
-                .addPath(new Path(new BezierLine(new Point(PREPARE3POSE), new Point(PUSH3POSE))))
+                .addPath(new Path(new BezierCurve(new Point(PREPARE3POSE), new Point(PUSH3CONTROL), new Point(PUSH3POSE))))
                 .setLinearHeadingInterpolation(PREPARE3POSE.getHeading(), PUSH3POSE.getHeading())
                 .build();
         push3ToWall = follower.pathBuilder()
                 .addPath(new Path(new BezierLine(new Point(PUSH3POSE), new Point(WALLPOSE))))
-                .setConstantHeadingInterpolation(WALLPOSE.getHeading())
+                .setLinearHeadingInterpolation(PUSH3POSE.getHeading(), WALLPOSE.getHeading())
                 .build();
         score1 = follower.pathBuilder()
                 .addPath(new Path(new BezierLine(new Point(WALLPOSE), new Point(SCORE1POSE))))
@@ -156,54 +159,50 @@ public class Auto_5_0 extends OpMode {
                 }
                 break;
             case 3:
-                if (pathTime.getElapsedTimeSeconds()>2) {
-                    extendo.setTargetPos(Extendo.MAX);
-                    intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
+                if (!follower.isBusy()) {
+                    follower.followPath(push1, true);
                     setPathState(4);
                 }
                 break;
             case 4:
                 if (!follower.isBusy()) {
-                    follower.followPath(push1);
+                    follower.followPath(prepare2, true);
                     setPathState(5);
                 }
                 break;
             case 5:
                 if (!follower.isBusy()) {
-                    follower.followPath(prepare2);
+                    follower.followPath(push2, true);
                     setPathState(6);
                 }
                 break;
             case 6:
                 if (!follower.isBusy()) {
-                    follower.followPath(push2);
+                    follower.followPath(prepare3, true);
                     setPathState(7);
                 }
                 break;
             case 7:
                 if (!follower.isBusy()) {
-                    follower.followPath(prepare3);
+                    follower.followPath(push3, true);
                     setPathState(8);
                 }
                 break;
             case 8:
                 if (!follower.isBusy()) {
-                    follower.followPath(push3);
+                    follower.followPath(push3ToWall, true);
                     setPathState(9);
                 }
                 break;
             case 9:
-                if (!follower.isBusy()) {
-                    follower.followPath(push3ToWall);
+                if (true) {
+                    Log.d("Hello!", "It's no longer my birthday!");
                     setPathState(10);
                 }
                 break;
             case 10:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) { //expected to be too early as of jan 5
-                    extendo.setTargetPos(Extendo.MIN);
-                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
-                    bar.setState(Bar.BarState.WALL);
-                    wrist.setState(Wrist.wristState.WALL);
+                if (true) {
+                    Log.d("Bye!", "I'm going to school!");
                     setPathState(11);
                 }
                 break;

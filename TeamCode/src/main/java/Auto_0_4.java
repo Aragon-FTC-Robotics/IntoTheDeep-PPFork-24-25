@@ -26,7 +26,7 @@ public class Auto_0_4 extends OpMode {
 
 
     private final Pose STARTPOSE = new Pose(7.065,96.000, Math.toRadians(-90));
-    private final Pose PRELOADPOSE = new Pose(-61.3656+72, 50.868+72, 4.96014);
+    private final Pose PRELOADPOSE = new Pose(-62.3656+72, 50.868+72, 4.96014);
     private final Pose INTAKE1POSE = new Pose(-53.734+72, 54.800+72, 6.10658);
     private final Pose INTAKE2POSE = new Pose(-54.310+72, 55.518+72, 0.14260);
     private final Pose INTAKE3POSE = new Pose(-48.895+72, 52.430+72, 0.5254);
