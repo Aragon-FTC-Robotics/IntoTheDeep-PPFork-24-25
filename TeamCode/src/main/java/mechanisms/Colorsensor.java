@@ -1,5 +1,7 @@
 package mechanisms;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -15,6 +17,7 @@ public class Colorsensor {
     NormalizedRGBA sensedcolors;
 
     public float[] colorHSV = {0, 0, 0}; //defaut
+
     public static float gain = 50.0f;
     public float[] redHigherHighHSV = {359, 1, 1}; //(Hue, Saturation, Value)
     public float[] redHigherLowHSV = {358, 0.6f, 0.6f};
@@ -27,6 +30,7 @@ public class Colorsensor {
 
     public float[] blueHigherHSV = {240, 0.9f, 0.4f};
     public float[] blueLowerHSV = {210, 0.6f, 0.1f}; //224
+
     public void init(HardwareMap hm) {
         colorSensor = hm.get(NormalizedColorSensor.class, "sensor_color");
         colorSensor.setGain(gain);
@@ -40,6 +44,7 @@ public class Colorsensor {
         float r = sensedcolors.red;
         float g = sensedcolors.green;
         float b = sensedcolors.blue;
+        
         // Convert RGB to HSV
         colorHSV = rgbToHsv(r, g, b);
         Log.d("colorsensor","Converted HSV: Hue=" + colorHSV[0] + ", Saturation=" + colorHSV[1] + ", Value=" + colorHSV[2]);
