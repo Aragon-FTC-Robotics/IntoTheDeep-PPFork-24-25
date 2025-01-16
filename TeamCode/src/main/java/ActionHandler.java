@@ -27,7 +27,7 @@ public class ActionHandler {
     private ElapsedTime intakeTimer = new ElapsedTime();
     private boolean waitingForSecondCheck = false;
 
-    private ActionState currentActionState = ActionState.IDLE;
+    public ActionState currentActionState = ActionState.IDLE;
 
     enum ActionState {
         IDLE,
@@ -62,21 +62,24 @@ public class ActionHandler {
         wrist.setState(Wrist.wristState.NEUTRAL);
         extendo.setTargetPos(Extendo.MIN);
         light.setState(LEDlight.LEDState.WHITE);
+        transferring = false;
+        intaking = false;
+        extendoout = false;
     }
 
     public void Loop(Gamepad gp1, Gamepad gp2) {
         //clip
-        if (gp2.x && !transferring && !intaking) {
+        if (gp2.x && !transferring) {
             wallPickup();
         }
         if (gp2.left_bumper) {
             claw.setState(Claw.ClawState.CLOSE);
         }
 
-        if (gp2.y && !transferring && !intaking) {
+        if (gp2.y && !transferring) {
             clippos();
         }
-        if (gp2.a && !transferring && !intaking) {
+        if (gp2.a && !transferring) {
             clip_down();
         }
         if (gp2.b){
@@ -85,34 +88,34 @@ public class ActionHandler {
         }
 
         //intake
-        if (gp1.y  && !transferring && !intaking) {
+        if (gp1.y) {
             intake();
         }
         intakeCheck();
 
         //flip
-        if (gp1.a && !transferring && !intaking){
+        if (gp1.a && !transferring){
             intake.setState(Intake.intakeState.OUT);
             currentActionState = ActionState.FLIP;
             timer.reset();
         }
 
-        if (gp1.left_bumper && !transferring && !intaking) {
+        if (gp1.left_bumper && !transferring) {
             transfer();
-            transferring = false;
+            transferring = true;
         }
         if (gp2.left_stick_button && gp2.right_stick_button) {
             nudge();
         }
 
-        if (gp2.dpad_up && !transferring && !intaking) {
+        if (gp2.dpad_up && !transferring) {
             highBucket();
         }
         if (gp2.right_bumper){
             claw.setState(Claw.ClawState.OPEN);
         }
 
-        if (gp2.dpad_down && !transferring && !intaking) {
+        if (gp2.dpad_down && !transferring) {
             slidesDown();
         }
 
@@ -121,17 +124,17 @@ public class ActionHandler {
             extendo.setTargetPos(Extendo.MAX);
             extendoout = true;
         }
-        if (gp1.right_trigger > 0.8){
-            extendo.setTargetPos(Extendo.MAX);
-            extendoout = true;
-            if (intakeWrist.currentState != IntakeWrist.intakeWristState.IN) {
-                if (isExtendoout()) {
-                    intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
-                } else {
-                    intakeWrist.setState(IntakeWrist.intakeWristState.SUPEROUT);
-                }
-            }
-        }
+//        if (gp1.right_trigger > 0.8){
+//            extendo.setTargetPos(Extendo.MAX);
+//            extendoout = true;
+//            if (intakeWrist.currentState != IntakeWrist.intakeWristState.IN) {
+//                if (isExtendoout()) {
+//                    intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
+//                } else {
+//                    intakeWrist.setState(IntakeWrist.intakeWristState.SUPEROUT);
+//                }
+//            }
+//        }
         if (gp1.left_trigger > 0.8){
             intakeWrist.setState(IntakeWrist.intakeWristState.IN);
             extendo.setTargetPos(Extendo.MIN);
@@ -143,12 +146,12 @@ public class ActionHandler {
         }
 
         //reset
-        if (gp1.touchpad_finger_1 && gp1.touchpad_finger_2 && gp2.touchpad_finger_1 && gp2.touchpad_finger_2) {
-            resetExtendo();
-            resetSlides();
-            gp1.rumbleBlips(1);
-            gp2.rumbleBlips(1);
-        }
+//        if (gp1.touchpad_finger_1 && gp1.touchpad_finger_2 && gp2.touchpad_finger_1 && gp2.touchpad_finger_2) {
+//            resetExtendo();
+//            resetSlides();
+//            gp1.rumbleBlips(1);
+//            gp2.rumbleBlips(1);
+//        }
 
         if (gp1.touchpad_finger_1 && gp1.touchpad_finger_2){
             intakeWrist.setState(IntakeWrist.intakeWristState.IN);
@@ -185,7 +188,7 @@ public class ActionHandler {
                 }
                 break;
             case TRANSFER_STAGE_3:
-                if (elapsedMs >= 1000) {
+                if (elapsedMs >= 600) {
                     bar.setState(Bar.BarState.TRANSFER);
                     wrist.setState(Wrist.wristState.TRANSFER);
                     currentActionState = ActionState.TRANSFER_STAGE_4;
@@ -419,13 +422,13 @@ public class ActionHandler {
     }
 
     private void resetExtendo() {
-        extendo.setPower(-0.3);
+        extendo.setPower(-0.7);
         currentActionState = ActionState.RESETEXTENDO;
         timer.reset();
     }
 
     private void resetSlides() {
-        slides.setPower(-0.3);
+        slides.setPower(-0.7);
         currentActionState = ActionState.RESETSLIDES;
         timer.reset();
     }

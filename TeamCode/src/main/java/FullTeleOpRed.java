@@ -68,6 +68,7 @@ public class FullTeleOpRed extends LinearOpMode {
             led.Loop();
             actionHandler.Loop(gp1, gp2); // :)
             telemetry.addData("High time (ms)", highestTime[0] + "; at " + highestTime[1]);
+            telemetry.addData("STATE", actionHandler.currentActionState);
             telemetry.addData("intaking? extendoing? transferring?", actionHandler.isIntaking() + " / " + actionHandler.isExtendoout() + " / " + actionHandler.isTransferring());
             telemetry.addData("slides L/R ", slides.getLPos() + " " + slides.getRPos());
             telemetry.addData("intakewrist state", intakeWrist.getState());

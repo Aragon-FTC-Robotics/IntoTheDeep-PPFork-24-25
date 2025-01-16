@@ -15,18 +15,18 @@ public class Colorsensor {
     NormalizedRGBA sensedcolors;
 
     public float[] colorHSV = {0, 0, 0}; //defaut
-    public static float gain = 30.0f;
+    public static float gain = 50.0f;
     public float[] redHigherHighHSV = {359, 1, 1}; //(Hue, Saturation, Value)
-    public float[] redHigherLowHSV = {320, 0.6f, 0.6f};
+    public float[] redHigherLowHSV = {358, 0.6f, 0.6f};
 
-    public float [] redLowerHighHSV = {20, 1, 1}; //19
-    public float[] redLowerLowHSV = {0, 0.6f, 0.6f};
+    public float [] redLowerHighHSV = {30, 0.9f, 0.4f}; //19
+    public float[] redLowerLowHSV = {0, 0.6f, 0.1f};
 
-    public float[] yellowHigherHSV = {60, 1, 1}; //69
-    public float[] yellowLowerHSV = {45, 0.6f, 0.6f};
+    public float[] yellowHigherHSV = {80, 0.9f, 0.7f}; //69
+    public float[] yellowLowerHSV = {60, 0.6f, 0.5f};
 
-    public float[] blueHigherHSV = {270, 1, 1};
-    public float[] blueLowerHSV = {200, 0.6f, 0.6f}; //224
+    public float[] blueHigherHSV = {240, 0.9f, 0.4f};
+    public float[] blueLowerHSV = {210, 0.6f, 0.1f}; //224
     public void init(HardwareMap hm) {
         colorSensor = hm.get(NormalizedColorSensor.class, "sensor_color");
         colorSensor.setGain(gain);

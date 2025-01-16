@@ -12,9 +12,11 @@ public class ColorTelemetry extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         color.init(hardwareMap);
+        waitForStart();
         while (opModeIsActive() && !isStopRequested()) {
             color.Loop();
             telemetry.addData("red? / yellow? / blue?", color.sensorIsRed() + " " + color.sensorIsYellow() + " " + color.sensorIsBlue());
+            telemetry.addData("red/yellow/blue", color.colorHSV[0] + " " + color.colorHSV[1] + " " + color.colorHSV[2]);
             telemetry.addData("gain", Colorsensor.gain);
             telemetry.update();
         }

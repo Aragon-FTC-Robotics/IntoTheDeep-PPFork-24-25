@@ -11,7 +11,7 @@ public class Drivetrain {
     DcMotor leftFront;
     DcMotor rightRear;
     DcMotor leftRear;
-    double minSpeed = -0.8;
+    double minSpeed = -1;
     double maxSpeed = 1;
     double MICROSPEED = 0.3;
     boolean slowMode = false;
@@ -46,7 +46,7 @@ public class Drivetrain {
 //        double rx = Math.pow(gp1.right_stick_x, 3) * -0.6;
         double y = gp1.left_stick_y;
         double x = gp1.left_stick_x * -1.1;
-        double rx = gp1.right_stick_x * -0.6;
+        double rx = gp1.right_stick_x * -1;
 
 //        if (gp1.dpad_up) {
 //            x = 0; y = -MICROSPEED;
