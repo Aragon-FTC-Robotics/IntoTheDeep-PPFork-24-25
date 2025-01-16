@@ -52,7 +52,7 @@ public class Auto_5_0 extends OpMode {
     private static final Pose PUSH3POSE = new Pose(-54.478+72, -35.570+72, Math.toRadians(0));
     private static final Pose PUSH3CONTROL = new Pose(6, 1.588, Math.toRadians(0));
     private static final Pose PUSH3TOWALLCONTROL = new Pose(66, 33);
-    private static final Pose WALLPOSE = new Pose(-62.820+72, -44.185+72, Math.toRadians(180));
+    private static final Pose WALLPOSE = new Pose(-61.820+72, -44.185+72, Math.toRadians(180));
     private static final Pose SCORE1POSE = new Pose(-36+72, 1.6+72, Math.toRadians(0));
     private static final Pose SCORE2POSE = new Pose(-36+72, 1.6+72+2, Math.toRadians(0));
     private static final Pose SCORE3POSE = new Pose(-36+72, 1.677+72+4, Math.toRadians(0));
@@ -161,6 +161,7 @@ public class Auto_5_0 extends OpMode {
                 break;
             case 3:
                 if (!follower.isBusy()) {
+                    follower.setMaxPower(1d);
                     follower.followPath(push1, true);
                     setPathState(4);
                 }
@@ -185,6 +186,7 @@ public class Auto_5_0 extends OpMode {
                 break;
             case 7:
                 if (!follower.isBusy()) {
+                    follower.setMaxPower(0.7);
                     wrist.setState(Wrist.wristState.WALL);
                     follower.followPath(push3, true);
                     setPathState(8);
@@ -211,13 +213,17 @@ public class Auto_5_0 extends OpMode {
                 break;
             case 11:
                 if (!follower.isBusy()) {
-                    slides.setTargetPos(Slides.MED);
                     claw.setState(Claw.ClawState.CLOSE);
                     follower.followPath(score1);
                     setPathState(1101);
                 }
                 break;
             case 1101:
+                if (pathTime.getElapsedTimeSeconds()>0.75) {
+                    slides.setTargetPos(Slides.MED);
+                }
+                break;
+            case 1102:
                 if (pathTime.getElapsedTimeSeconds()>0.75) {
                     bar.setState(Bar.BarState.CLIP);
                     wrist.setState(Wrist.wristState.CLIP);
@@ -246,7 +252,6 @@ public class Auto_5_0 extends OpMode {
                 break;
             case 15:
                 if (!follower.isBusy()) {
-                    slides.setTargetPos(Slides.MED);
                     claw.setState(Claw.ClawState.CLOSE);
                     follower.followPath(score2);
                     setPathState(1501);
@@ -254,9 +259,15 @@ public class Auto_5_0 extends OpMode {
                 break;
             case 1501:
                 if (pathTime.getElapsedTimeSeconds() > 0.75) {
+                    slides.setTargetPos(Slides.MED);
+                    setPathState(1502);
+                }
+                break;
+            case 1502:
+                if (pathTime.getElapsedTimeSeconds() > 0.75) {
                     bar.setState(Bar.BarState.CLIP);
                     wrist.setState(Wrist.wristState.CLIP);
-                    setPathState(16);
+                    setPathState(1502);
                 }
                 break;
             case 16:
@@ -281,19 +292,23 @@ public class Auto_5_0 extends OpMode {
                 break;
             case 19:
                 if (!follower.isBusy()) {
-                    slides.setTargetPos(Slides.MED);
                     claw.setState(Claw.ClawState.CLOSE);
                     follower.followPath(score3);
                     setPathState(1901);
                 }
                 break;
             case 1901:
-                if (pathTime.getElapsedTimeSeconds()>0.75) {
+                if (pathTime.getElapsedTimeSeconds() > 0.75) {
+                    slides.setTargetPos(Slides.MED);
+                    setPathState(1902);
+                }
+                break;
+            case 1902:
+                if (pathTime.getElapsedTimeSeconds() > 0.75) {
                     bar.setState(Bar.BarState.CLIP);
                     wrist.setState(Wrist.wristState.CLIP);
                     setPathState(20);
                 }
-                break;
             case 20:
                 if (!follower.isBusy()) {
                     slides.setTargetPos(Slides.LOW);
@@ -316,19 +331,23 @@ public class Auto_5_0 extends OpMode {
                 break;
             case 23:
                 if (!follower.isBusy()) {
-                    slides.setTargetPos(Slides.MED);
                     claw.setState(Claw.ClawState.CLOSE);
                     follower.followPath(score4);
                     setPathState(2301);
                 }
                 break;
             case 2301:
-                if (pathTime.getElapsedTimeSeconds()>0.75) {
+                if (pathTime.getElapsedTimeSeconds() > 0.75) {
+                    slides.setTargetPos(Slides.MED);
+                    setPathState(2302);
+                }
+                break;
+            case 2302:
+                if (pathTime.getElapsedTimeSeconds() > 0.75) {
                     bar.setState(Bar.BarState.CLIP);
                     wrist.setState(Wrist.wristState.CLIP);
                     setPathState(24);
                 }
-                break;
             case 24:
                 if (!follower.isBusy()) {
                     slides.setTargetPos(Slides.LOW);
