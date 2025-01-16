@@ -66,17 +66,17 @@ public class ActionHandler {
 
     public void Loop(Gamepad gp1, Gamepad gp2) {
         //clip
-        if (gp2.x && !transferring && !intaking) {
+        if (gp2.x && !transferring ) {
             wallPickup();
         }
         if (gp2.left_bumper) {
             claw.setState(Claw.ClawState.CLOSE);
         }
 
-        if (gp2.y && !transferring && !intaking) {
+        if (gp2.y && !transferring) {
             clippos();
         }
-        if (gp2.a && !transferring && !intaking) {
+        if (gp2.a && !transferring) {
             clip_down();
         }
         if (gp2.b){
@@ -85,19 +85,19 @@ public class ActionHandler {
         }
 
         //intake
-        if (gp1.y  && !transferring && !intaking) {
+        if (gp1.y  && !intaking) {
             intake();
         }
         intakeCheck();
 
         //flip
-        if (gp1.a && !transferring && !intaking){
+        if (gp1.a && !transferring){
             intake.setState(Intake.intakeState.OUT);
             currentActionState = ActionState.FLIP;
             timer.reset();
         }
 
-        if (gp1.left_bumper && !transferring && !intaking) {
+        if (gp1.left_bumper && !transferring) {
             transfer();
             transferring = false;
         }
@@ -105,14 +105,14 @@ public class ActionHandler {
             nudge();
         }
 
-        if (gp2.dpad_up && !transferring && !intaking) {
+        if (gp2.dpad_up && !transferring) {
             highBucket();
         }
         if (gp2.right_bumper){
             claw.setState(Claw.ClawState.OPEN);
         }
 
-        if (gp2.dpad_down && !transferring && !intaking) {
+        if (gp2.dpad_down && !transferring) {
             slidesDown();
         }
 
@@ -144,8 +144,7 @@ public class ActionHandler {
 
         //reset
         if (gp1.touchpad_finger_1 && gp1.touchpad_finger_2 && gp2.touchpad_finger_1 && gp2.touchpad_finger_2) {
-            resetExtendo();
-            resetSlides();
+            resetExtendoSlides();
             gp1.rumbleBlips(1);
             gp2.rumbleBlips(1);
         }
@@ -251,14 +250,16 @@ public class ActionHandler {
             case RESETEXTENDO:
                 if (elapsedMs >= 1000) {
                     extendo.DANGEROUS_RESET_ENCODERS();
+                    slides.DANGEROUS_RESET_ENCODERS();
+                    slides.setPower(0);
                     extendo.setPower(0);
                     extendo.usingpid = true;
+                    slides.usingpid = true;
                     currentActionState = ActionState.IDLE;
                 }
                 break;
             case RESETSLIDES:
                 if (elapsedMs >= 1000){
-                    slides.DANGEROUS_RESET_ENCODERS();
                     slides.setPower(0);
                     slides.usingpid = true;
                     currentActionState = ActionState.IDLE;
@@ -418,17 +419,15 @@ public class ActionHandler {
         timer.reset();
     }
 
-    private void resetExtendo() {
+    private void resetExtendoSlides() {
         extendo.setPower(-0.3);
+        Log.d("reseting", "extendo");
+        slides.setPower(-0.3);
+        Log.d("reseting", "slides");
         currentActionState = ActionState.RESETEXTENDO;
         timer.reset();
     }
 
-    private void resetSlides() {
-        slides.setPower(-0.3);
-        currentActionState = ActionState.RESETSLIDES;
-        timer.reset();
-    }
     public boolean isIntaking() {
         return intaking;
     }
