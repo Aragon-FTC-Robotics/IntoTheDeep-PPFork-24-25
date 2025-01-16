@@ -447,20 +447,36 @@ public class ActionHandler {
 
     public void light(){
         if (colorSensor.sensorIsRed()){
-            light.setState(LEDlight.LEDState.RED);
-            Log.d("LED", "RED");
+            currentColor = ColorState.RED;
         }
         if (colorSensor.sensorIsBlue()){
-            light.setState(LEDlight.LEDState.BLUE);
-            Log.d("LED", "BLUE");
+            currentColor = ColorState.BLUE;
         }
         if (colorSensor.sensorIsYellow()){
-            light.setState(LEDlight.LEDState.YELLOW);
-            Log.d("LED", "YELLOW");
+            currentColor = ColorState.YELLOW;
         }
-        else {
-            light.setState(LEDlight.LEDState.WHITE);
-            Log.d("LED", "WHITE");
+
+        switch (currentColor){
+            case BLUE:
+                light.setState(LEDlight.LEDState.BLUE);
+                Log.d("LED", "BLUE");
+                break;
+            case YELLOW:
+                light.setState(LEDlight.LEDState.YELLOW);
+                Log.d("LED", "YELLOW");
+                break;
+            case RED:
+                light.setState(LEDlight.LEDState.RED);
+                Log.d("LED", "RED");
+                break;
+            case NOTHING:
+                light.setState(LEDlight.LEDState.WHITE);
+                Log.d("LED", "WHITE");
+                break;
+            default:
+                light.setState(LEDlight.LEDState.WHITE);
+                Log.d("LED", "WHITE");
+                break;
         }
     }
 }
