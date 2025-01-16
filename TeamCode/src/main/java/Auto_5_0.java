@@ -41,21 +41,21 @@ public class Auto_5_0 extends OpMode {
     //Clip x: 41.29411764705882
     private static final Pose STARTPOSE = new Pose(-65.25+72, -12+72, Math.toRadians(0));
     private static final Pose PRELOADPOSE = new Pose(-29.467+72, -6.11+72, Math.toRadians(0));
-    private static final Pose PREPARE1POSE = new Pose(69.705, 24, Math.toRadians(0));
+    private static final Pose PREPARE1POSE = new Pose(-14.489+72, -39.716+72, Math.toRadians(0));
     private static final Pose PREPARE1CONTROL = new Pose(5.294, 47.647, Math.toRadians(0));
-    private static final Pose PUSH1POSE = new Pose(19.941, 24.529, Math.toRadians(0));
-    private static final Pose PREPARE2POSE = new Pose(71.647, 12, Math.toRadians(0));
+    private static final Pose PUSH1POSE = new Pose(-57.524+72, -43.633+72, Math.toRadians(0));
+    private static final Pose PREPARE2POSE = new Pose(-17.629+72, -53.676+72, Math.toRadians(0));
     private static final Pose PREPARE2CONTROL = new Pose(75.176,30.882, Math.toRadians(0));
-    private static final Pose PUSH2POSE = new Pose(20.117, 12.882, Math.toRadians(0));
-    private static final Pose PREPARE3POSE = new Pose(68.647, 5.470, Math.toRadians(0));
+    private static final Pose PUSH2POSE = new Pose(-58.897+72, -53.339+72, Math.toRadians(0));
+    private static final Pose PREPARE3POSE = new Pose(-13.878+72, -62.211+72, Math.toRadians(0));
     private static final Pose PREPARE3CONTROL = new Pose(82.235,15, Math.toRadians(0));
-    private static final Pose PUSH3POSE = new Pose(15, 18.705, Math.toRadians(0));
+    private static final Pose PUSH3POSE = new Pose(-54.478+72, -35.570+72, Math.toRadians(0));
     private static final Pose PUSH3CONTROL = new Pose(6, 1.588, Math.toRadians(0));
-    private static final Pose WALLPOSE = new Pose(6.75, 34.059, Math.toRadians(180));
-    private static final Pose SCORE1POSE = new Pose(41.294, 66.5, Math.toRadians(0));
-    private static final Pose SCORE2POSE = new Pose(41.294, 68.5, Math.toRadians(0));
-    private static final Pose SCORE3POSE = new Pose(41.294, 70.5, Math.toRadians(0));
-    private static final Pose SCORE4POSE = new Pose(41.294, 72.5, Math.toRadians(0));
+    private static final Pose WALLPOSE = new Pose(-69.820+72, -32.185+72, Math.toRadians(180));
+    private static final Pose SCORE1POSE = new Pose(-33.951+72, 1.677+72, Math.toRadians(0));
+    private static final Pose SCORE2POSE = new Pose(-33.951+72+1.5, 1.677+72, Math.toRadians(0));
+    private static final Pose SCORE3POSE = new Pose(-33.951+72+3, 1.677+72, Math.toRadians(0));
+    private static final Pose SCORE4POSE = new Pose(-33.951+72+4.5, 1.677+72, Math.toRadians(0));
     private static final Pose PARKPOSE = new Pose(8.396, 6.882, Math.toRadians(-10));
     private static final Pose PARKCONTROL = new Pose(7.235, 70.235);
 
