@@ -12,7 +12,7 @@ public class Drivetrain {
     DcMotor rightRear;
     DcMotor leftRear;
     double minSpeed = -0.8;
-    double maxSpeed = 0.8;
+    double maxSpeed = 1;
     double MICROSPEED = 0.3;
     boolean slowMode = false;
     public void init(HardwareMap hm){

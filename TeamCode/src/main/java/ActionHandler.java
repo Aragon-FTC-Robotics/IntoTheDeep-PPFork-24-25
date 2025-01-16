@@ -99,7 +99,7 @@ public class ActionHandler {
 
         if (gp1.left_bumper && !transferring && !intaking) {
             transfer();
-            transferring = true;
+            transferring = false;
         }
         if (gp2.left_stick_button && gp2.right_stick_button) {
             nudge();
@@ -232,7 +232,7 @@ public class ActionHandler {
 
             //wall pickup
             case WALLPICKUP:
-                if (elapsedMs >= 500){
+                if (elapsedMs >= 200){
                     bar.setState(Bar.BarState.WALL);
                     intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                     currentActionState = ActionState.IDLE;
@@ -346,6 +346,7 @@ public class ActionHandler {
     private void transfer() {
         bar.setState(Bar.BarState.NEUTRAL);
         wrist.setState(Wrist.wristState.TRANSFER);
+        claw.setState(Claw.ClawState.CLOSE);
         intakeWrist.setState(IntakeWrist.intakeWristState.TRANSFER);
         currentActionState = ActionState.TRANSFER_STAGE_1;
         timer.reset();
