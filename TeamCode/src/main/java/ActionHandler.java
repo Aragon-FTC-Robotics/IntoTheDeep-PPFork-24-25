@@ -181,7 +181,7 @@ public class ActionHandler {
             case TRANSFER_STAGE_2:
                 if (elapsedMs >= 800) {
 //                    intake.setState(Intake.intakeState.OUT);
-                    claw.setState(Claw.ClawState.OPEN);
+                    claw.setState(Claw.ClawState.SUPEROPEN);
                     Log.d("hello", "hello!!");
                     currentActionState = ActionState.TRANSFER_STAGE_3;
                     timer.reset();
