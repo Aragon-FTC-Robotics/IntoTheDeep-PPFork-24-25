@@ -27,6 +27,11 @@ public class ActionHandler {
     private ElapsedTime intakeTimer = new ElapsedTime();
     private boolean waitingForSecondCheck = false;
 
+    public ColorState currentColor = ColorState.NOTHING;
+    enum ColorState{
+        NOTHING, BLUE, RED, YELLOW
+    }
+
     public ActionState currentActionState = ActionState.IDLE;
 
     enum ActionState {
@@ -103,6 +108,7 @@ public class ActionHandler {
         if (gp1.left_bumper && !transferring) {
             transfer();
             transferring = true;
+            currentColor = ColorState.NOTHING;
         }
         if (gp2.left_stick_button && gp2.right_stick_button) {
             nudge();
@@ -143,6 +149,7 @@ public class ActionHandler {
         if (gp1.options) {
             intake.setState(Intake.intakeState.OUT);
             intaking = false;
+            currentColor = ColorState.NOTHING;
         }
 
         //reset
@@ -357,6 +364,7 @@ public class ActionHandler {
         timer.reset();
         intake.setState(Intake.intakeState.STOP);
         intaking = false;
+        currentColor = ColorState.NOTHING;
     }
 
     private void nudge(){
@@ -440,20 +448,36 @@ public class ActionHandler {
 
     public void light(){
         if (colorSensor.sensorIsRed()){
-            light.setState(LEDlight.LEDState.RED);
-            Log.d("LED", "RED");
+            currentColor = ColorState.RED;
         }
         if (colorSensor.sensorIsBlue()){
-            light.setState(LEDlight.LEDState.BLUE);
-            Log.d("LED", "BLUE");
+            currentColor = ColorState.BLUE;
         }
         if (colorSensor.sensorIsYellow()){
-            light.setState(LEDlight.LEDState.YELLOW);
-            Log.d("LED", "YELLOW");
+            currentColor = ColorState.YELLOW;
         }
-        else {
-            light.setState(LEDlight.LEDState.WHITE);
-            Log.d("LED", "WHITE");
+
+        switch (currentColor){
+            case BLUE:
+                light.setState(LEDlight.LEDState.BLUE);
+                Log.d("LED", "BLUE");
+                break;
+            case YELLOW:
+                light.setState(LEDlight.LEDState.YELLOW);
+                Log.d("LED", "YELLOW");
+                break;
+            case RED:
+                light.setState(LEDlight.LEDState.RED);
+                Log.d("LED", "RED");
+                break;
+            case NOTHING:
+                light.setState(LEDlight.LEDState.WHITE);
+                Log.d("LED", "WHITE");
+                break;
+            default:
+                light.setState(LEDlight.LEDState.WHITE);
+                Log.d("LED", "WHITE");
+                break;
         }
     }
 }
