@@ -14,12 +14,12 @@ public class Intake {
     public void Loop(Gamepad gp1, Gamepad gp2) {
         switch (currentState) {
             case IN:
-                intake.setPower(0.8);
+                intake.setPower(1);
                 gp1.stopRumble();
                 gp2.stopRumble();
                 break;
             case OUT:
-                intake.setPower(-0.7);
+                intake.setPower(-1);
                 gp1.rumble(Gamepad.RUMBLE_DURATION_CONTINUOUS);
                 gp2.rumble(Gamepad.RUMBLE_DURATION_CONTINUOUS);
                 break;
