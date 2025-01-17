@@ -21,14 +21,19 @@ public class LEDlight {
         switch (currentState){
             case WHITE:
                 LED.setPosition(WHITE);
+                break;
             case RED:
                 LED.setPosition(RED);
+                break;
             case BLUE:
                 LED.setPosition(BLUE);
+                break;
             case YELLOW:
                 LED.setPosition(YELLOW);
+                break;
             default:
                 LED.setPosition(WHITE);
+                break;
         }
     }
 
