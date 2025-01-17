@@ -48,7 +48,8 @@ public class ActionHandler {
         RESETEXTENDO,
         RESETSLIDES,
         NUDGE1, NUDGE2, NUDGE3, CLIPPOS, TRANSFER_STAGE_6, NUDGE4,
-        FLIP
+        FLIP,
+        SPIT, SPIT2, SPIT3
     }
 
     public void init(Slides s, Extendo e, Bar b, Wrist w, Intake f, Claw c, IntakeWrist iw, Colorsensor cs, LEDlight l, String alliance) {
@@ -150,6 +151,11 @@ public class ActionHandler {
             intake.setState(Intake.intakeState.OUT);
             intaking = false;
             currentColor = ColorState.NOTHING;
+        }
+        if (gp1.right_trigger > 0.8) {
+            intakeWrist.setState(IntakeWrist.intakeWristState.SPIT);
+            currentActionState = ActionState.SPIT;
+            timer.reset();
         }
 
         //reset
@@ -319,6 +325,20 @@ public class ActionHandler {
                     bar.setState(Bar.BarState.CLIP);
                     wrist.setState(Wrist.wristState.CLIP);
                     currentActionState = ActionState.IDLE;
+                }
+                break;
+            case SPIT:
+                if(elapsedMs>=400){
+                    intake.setState(Intake.intakeState.OUT);
+                    currentActionState = ActionState.SPIT2;
+                    timer.reset();
+                }
+                break;
+            case SPIT2:
+                if (elapsedMs>=800) {
+                    intake.setState(Intake.intakeState.STOP);
+                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
+                    currentActionState=ActionState.IDLE;
                 }
                 break;
 

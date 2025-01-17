@@ -49,8 +49,8 @@ public class Auto_5_0 extends OpMode {
     private static final Pose PUSH2POSE = new Pose(-58.897+72, -57.339+72, Math.toRadians(0));
     private static final Pose PREPARE3POSE = new Pose(-13.878+72, -62.211+72, Math.toRadians(0));
     private static final Pose PREPARE3CONTROL = new Pose(82.235,15, Math.toRadians(0));
-    private static final Pose PUSH3POSE = new Pose(-54.478+72, -35.570+72, Math.toRadians(0));
-    private static final Pose PUSH3CONTROL = new Pose(6, 1.588, Math.toRadians(0));
+    private static final Pose PUSH3POSE = new Pose(-54.078+72, -35.570+72, Math.toRadians(0));
+    private static final Pose PUSH3CONTROL = new Pose(8, 1.588, Math.toRadians(0));
     private static final Pose PUSH3TOWALLCONTROL = new Pose(66, 33);
     private static final Pose WALLPOSE = new Pose(-65.820+72, -44.185+72, Math.toRadians(180));
     private static final Pose SCORE1POSE = new Pose(-36+72, 1.6+72, Math.toRadians(0));
@@ -373,7 +373,7 @@ public class Auto_5_0 extends OpMode {
     }
     @Override
     public void init() {
-          pathTime = new Timer();
+        pathTime = new Timer();
         totalTime = new Timer();
         totalTime.resetTimer();
         Constants.setConstants(FConstants.class, LConstants.class);
