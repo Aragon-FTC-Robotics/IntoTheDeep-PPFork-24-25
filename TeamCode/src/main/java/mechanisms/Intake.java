@@ -41,7 +41,7 @@ public class Intake {
                 intake.setPower(1);
                 break;
             case OUT:
-                intake.setPower(-0.6);
+                intake.setPower(-1);
                 break;
             case STOP:
                 intake.setPower(0);

@@ -130,7 +130,7 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 201:
-                if (pathTime.getElapsedTimeSeconds()>0.35) {
+                if (pathTime.getElapsedTimeSeconds()>0.4) {
                     intake.setState(Intake.intakeState.IN);
                     intakeWrist.setState(IntakeWrist.intakeWristState.OUT); //Maybe needs to be a different out position
                     setPathState(3);
@@ -189,7 +189,7 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 801:
-                if (pathTime.getElapsedTimeSeconds()>0.35) {
+                if (pathTime.getElapsedTimeSeconds()>0.4) {
                     intake.setState(Intake.intakeState.IN);
                     intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
                     setPathState(9);
@@ -248,7 +248,7 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 1401:
-                if (pathTime.getElapsedTimeSeconds() > 0.35) {
+                if (pathTime.getElapsedTimeSeconds() > 0.4) {
                     intake.setState(Intake.intakeState.IN);
                     intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
                     setPathState(15);
