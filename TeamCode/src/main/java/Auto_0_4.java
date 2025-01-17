@@ -147,8 +147,8 @@ public class Auto_0_4 extends OpMode {
                 break;
             case 4:
                 if (pathTime.getElapsedTimeSeconds() > 1.5) {
-                    bar.setState(Bar.BarState.TRANSFER);
-                    wrist.setState(Wrist.wristState.TRANSFER);
+                    bar.setState(Bar.BarState.AUTOTRANSFER);
+                    wrist.setState(Wrist.wristState.AUTOTRANSFER);
                     setPathState(5);
                 }
                 break;
@@ -211,8 +211,8 @@ public class Auto_0_4 extends OpMode {
                 break;
             case 10:
                 if (pathTime.getElapsedTimeSeconds() > 1.5) {
-                    bar.setState(Bar.BarState.TRANSFER);
-                    wrist.setState(Wrist.wristState.TRANSFER);
+                    bar.setState(Bar.BarState.AUTOTRANSFER);
+                    wrist.setState(Wrist.wristState.AUTOTRANSFER);
                     setPathState(11);
                 }
                 break;
@@ -275,8 +275,8 @@ public class Auto_0_4 extends OpMode {
                 break;
             case 16:
                 if (pathTime.getElapsedTimeSeconds() > 1.5) {
-                    bar.setState(Bar.BarState.TRANSFER);
-                    wrist.setState(Wrist.wristState.TRANSFER);
+                    bar.setState(Bar.BarState.AUTOTRANSFER);
+                    wrist.setState(Wrist.wristState.AUTOTRANSFER);
                     setPathState(17);
                 }
                 break;
