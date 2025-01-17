@@ -96,6 +96,7 @@ public class ActionHandler {
         //intake
         if (gp1.y) {
             intake();
+            currentColor = ColorState.NOTHING;
         }
         intakeCheck();
 
