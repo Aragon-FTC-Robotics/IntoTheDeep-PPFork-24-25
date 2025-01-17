@@ -26,11 +26,11 @@ public class Auto_0_4 extends OpMode {
 
 
     private final Pose STARTPOSE = new Pose(7.065,96.000, Math.toRadians(-90));
-    private final Pose PRELOADPOSE = new Pose(-61.9656+72, 50.868+72, 4.96014);
-    private final Pose INTAKE1POSE = new Pose(-53.734+72, 54.800+72, 6.10658);
-    private final Pose INTAKE2POSE = new Pose(-54.310+72, 55.518+72, 0.14260);
-    private final Pose INTAKE3POSE = new Pose(-48.895+72, 52.430+72, 0.5254);
-    private final Pose BUCKETPOSE = new Pose(-54.5453+72, 57.327+72, 5.5738);
+    private final Pose PRELOADPOSE = new Pose(-54.7453+72, 57.527+72, 5.5738);
+    private final Pose INTAKE1POSE = new Pose(-55.934+72, 52.800+72, 6.10658);
+    private final Pose INTAKE2POSE = new Pose(-55.010+72, 58.218+72, 0.05);
+    private final Pose INTAKE3POSE = new Pose(-50.395+72, 53.730+72, 0.4854);
+    private final Pose BUCKETPOSE = new Pose(-54.7453+72, 57.527+72, 5.5738);
     private final Pose ASCENTPOSE = new Pose(-7.786+72, 20.307+72, Math.toRadians(-90));
     private final Pose ASCENTCONTROL1 = new Pose(84, 129);
 
@@ -109,7 +109,7 @@ public class Auto_0_4 extends OpMode {
                 setPathState(1);
                 break;
             case 1:
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() && pathTime.getElapsedTimeSeconds() > 0.45) {
                     claw.setState(Claw.ClawState.OPEN);
                     setPathState(101);
                 }
@@ -130,7 +130,7 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 201:
-                if (pathTime.getElapsedTimeSeconds()>0.4) {
+                if (pathTime.getElapsedTimeSeconds()>0.3) {
                     intake.setState(Intake.intakeState.IN);
                     intakeWrist.setState(IntakeWrist.intakeWristState.OUT); //Maybe needs to be a different out position
                     setPathState(3);
@@ -161,6 +161,11 @@ public class Auto_0_4 extends OpMode {
             case 6:
                 if (pathTime.getElapsedTimeSeconds() > 0.5) {
                     slides.setTargetPos(Slides.HIGH);
+                    setPathState(6001);
+                }
+                break;
+            case 6001:
+                if (pathTime.getElapsedTimeSeconds() > 0.6){
                     bar.setState(Bar.BarState.BUCKET);
                     wrist.setState(Wrist.wristState.BUCKET);
                     setPathState(7);
@@ -189,7 +194,7 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 801:
-                if (pathTime.getElapsedTimeSeconds()>0.4) {
+                if (pathTime.getElapsedTimeSeconds()>0.343) {
                     intake.setState(Intake.intakeState.IN);
                     intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
                     setPathState(9);
@@ -220,6 +225,11 @@ public class Auto_0_4 extends OpMode {
             case 12:
                 if (pathTime.getElapsedTimeSeconds() > 0.5) {
                     slides.setTargetPos(Slides.HIGH);
+                    setPathState(1201);
+                }
+                break;
+            case 1201:
+                if (pathTime.getElapsedTimeSeconds() > 0.6){
                     bar.setState(Bar.BarState.BUCKET);
                     wrist.setState(Wrist.wristState.BUCKET);
                     setPathState(13);
@@ -248,7 +258,7 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 1401:
-                if (pathTime.getElapsedTimeSeconds() > 0.4) {
+                if (pathTime.getElapsedTimeSeconds() > 0.344) {
                     intake.setState(Intake.intakeState.IN);
                     intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
                     setPathState(15);
@@ -279,6 +289,11 @@ public class Auto_0_4 extends OpMode {
             case 18:
                 if (pathTime.getElapsedTimeSeconds() > 0.5) {
                     slides.setTargetPos(Slides.HIGH);
+                    setPathState(1801);
+                }
+                break;
+            case 1801:
+                if (pathTime.getElapsedTimeSeconds() > 0.6){
                     bar.setState(Bar.BarState.BUCKET);
                     wrist.setState(Wrist.wristState.BUCKET);
                     setPathState(19);

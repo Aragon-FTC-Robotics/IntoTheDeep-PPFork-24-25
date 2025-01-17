@@ -154,7 +154,9 @@ public class ActionHandler {
             intaking = false;
             currentColor = ColorState.NOTHING;
         }
-        if (gp1.right_trigger > 0.8) {
+
+        //spit
+        if (gp1.right_trigger > 0.8 && currentActionState == ActionState.IDLE) {
             intakeWrist.setState(IntakeWrist.intakeWristState.SPIT);
             currentActionState = ActionState.SPIT;
             timer.reset();

@@ -10,7 +10,7 @@ public class Bar {
     public enum BarState {TRANSFER, WALL, BUCKET, CLIP, NEUTRAL}
     public BarState currentState = BarState.NEUTRAL;
 
-    public final double TRANSFER = 0.745; //as of jan 10 omni intake
+    public final double TRANSFER = 0.76; //as of jan 10 omni intake
     public final double WALL = 0.85;
     public final double BUCKET = 0.20;
     public final double CLIP = 0.45;

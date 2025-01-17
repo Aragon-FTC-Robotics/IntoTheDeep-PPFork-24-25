@@ -19,7 +19,7 @@ public class Intake {
                 gp2.stopRumble();
                 break;
             case OUT:
-                intake.setPower(-0.6);
+                intake.setPower(-0.7);
                 gp1.rumble(Gamepad.RUMBLE_DURATION_CONTINUOUS);
                 gp2.rumble(Gamepad.RUMBLE_DURATION_CONTINUOUS);
                 break;
