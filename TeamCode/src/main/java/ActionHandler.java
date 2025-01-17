@@ -104,6 +104,7 @@ public class ActionHandler {
             intake.setState(Intake.intakeState.OUT);
             currentActionState = ActionState.FLIP;
             timer.reset();
+            currentColor = ColorState.NOTHING;
         }
 
         if (gp1.left_bumper && !transferring) {
@@ -156,6 +157,7 @@ public class ActionHandler {
             intakeWrist.setState(IntakeWrist.intakeWristState.SPIT);
             currentActionState = ActionState.SPIT;
             timer.reset();
+            currentColor = ColorState.NOTHING;
         }
 
         //reset
@@ -415,6 +417,7 @@ public class ActionHandler {
                         if (wrongColor) {
                             intake.setState(Intake.intakeState.OUT); // Reverse flywheel to eject
                             intaking = false; // Stop intaking
+                            currentColor = ColorState.NOTHING;
                         }
                         intakeTimer.reset(); // Reset timer for the next cycle
                     }
