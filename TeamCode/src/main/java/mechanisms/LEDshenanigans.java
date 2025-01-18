@@ -32,7 +32,7 @@ public class LEDshenanigans {
     }
 
     public void whee(){
-        COLOR += 0.001;
+        COLOR += 0.006;
 
         if (COLOR >= 0.722) {
             COLOR = 0.279;
