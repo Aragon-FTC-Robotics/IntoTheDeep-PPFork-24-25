@@ -411,7 +411,7 @@ public class Auto_5_0 extends OpMode {
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap);
         follower.setStartingPose(STARTPOSE);
-        follower.setMaxPower(0.6);
+        follower.setMaxPower(1);
         buildPaths();
 
         bar = new Bar();

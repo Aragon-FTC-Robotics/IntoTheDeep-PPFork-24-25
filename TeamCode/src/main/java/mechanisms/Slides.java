@@ -16,7 +16,7 @@ public class Slides {
     public double power;
     public static final int GROUND = -30;
     public static final int LOW = 200;
-    public static final int MED = 1000;
+    public static final int MED = 1200;
     public static final int HIGH = 2700;
     public int targetPos = 0;
 
