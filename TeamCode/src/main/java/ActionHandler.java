@@ -74,6 +74,9 @@ public class ActionHandler {
     }
 
     public void Loop(Gamepad gp1, Gamepad gp2) {
+        if (gp1.share) {
+            extendo.DANGEROUS_RESET_ENCODERS();
+        }
         //clip
         if (gp2.x && !transferring) {
             wallPickup();

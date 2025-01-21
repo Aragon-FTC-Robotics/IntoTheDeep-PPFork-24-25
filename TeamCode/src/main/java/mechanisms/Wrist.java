@@ -15,7 +15,7 @@ public class Wrist {
     public final double BUCKET = 1;
     public final double CLIP = 0.34;
     public final double NEUTRAL = 0.2;
-    public final double PARK = 0.55;
+    public final double PARK = 0.84;
 
     public void init(HardwareMap hm) {
         wrist = hm.get(Servo.class, "wrist");

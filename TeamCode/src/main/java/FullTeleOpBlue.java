@@ -3,13 +3,19 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import java.util.HashMap;
-import java.util.Map;
+import mechanisms.Bar;
+import mechanisms.Claw;
+import mechanisms.Colorsensor;
+import mechanisms.Drivetrain;
+import mechanisms.Extendo;
+import mechanisms.Intake;
+import mechanisms.IntakeWrist;
+import mechanisms.LEDlight;
+import mechanisms.Slides;
+import mechanisms.Wrist;
 
-import mechanisms.*;
-
-@TeleOp(name="\uD83D\uDFE5 Red Teleop", group="!!!")
-public class FullTeleOpRed extends LinearOpMode {
+@TeleOp(name="\uD83D\uDFE6 Blue Teleop", group="!!!")
+public class FullTeleOpBlue extends LinearOpMode {
     public Bar bar = new Bar();
     public Claw claw = new Claw();
     public Colorsensor colorsensor = new Colorsensor();
@@ -44,7 +50,7 @@ public class FullTeleOpRed extends LinearOpMode {
         slides.init(hardwareMap);
         wrist.init(hardwareMap);
         led.init(hardwareMap);
-        actionHandler.init(slides,extendo,bar,wrist,intake,claw,intakeWrist,colorsensor,led, "red");
+        actionHandler.init(slides,extendo,bar,wrist,intake,claw,intakeWrist,colorsensor,led, "blue");
 
         gp1 = gamepad1;
         gp2 = gamepad2;

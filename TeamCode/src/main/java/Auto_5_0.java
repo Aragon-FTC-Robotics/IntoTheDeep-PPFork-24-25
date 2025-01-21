@@ -22,7 +22,7 @@ import mechanisms.Wrist;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 
-@Autonomous(name = "5+0 Specimen", group = "Auto")
+@Autonomous(name = "5+0 (CLIP!)", group = "Auto")
 public class Auto_5_0 extends OpMode {
     private Bar bar;
     private Claw claw;

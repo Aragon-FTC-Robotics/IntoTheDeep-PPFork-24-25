@@ -16,7 +16,7 @@ public class Bar {
     public final double BUCKET = 0.20;
     public final double CLIP = 0.49;
     public static final double NEUTRAL = 0.6;
-    public final double PARK = 0.54;
+    public final double PARK = 0.36;
 
     public void init(HardwareMap hm) {
         barServoRight = hm.get(Servo.class, "bar");

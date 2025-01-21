@@ -2,6 +2,8 @@ import static mechanisms.Intake.intakeState.IN;
 import static mechanisms.Intake.intakeState.STOP;
 import static mechanisms.IntakeWrist.intakeWristState.OUT;
 import static mechanisms.IntakeWrist.intakeWristState.SPIT;
+import static mechanisms.IntakeWrist.intakeWristState.SUPERALMOSTOUT;
+import static mechanisms.IntakeWrist.intakeWristState.SUPEROUT;
 import static mechanisms.IntakeWrist.intakeWristState.TRANSFER;
 
 import android.util.Log;
@@ -17,7 +19,7 @@ import mechanisms.*;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 
-@Autonomous(name = "0+4", group = "Auto")
+@Autonomous(name = "0+4 (BUCKET!)", group = "Auto")
 public class Auto_0_4 extends OpMode {
     private Bar bar;
     private Claw claw;
@@ -36,13 +38,13 @@ public class Auto_0_4 extends OpMode {
 
     private final Pose STARTPOSE = new Pose(7.065,96.000, Math.toRadians(-90));
     private final Pose PRELOADPOSE = new Pose(-54.7453+72, 57.527+72, 5.5738);
-    private final Pose INTAKE1POSE = new Pose(-55.734+72, 52.800+72, 6.10658);
-    private final Pose INTAKE1POSEMISS = new Pose(-53.734+72, 52.800+72, 6.10658);
-    private final Pose INTAKE2POSE = new Pose(-55.010+72, 58.218+72, 0.05);
-    private final Pose INTAKE2POSEMISS = new Pose(-53.010+72, 58.218+72, 0.05);
-    private final Pose INTAKE3POSE = new Pose(-50.395+72, 53.730+72, 0.4724);
-    private final Pose BUCKETPOSE = new Pose(-54.7453+72, 57.527+72, 5.5738);
-    private final Pose ASCENTPOSE = new Pose(9.396, 24.882, Math.toRadians(-10));
+    private final Pose INTAKE1POSE = new Pose(-55.734+72, 52.800+72, 6.01658);
+    private final Pose INTAKE1POSEMISS = new Pose(-53.734+72, 52.800+72, 6.15658);
+    private final Pose INTAKE2POSE = new Pose(-55.010+72, 58.218+72, 0.04345);
+    private final Pose INTAKE2POSEMISS = new Pose(-53.010+72, 58.218+72, 0.03);
+    private final Pose INTAKE3POSE = new Pose(-50.895+72, 54.330+72, 0.4974);
+    private final Pose BUCKETPOSE = new Pose(-54.7453+72, 57.527+72, 5.5788);
+    private final Pose ASCENTPOSE = new Pose(14.396, 24.882, Math.toRadians(-10));
     private final Pose ASCENTCONTROL1 = new Pose(18.235, 70.235);
 
     private Path scorePreload, park;
@@ -167,20 +169,20 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 201:
-                if (pathTime.getElapsedTimeSeconds()>0.30) {
+                if (pathTime.getElapsedTimeSeconds()>0.15) {
                     intake.setState(IN);
                     intakeWrist.setState(IntakeWrist.intakeWristState.SUPERALMOSTOUT); //Maybe needs to be a different out position
                     setPathState(202);
                 }
                 break;
             case 202:
-                if (pathTime.getElapsedTimeSeconds()>0.2){
-                    intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
+                if (pathTime.getElapsedTimeSeconds()>0.22){
+                    intakeWrist.setState(IntakeWrist.intakeWristState.SUPEROUT);
                     setPathState(3);
                 }
                 break;
             case 3:
-                if (pathTime.getElapsedTimeSeconds() > 2.25 || colorsensor.sensorIsYellow()) {
+                if (pathTime.getElapsedTimeSeconds() > 2 || colorsensor.sensorIsYellow()) {
                     intake.setState(Intake.intakeState.STOP);
 
 
@@ -206,13 +208,17 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 302:
-                if(pathTime.getElapsedTimeSeconds() > 2.5 || colorsensor.sensorIsYellow()) {
+                if(pathTime.getElapsedTimeSeconds() > 2 || colorsensor.sensorIsYellow()) {
                     intake.setState(Intake.intakeState.STOP);
 
                     intakeWrist.setState(TRANSFER);
                     follower.followPath(score1_fix, true); //Samp 1 -> bucket
                     extendo.setTargetPos(-100);
-                    setPathState(4);
+                    if(colorsensor.sensorIsYellow()) { //SUCCESS
+                        setPathState(4);
+                    } else {
+                        setPathState(401);
+                    }
                 }
                 break;
             case 4:
@@ -224,6 +230,11 @@ public class Auto_0_4 extends OpMode {
                     setPathState(5);
                 }
                 break;
+            case 401:
+                if (!follower.isBusy()) {
+                    setPathState(701);
+                }
+                 break;
             case 5:
                 if (pathTime.getElapsedTimeSeconds() > 0.5) {
                     claw.setState(Claw.ClawState.CLOSE);
@@ -245,7 +256,7 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 7:
-                if (pathTime.getElapsedTimeSeconds() > 0.6) {
+                if (pathTime.getElapsedTimeSeconds() > 0.8) {
                     intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                     claw.setState(Claw.ClawState.OPEN);
                     setPathState(701);
@@ -264,6 +275,7 @@ public class Auto_0_4 extends OpMode {
                     wrist.setState(Wrist.wristState.NEUTRAL);
                     claw.setState(Claw.ClawState.CLOSE);
                     extendo.setTargetPos(Extendo.MAX-0);
+                    intakeWrist.setState(SUPERALMOSTOUT);
                     setPathState(801);
                 }
                 break;
@@ -275,7 +287,7 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 9:
-                if (pathTime.getElapsedTimeSeconds() > 2.5 || colorsensor.sensorIsYellow()) {
+                if (pathTime.getElapsedTimeSeconds() > 2 || colorsensor.sensorIsYellow()) {
                     intake.setState(Intake.intakeState.STOP);
                     if(!colorsensor.sensorIsYellow()) { //FAIL
                         Log.d("FAIL!!!!", "GO BACK TO SCHOOL");
@@ -294,7 +306,7 @@ public class Auto_0_4 extends OpMode {
                 break;
             case 901:
                 if(pathTime.getElapsedTimeSeconds() > 0.5) {
-                    intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
+                    intakeWrist.setState(IntakeWrist.intakeWristState.SUPEROUT);
                     intake.setState(IN);
                     setPathState(902);
                 }
@@ -306,9 +318,18 @@ public class Auto_0_4 extends OpMode {
                     intakeWrist.setState(TRANSFER);
                     follower.followPath(score2_fix, true); //Samp 1 -> bucket
                     extendo.setTargetPos(-100);
-                    setPathState(10);
+                    if(colorsensor.sensorIsYellow()) { //succeed
+                        setPathState(10);
+                    } else {
+                        setPathState(9001);
+                    }
+
                 }
                 break;
+            case 9001:
+                if(follower.isBusy()) {
+                    setPathState(1301);
+                }
             case 10:
                 if (pathTime.getElapsedTimeSeconds() > 1.5) {
                     claw.setState(Claw.ClawState.OPEN);
@@ -339,7 +360,7 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 13:
-                if (pathTime.getElapsedTimeSeconds() > 0.6) {
+                if (pathTime.getElapsedTimeSeconds() > 0.7) {
                     intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                     claw.setState(Claw.ClawState.OPEN);
                     setPathState(1301);
@@ -363,12 +384,12 @@ public class Auto_0_4 extends OpMode {
             case 1401:
                 if (pathTime.getElapsedTimeSeconds() > 0.344) {
                     intake.setState(IN);
-                    intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
+                    intakeWrist.setState(IntakeWrist.intakeWristState.SUPEROUT);
                     setPathState(15);
                 }
                 break;
             case 15:
-                if (pathTime.getElapsedTimeSeconds() > 2.5 || colorsensor.sensorIsYellow()) {
+                if (pathTime.getElapsedTimeSeconds() > 2 || colorsensor.sensorIsYellow()) {
                     if (!colorsensor.sensorIsYellow()) {//FAIL
                         intakeWrist.setState(SPIT);
                         intake.setState(STOP);
@@ -379,13 +400,21 @@ public class Auto_0_4 extends OpMode {
                         claw.setState(Claw.ClawState.CLOSE);
                         intakeWrist.setState(TRANSFER);
                         follower.followPath(score3, true); //Samp 3 -> bucket
-                        setPathState(16);
+                        if(colorsensor.sensorIsYellow()) {//SUICCEed
+                            setPathState(16);
+                        } else {
+                            setPathState(15001);
+                        }
                     }
                 }
                 break;
+            case 15001:
+                if(!follower.isBusy()) {
+                    setPathState(1901);
+                }
             case 1501:
                 if(pathTime.getElapsedTimeSeconds()>1) {
-                    intakeWrist.setState(OUT);
+                    intakeWrist.setState(SUPEROUT);
                     intake.setState(IN);
                     setPathState(1502);
                 }
@@ -397,8 +426,17 @@ public class Auto_0_4 extends OpMode {
                         claw.setState(Claw.ClawState.CLOSE);
                         intakeWrist.setState(TRANSFER);
                         follower.followPath(score3, true); //Samp 3 -> bucket
-                        setPathState(16);
+                        if (colorsensor.sensorIsYellow()) {// succede
+                            setPathState(16);
+                        } else {
+                            setPathState(15002);
+                        }
                     }
+                break;
+            case 15002:
+                if(!follower.isBusy()) {
+                    setPathState(1901);
+                }
                 break;
 
             case 16:
@@ -519,6 +557,11 @@ public class Auto_0_4 extends OpMode {
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());
+        if(totalTime.getElapsedTimeSeconds() > 28) {
+            setPathState(-1);
+            bar.setState(Bar.BarState.PARK);
+            wrist.setState(Wrist.wristState.PARK);
+        }
         telemetry.update();
     }
 }
