@@ -95,7 +95,6 @@ public class ActionHandler {
             bar.setState(Bar.BarState.NEUTRAL);
             wrist.setState(Wrist.wristState.NEUTRAL);
         }
-
         //intake
         if (gp1.y) {
             intake();
@@ -184,7 +183,6 @@ public class ActionHandler {
             gp1.rumbleBlips(3);
             gp2.rumbleBlips(3);
         }
-
         light();
         TimedActions();
     }

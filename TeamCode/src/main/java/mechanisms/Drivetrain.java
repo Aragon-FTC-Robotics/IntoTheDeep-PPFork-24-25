@@ -14,7 +14,7 @@ public class Drivetrain {
     double minSpeed = -1;
     double maxSpeed = 1;
     double MICROSPEED = 0.3;
-    boolean slowMode = false;
+    public static boolean slowMode = false;
     public void init(HardwareMap hm){
         rightFront = hm.get(DcMotor.class, "rightFront");
         leftFront = hm.get(DcMotor.class, "leftFront");
@@ -47,7 +47,8 @@ public class Drivetrain {
         double y = gp1.left_stick_y;
         double x = gp1.left_stick_x * -1.1;
         double rx = gp1.right_stick_x * -1;
-
+        maxSpeed = slowMode ? 0.5 : 1;
+        minSpeed = slowMode ? -0.5 : -1;
 //        if (gp1.dpad_up) {
 //            x = 0; y = -MICROSPEED;
 //        }

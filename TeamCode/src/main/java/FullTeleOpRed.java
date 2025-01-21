@@ -1,3 +1,5 @@
+
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -60,6 +62,11 @@ public class FullTeleOpRed extends LinearOpMode {
             colorsensor.Loop();
             claw.Loop();
             drivetrain.Loop(gp1, gp2); //Gamepad inputs handled by class
+            if (slides.getLPos() > 1000) {
+                drivetrain.slowModeON();
+            } else {
+                drivetrain.slowModeOFF();
+            }
             extendo.Loop();
             intake.Loop(gp1, gp2); //Gamepad needed to rumble
             intakeWrist.Loop();
