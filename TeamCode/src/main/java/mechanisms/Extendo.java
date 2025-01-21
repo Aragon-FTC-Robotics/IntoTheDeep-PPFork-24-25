@@ -21,6 +21,7 @@ public class Extendo {
     public static final int MIN = -250;
     public static final int MED = 900;
     private int targetPos = 0;
+    double adjustedP;
 
     public boolean usingpid = true;
 
@@ -30,9 +31,10 @@ public class Extendo {
 //        extendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extendo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-    public void Loop() {
+    public void Loop(double voltage) {
         if (usingpid) {
-            controller.setPID(p, i, d);
+            adjustedP = p * 13 / voltage;
+            controller.setPID(adjustedP,i,d);
             pid = controller.calculate(extendo.getCurrentPosition(), targetPos);
             double ff = f;
             pidpower = pid + ff;

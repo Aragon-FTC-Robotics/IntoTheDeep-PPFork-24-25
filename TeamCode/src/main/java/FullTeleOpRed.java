@@ -3,6 +3,7 @@
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.HashMap;
@@ -25,15 +26,17 @@ public class FullTeleOpRed extends LinearOpMode {
     public LEDlight led = new LEDlight();
     public ElapsedTime loopTimer = new ElapsedTime();
     public ElapsedTime opTimer = new ElapsedTime();
+    public ElapsedTime lastVoltageCheck = new ElapsedTime();
     public Gamepad gp1;
     public Gamepad gp2;
+    public VoltageSensor voltageSensor;
+    double currentVoltage = 13;
     private double loopTime, opTime;
     private double[] highestTime;
     @Override
     public void waitForStart() {
         super.waitForStart();
     }
-
     @Override
     public void runOpMode() throws InterruptedException {
         bar.init(hardwareMap);
@@ -46,6 +49,7 @@ public class FullTeleOpRed extends LinearOpMode {
         slides.init(hardwareMap);
         wrist.init(hardwareMap);
         led.init(hardwareMap);
+        voltageSensor = hardwareMap.get(VoltageSensor.class, "Control Hub");
         actionHandler.init(slides,extendo,bar,wrist,intake,claw,intakeWrist,colorsensor,led, "red");
 
         gp1 = gamepad1;
@@ -55,6 +59,7 @@ public class FullTeleOpRed extends LinearOpMode {
         highestTime = new double[]{0.000, 0};
         loopTimer.reset();
         opTimer.reset();
+        lastVoltageCheck.reset();
         while(opModeIsActive() && !isStopRequested()) {
             loopTime = loopTimer.milliseconds();
             opTime = opTimer.milliseconds();
@@ -67,13 +72,17 @@ public class FullTeleOpRed extends LinearOpMode {
             } else {
                 drivetrain.slowModeOFF();
             }
-            extendo.Loop();
+            extendo.Loop(currentVoltage);
             intake.Loop(gp1, gp2); //Gamepad needed to rumble
             intakeWrist.Loop();
-            slides.Loop();
+            slides.Loop(currentVoltage);
             wrist.Loop();
             led.Loop();
-            actionHandler.Loop(gp1, gp2); // :)
+            actionHandler.Loop(gp1, gp2); /// :)
+            if (lastVoltageCheck.milliseconds() > 500) { //check every 500ms
+                currentVoltage = voltageSensor.getVoltage();
+                lastVoltageCheck.reset();
+            }
             telemetry.addData("High time (ms)", highestTime[0] + "; at " + highestTime[1]);
             telemetry.addData("STATE", actionHandler.currentActionState);
             telemetry.addData("intaking? extendoing? transferring?", actionHandler.isIntaking() + " / " + actionHandler.isExtendoout() + " / " + actionHandler.isTransferring());

@@ -19,7 +19,7 @@ public class Slides {
     public static final int MED = 1200;
     public static final int HIGH = 2700;
     public int targetPos = 0;
-
+    double adjustedP;
     public boolean usingpid = true;
 
     public void init(HardwareMap hm) {
@@ -36,9 +36,10 @@ public class Slides {
         slideRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void Loop() {
+    public void Loop(double voltage) {
         if (usingpid){
-            controller.setPID(p,i,d);
+            adjustedP = p * 13/voltage;
+            controller.setPID(adjustedP,i,d);
             pid = controller.calculate(slideLeft.getCurrentPosition(), targetPos);
 //        double ff = Math.cos(Math.toRadians(target / ticks_in_degree)) * f;
             double ff = 0;
