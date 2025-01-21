@@ -63,8 +63,8 @@ public class Auto_5_0 extends OpMode {
 
     private static final Pose WALLPOSE = new Pose(-65.820+72, -44.185+72, Math.toRadians(180));
     private static final Pose SCORE1POSE = new Pose(-36+72, 1.6+72, Math.toRadians(0));
-    private static final Pose SCORETOWALLCONTROL = new Pose(30.805, 67.722, Math.toRadians(0));
-    private static final Pose SCORETOWALLCONTROL2 = new Pose(38.384, 31.049, Math.toRadians(0));
+    private static final Pose SCORETOWALLCONTROL = new Pose(23.033, 76.722, Math.toRadians(0));
+    private static final Pose SCORETOWALLCONTROL2 = new Pose(26.678, 28.667, Math.toRadians(0));
 
     private static final Pose SCORE2POSE = new Pose(-36+72, 1.6+72+2, Math.toRadians(0));
     private static final Pose SCORE3POSE = new Pose(-36+72, 1.677+72+4, Math.toRadians(0));
