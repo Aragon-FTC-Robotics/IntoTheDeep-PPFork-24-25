@@ -144,7 +144,7 @@ public class Auto_5_0 extends OpMode {
     private void updatePaths() {
         switch (pathState) {
             case 0:
-                extendo.setTargetPos(Extendo.MIN);
+                extendo.setTargetPos(0);
                 intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                 slides.setTargetPos(Slides.MED);
                 bar.setState(Bar.BarState.CLIP);

@@ -112,6 +112,9 @@ public class ActionHandler {
         }
 
         if (gp1.left_bumper && !transferring) {
+            extendo.setTargetPos(Extendo.MIN);
+            claw.setState(Claw.ClawState.CLOSE);
+            extendoout = false;
             transfer();
             transferring = true;
             currentColor = ColorState.NOTHING;
@@ -192,52 +195,50 @@ public class ActionHandler {
         switch (currentActionState) {
             //transfer
             case TRANSFER_STAGE_1:
-                if (elapsedMs >= 200) {
-                    extendo.setTargetPos(Extendo.MIN);
-                    extendoout = false;
+                if (elapsedMs >= 600) {
+                    claw.setState(Claw.ClawState.SUPEROPEN);
                     currentActionState = ActionState.TRANSFER_STAGE_2;
                     timer.reset();
                 }
                 break;
             case TRANSFER_STAGE_2:
-                if (elapsedMs >= 800) {
-//                    intake.setState(Intake.intakeState.OUT);
-                    claw.setState(Claw.ClawState.SUPEROPEN);
+                if (elapsedMs >= 600) {
+                    bar.setState(Bar.BarState.TRANSFER);
+                    wrist.setState(Wrist.wristState.TRANSFER);
                     Log.d("hello", "hello!!");
                     currentActionState = ActionState.TRANSFER_STAGE_3;
                     timer.reset();
                 }
                 break;
             case TRANSFER_STAGE_3:
-                if (elapsedMs >= 600) {
-                    bar.setState(Bar.BarState.TRANSFER);
-                    wrist.setState(Wrist.wristState.TRANSFER);
+                if (elapsedMs >= 150) {
+                    claw.setState(Claw.ClawState.CLOSE);
                     currentActionState = ActionState.TRANSFER_STAGE_4;
                     timer.reset();
                 }
                 break;
             case TRANSFER_STAGE_4:
-                if (elapsedMs >= 250) {
-                    claw.setState(Claw.ClawState.CLOSE);
-                    currentActionState = ActionState.TRANSFER_STAGE_5;
-                    timer.reset();
-                }
-                break;
-            case TRANSFER_STAGE_5:
-                if (elapsedMs >= 500) {
+                if (elapsedMs >= 150) {
                     bar.setState(Bar.BarState.NEUTRAL);
                     wrist.setState(Wrist.wristState.NEUTRAL);
-                    currentActionState = ActionState.TRANSFER_STAGE_6;
+                    transferring = false;
+                    currentActionState = ActionState.IDLE;
                     timer.reset();
                 }
                 break;
-            case TRANSFER_STAGE_6:
-                if (elapsedMs >= 500) {
-                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
-                    transferring = false;
-                    currentActionState = ActionState.IDLE;
-                }
-                break;
+//            case TRANSFER_STAGE_5:
+//                if (elapsedMs >= 500) {
+//                    currentActionState = ActionState.TRANSFER_STAGE_6;
+//                    timer.reset();
+//                }
+//                break;
+//            case TRANSFER_STAGE_6:
+//                if (elapsedMs >= 500) {
+//                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
+//                    transferring = false;
+//                    currentActionState = ActionState.IDLE;
+//                }
+//                break;
 
             //high bucket
             case HIGHBUCKET:
