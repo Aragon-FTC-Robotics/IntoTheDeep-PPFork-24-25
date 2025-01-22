@@ -38,10 +38,10 @@ public class Auto_0_4 extends OpMode {
 
     private final Pose STARTPOSE = new Pose(7.065,96.000, Math.toRadians(-90));
     private final Pose PRELOADPOSE = new Pose(-54.7453+72, 57.527+72, 5.5738);
-    private final Pose INTAKE1POSE = new Pose(-55.734+72, 52.800+72, 6.01658);
-    private final Pose INTAKE1POSEMISS = new Pose(-53.734+72, 52.800+72, 6.15658);
-    private final Pose INTAKE2POSE = new Pose(-55.010+72, 58.218+72, 0.04345);
-    private final Pose INTAKE2POSEMISS = new Pose(-53.010+72, 58.218+72, 0.03);
+    private final Pose INTAKE1POSE = new Pose(-55.734+72, 59.499+72, 0);
+    private final Pose INTAKE1POSEMISS = new Pose(-53.734+72, 59.499+72, 0);
+    private final Pose INTAKE2POSE = new Pose(-55.010+72, 58.218+72, 0);
+    private final Pose INTAKE2POSEMISS = new Pose(-53.010+72, 58.218+72, 0);
     private final Pose INTAKE3POSE = new Pose(-50.895+72, 54.330+72, 0.4974);
     private final Pose BUCKETPOSE = new Pose(-54.7453+72, 57.527+72, 5.5788);
     private final Pose ASCENTPOSE = new Pose(14.396, 24.882, Math.toRadians(-10));
@@ -545,10 +545,10 @@ public class Auto_0_4 extends OpMode {
         updatePaths();
         bar.Loop();
         claw.Loop();
-        extendo.Loop();
+        extendo.Loop(13);
         intake.Loop();
         intakeWrist.Loop();
-        slides.Loop();
+        slides.Loop(13);
         wrist.Loop();
         led.Loop();
         if(intake.getState()=="IN"){colorsensor.Loop();}
