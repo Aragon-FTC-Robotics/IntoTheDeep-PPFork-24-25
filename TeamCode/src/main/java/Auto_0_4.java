@@ -8,6 +8,8 @@ import static mechanisms.IntakeWrist.intakeWristState.TRANSFER;
 
 import android.util.Log;
 
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.pedropathing.follower.*;
 import com.pedropathing.localization.*;
 import com.pedropathing.pathgen.*;
@@ -15,10 +17,12 @@ import com.pedropathing.util.*;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import mechanisms.*;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
-
+@Config
 @Autonomous(name = "0+4 (BUCKET!)", group = "Auto")
 public class Auto_0_4 extends OpMode {
     private Bar bar;
@@ -34,18 +38,21 @@ public class Auto_0_4 extends OpMode {
     private Follower follower;
     private Timer pathTime, totalTime;
     private int pathState = 0;
+    private PoseUpdater poseUpdater;
+    private DashboardPoseTracker dashboardPoseTracker;
+    private Telemetry telemetryA;
 
 
-    private final Pose STARTPOSE = new Pose(7.065,96.000, Math.toRadians(-90));
-    private final Pose PRELOADPOSE = new Pose(-54.7453+72, 57.527+72, 5.5738);
-    private final Pose INTAKE1POSE = new Pose(-55.734+72, 59.499+72, 0);
-    private final Pose INTAKE1POSEMISS = new Pose(-53.734+72, 59.499+72, 0);
-    private final Pose INTAKE2POSE = new Pose(-55.010+72, 58.218+72, 0);
-    private final Pose INTAKE2POSEMISS = new Pose(-53.010+72, 58.218+72, 0);
-    private final Pose INTAKE3POSE = new Pose(-50.895+72, 54.330+72, 0.4974);
-    private final Pose BUCKETPOSE = new Pose(-54.7453+72, 57.527+72, 5.5788);
-    private final Pose ASCENTPOSE = new Pose(14.396, 24.882, Math.toRadians(-10));
-    private final Pose ASCENTCONTROL1 = new Pose(18.235, 70.235);
+    private static final Pose STARTPOSE = new Pose(7.065,96.000, Math.toRadians(-90));
+    private static final Pose PRELOADPOSE = new Pose(-54.7453+72, 57.527+72, 5.5738);
+    private static final Pose INTAKE1POSE = new Pose(-55.380+72, 48.961+72, 6.264);
+    private static final Pose INTAKE1POSEMISS = new Pose(-53.734+72, 48.961+72, 6.224);
+    private static final Pose INTAKE2POSE = new Pose(-53.173+72, 59.935+72, 6.2103);
+    private static final Pose INTAKE2POSEMISS = new Pose(-50.753+72, 60.200+72, 6.1644);
+    private static final Pose INTAKE3POSE = new Pose(-53.442+72, 57.047+72, 0.296);
+    private static final Pose BUCKETPOSE = new Pose(-54.7453+72, 57.527+72, 5.5788);
+    private static final Pose ASCENTPOSE = new Pose(14.396, 24.882, Math.toRadians(-10));
+    private static final Pose ASCENTCONTROL1 = new Pose(18.235, 70.235);
 
     private Path scorePreload, park;
     private PathChain grab1, grab2, grab3, score1, score1_fix, score2, score3, grab1_fix, grab2_fix, score2_fix;
@@ -176,8 +183,8 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 202:
-                if (pathTime.getElapsedTimeSeconds()>0.22){
-                    intakeWrist.setState(IntakeWrist.intakeWristState.SUPEROUT);
+                if (extendo.getPos()>1400){
+                    intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
                     setPathState(3);
                 }
                 break;
@@ -276,12 +283,12 @@ public class Auto_0_4 extends OpMode {
                     claw.setState(Claw.ClawState.CLOSE);
                     extendo.setTargetPos(Extendo.MAX-0);
                     intakeWrist.setState(SUPERALMOSTOUT);
+                    intake.setState(IN);
                     setPathState(801);
                 }
                 break;
             case 801:
-                if (pathTime.getElapsedTimeSeconds()>0.343) {
-                    intake.setState(IN);
+                if (extendo.getPos()>1400) {
                     intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
                     setPathState(9);
                 }
@@ -378,13 +385,14 @@ public class Auto_0_4 extends OpMode {
                     bar.setState(Bar.BarState.NEUTRAL);
                     wrist.setState(Wrist.wristState.NEUTRAL);
                     extendo.setTargetPos(Extendo.MAX-00);
+                    intakeWrist.setState(SUPERALMOSTOUT);
+                    intake.setState(IN);
                     setPathState(1401);
                 }
                 break;
             case 1401:
-                if (pathTime.getElapsedTimeSeconds() > 0.344) {
-                    intake.setState(IN);
-                    intakeWrist.setState(IntakeWrist.intakeWristState.SUPEROUT);
+                if (extendo.getPos()>1400) {
+                    intakeWrist.setState(OUT);
                     setPathState(15);
                 }
                 break;
@@ -504,6 +512,12 @@ public class Auto_0_4 extends OpMode {
         follower = new Follower(hardwareMap);
         follower.setStartingPose(STARTPOSE);
         follower.setMaxPower(1);
+        poseUpdater = new PoseUpdater(hardwareMap);
+        poseUpdater.setStartingPose(new Pose(STARTPOSE.getX(), STARTPOSE.getY(), STARTPOSE.getHeading()));
+
+        dashboardPoseTracker = new DashboardPoseTracker(poseUpdater);
+        Drawing.drawRobot(poseUpdater.getPose(), "#4CAF50");
+        Drawing.sendPacket();
         buildPaths();
 
         bar = new Bar();
@@ -563,5 +577,10 @@ public class Auto_0_4 extends OpMode {
             wrist.setState(Wrist.wristState.PARK);
         }
         telemetry.update();
+        poseUpdater.update();
+        dashboardPoseTracker.update();
+        Drawing.drawPoseHistory(dashboardPoseTracker, "#4CAF50");
+        Drawing.drawRobot(poseUpdater.getPose(), "#4CAF50");
+        Drawing.sendPacket();
     }
 }

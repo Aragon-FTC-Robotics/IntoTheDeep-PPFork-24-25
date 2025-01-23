@@ -9,11 +9,14 @@ import static com.pedropathing.follower.FollowerConstants.leftRearMotorDirection
 import static com.pedropathing.follower.FollowerConstants.rightFrontMotorDirection;
 import static com.pedropathing.follower.FollowerConstants.rightRearMotorDirection;
 
+import static mechanisms.Extendo.*;
+
 import android.graphics.Point;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.pedropathing.localization.Pose;
 import com.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -30,6 +33,7 @@ import com.pedropathing.util.Drawing;
 import java.util.Arrays;
 import java.util.List;
 
+import mechanisms.Extendo;
 import pedroPathing.constants.*;
 
 /**
@@ -38,6 +42,7 @@ import pedroPathing.constants.*;
  * on FTC Dashboard (192/168/43/1:8080/dash). You should use this to check the robot's localization.
  *
  * @author Anyi Lin - 10158 Scott's Bots
+ * contrib michael
  * @version 1.0, 5/6/2024
  */
 @Config
@@ -46,8 +51,9 @@ public class LocalizationTest extends OpMode {
     private PoseUpdater poseUpdater;
     private DashboardPoseTracker dashboardPoseTracker;
     private Telemetry telemetryA;
-
+    private PIDController controller;
     private DcMotorEx leftFront;
+    private Extendo extendo = new Extendo();
     private DcMotorEx leftRear;
     private DcMotorEx rightFront;
     private DcMotorEx rightRear;
@@ -62,7 +68,7 @@ public class LocalizationTest extends OpMode {
     public void init() {
         Constants.setConstants(FConstants.class, LConstants.class);
         poseUpdater = new PoseUpdater(hardwareMap);
-        poseUpdater.setStartingPose(new Pose(startX, startY, startHeading));
+        poseUpdater.setStartingPose(new Pose(startX-72, startY-72, Math.toRadians(startHeading)));
 
         dashboardPoseTracker = new DashboardPoseTracker(poseUpdater);
 
@@ -70,6 +76,8 @@ public class LocalizationTest extends OpMode {
         leftRear = hardwareMap.get(DcMotorEx.class, leftRearMotorName);
         rightRear = hardwareMap.get(DcMotorEx.class, rightRearMotorName);
         rightFront = hardwareMap.get(DcMotorEx.class, rightFrontMotorName);
+        extendo.init(hardwareMap);
+        extendo.setTargetPos(-100);
         leftFront.setDirection(leftFrontMotorDirection);
         leftRear.setDirection(leftRearMotorDirection);
         rightFront.setDirection(rightFrontMotorDirection);
@@ -91,7 +99,6 @@ public class LocalizationTest extends OpMode {
         telemetryA.addLine("This will print your robot's position to telemetry while "
                 + "allowing robot control through a basic mecanum drive on gamepad 1.");
         telemetryA.update();
-
         Drawing.drawRobot(poseUpdater.getPose(), "#4CAF50");
         Drawing.sendPacket();
     }
@@ -128,7 +135,7 @@ public class LocalizationTest extends OpMode {
         telemetryA.addData("heading", poseUpdater.getPose().getHeading());
         telemetryA.addData("total heading", poseUpdater.getTotalHeading());
         telemetryA.update();
-
+        extendo.Loop(13);
         Drawing.drawPoseHistory(dashboardPoseTracker, "#4CAF50");
         Drawing.drawRobot(poseUpdater.getPose(), "#4CAF50");
         Drawing.sendPacket();

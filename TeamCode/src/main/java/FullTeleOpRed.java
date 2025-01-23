@@ -90,6 +90,7 @@ public class FullTeleOpRed extends LinearOpMode {
             telemetry.addData("intakewrist state", intakeWrist.getState());
             telemetry.addData("red? / yellow? / blue?", colorsensor.sensorIsRed() + " " + colorsensor.sensorIsYellow() + " " + colorsensor.sensorIsBlue());
             telemetry.addData("EXTENDO POS | pid?", extendo.getPos() + " " + extendo.usingpid);
+            telemetry.addData("voltage / voltage check timer", currentVoltage + " / " + lastVoltageCheck.milliseconds());
             telemetry.update();
             if (loopTime>highestTime[0] || (highestTime[1]-opTime > 5000)) { //If loop time is greater than the highest time OR 5 seconds have passed since last highest time
                 highestTime[0] = loopTime; //set highest time to loop time

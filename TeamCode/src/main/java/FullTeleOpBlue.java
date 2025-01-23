@@ -15,7 +15,7 @@ import mechanisms.LEDlight;
 import mechanisms.Slides;
 import mechanisms.Wrist;
 
-@TeleOp(name="Blue Teleop", group="!!!")
+@TeleOp(name="th blue Teleop", group="!!!")
 public class FullTeleOpBlue extends LinearOpMode {
     public Bar bar = new Bar();
     public Claw claw = new Claw();

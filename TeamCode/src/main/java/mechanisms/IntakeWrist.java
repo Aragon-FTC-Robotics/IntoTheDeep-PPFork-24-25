@@ -10,7 +10,7 @@ public class IntakeWrist {
     public final double IN = 0.16;
     public final double OUT = 0.95; //Extendo out
     public final double SUPEROUT = 0.955; //Extendo in
-    public final double SUPERALMOSTOUT = 0.89;
+    public final double SUPERALMOSTOUT = 0.85;
     public final double TRANSFER = 0.35;
     public final double SPIT = 0.8;
     public void init(HardwareMap hm) {

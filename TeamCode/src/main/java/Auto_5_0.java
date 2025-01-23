@@ -39,9 +39,9 @@ public class Auto_5_0 extends OpMode {
 
 
     //Clip x: 41.29411764705882
-    private static final Pose STARTPOSE = new Pose(-65.25+72, -12+72, Math.toRadians(0));
+    private static final Pose STARTPOSE = new Pose(6.75, 60, Math.toRadians(0));
 
-    private static final Pose PRELOADPOSE = new Pose(-29.667+72, -2.9+72, Math.toRadians(0));
+    private static final Pose PRELOADPOSE = new Pose(-29.597+72, -5.343+72, Math.toRadians(0));
     private static final Pose PREPARE1POSE = new Pose(-14.489+72, -46.716+72, Math.toRadians(0));
     private static final Pose PREPARE1CONTROL = new Pose(4.889, 28.115, Math.toRadians(0));
     private static final Pose PREPARE1CONTROL2 = new Pose(79.701, 37.650, Math.toRadians(0));
@@ -61,14 +61,14 @@ public class Auto_5_0 extends OpMode {
 
     private static final Pose PUSH3TOWALLCONTROL = new Pose(74.322, 36.427);
 
-    private static final Pose WALLPOSE = new Pose(-65.820+72, -44.185+72, Math.toRadians(180));
-    private static final Pose SCORE1POSE = new Pose(-36+72, 1.6+72, Math.toRadians(0));
+    private static final Pose WALLPOSE = new Pose(-64.1+72, -44.185+72, Math.toRadians(180));
+    private static final Pose SCORE1POSE = new Pose(-29.597+72, 1.6+72, Math.toRadians(0));
     private static final Pose SCORETOWALLCONTROL = new Pose(23.033, 76.722, Math.toRadians(0));
     private static final Pose SCORETOWALLCONTROL2 = new Pose(26.678, 28.667, Math.toRadians(0));
 
-    private static final Pose SCORE2POSE = new Pose(-36+72, 1.6+72+2, Math.toRadians(0));
-    private static final Pose SCORE3POSE = new Pose(-36+72, 1.677+72+4, Math.toRadians(0));
-    private static final Pose SCORE4POSE = new Pose(-36+72, 1.677+72+6, Math.toRadians(0));
+    private static final Pose SCORE2POSE = new Pose(-29.597+72, 1.6+72+2, Math.toRadians(0));
+    private static final Pose SCORE3POSE = new Pose(-29.597+72, 1.677+72+4, Math.toRadians(0));
+    private static final Pose SCORE4POSE = new Pose(-29.597+72, 1.677+72+6, Math.toRadians(0));
     private static final Pose PARKPOSE = new Pose(8.396, 6.882, Math.toRadians(-10));
     private static final Pose PARKCONTROL = new Pose(7.235, 70.235);
 
@@ -449,10 +449,10 @@ public class Auto_5_0 extends OpMode {
         updatePaths();
         bar.Loop();
         claw.Loop();
-        extendo.Loop();
+        extendo.Loop(13);
         intake.Loop();
         intakeWrist.Loop();
-        slides.Loop();
+        slides.Loop(13);
         wrist.Loop();
         telemetry.addData("path state", pathState);
         telemetry.addData("Elapsed Time", pathTime.getElapsedTimeSeconds());

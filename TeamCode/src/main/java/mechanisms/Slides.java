@@ -17,7 +17,7 @@ public class Slides {
     public static final int GROUND = -30;
     public static final int LOW = 200;
     public static final int MED = 1200;
-    public static final int HIGH = 2700;
+    public static final int HIGH = 2800;
     public int targetPos = 0;
     double adjustedP;
     public boolean usingpid = true;
@@ -30,8 +30,8 @@ public class Slides {
         slideLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         slideRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
-//        slideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        slideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         slideRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }

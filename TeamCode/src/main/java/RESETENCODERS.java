@@ -21,8 +21,8 @@ public class RESETENCODERS extends LinearOpMode {
         slides.DANGEROUS_RESET_ENCODERS();
         extendo.DANGEROUS_RESET_ENCODERS();
         while (opModeIsActive() && !isStopRequested()) {
-            slides.Loop();
-            extendo.Loop();
+            slides.Loop(13);
+            extendo.Loop(13);
         }
     }
 }

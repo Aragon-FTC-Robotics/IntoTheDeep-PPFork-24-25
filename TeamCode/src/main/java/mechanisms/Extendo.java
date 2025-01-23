@@ -28,7 +28,7 @@ public class Extendo {
     public void init(HardwareMap hm) {
         controller = new PIDController(p,i,d);
         extendo = hm.get(DcMotorEx.class, "extendo");
-//        extendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        extendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extendo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
     public void Loop(double voltage) {
