@@ -43,7 +43,7 @@ public class Auto_5_0 extends OpMode {
 
     private static final Pose PRELOADPOSE = new Pose(-29.597+72, -5.343+72, Math.toRadians(0));
     private static final Pose PREPARE1POSE = new Pose(-14.489+72, -46.716+72, Math.toRadians(0));
-    private static final Pose PREPARE1CONTROL = new Pose(4.889, 28.115, Math.toRadians(0));
+    private static final Pose PREPARE1CONTROL = new Pose(3.889, 28.115, Math.toRadians(0));
     private static final Pose PREPARE1CONTROL2 = new Pose(79.701, 37.650, Math.toRadians(0));
 
     private static final Pose PUSH1POSE = new Pose(-57.524+72, -43.633+72, Math.toRadians(0));
@@ -144,7 +144,7 @@ public class Auto_5_0 extends OpMode {
     private void updatePaths() {
         switch (pathState) {
             case 0:
-                extendo.setTargetPos(0);
+                extendo.setTargetPos(-200);
                 intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                 slides.setTargetPos(Slides.MED);
                 bar.setState(Bar.BarState.CLIP);
@@ -411,7 +411,7 @@ public class Auto_5_0 extends OpMode {
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap);
         follower.setStartingPose(STARTPOSE);
-        follower.setMaxPower(1);
+        follower.setMaxPower(0.7);
         buildPaths();
 
         bar = new Bar();

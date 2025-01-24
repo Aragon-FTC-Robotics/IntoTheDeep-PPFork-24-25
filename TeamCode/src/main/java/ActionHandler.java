@@ -210,7 +210,7 @@ public class ActionHandler {
                 }
                 break;
             case TRANSFER_STAGE_3:
-                if (elapsedMs >= 200) {
+                if (elapsedMs >= 400) {
                     claw.setState(Claw.ClawState.CLOSE);
                     currentActionState = ActionState.TRANSFER_STAGE_4;
                     timer.reset();
