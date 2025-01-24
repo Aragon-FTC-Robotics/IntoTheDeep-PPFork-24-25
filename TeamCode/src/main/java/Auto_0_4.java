@@ -45,11 +45,11 @@ public class Auto_0_4 extends OpMode {
 
     private static final Pose STARTPOSE = new Pose(7.065,96.000, Math.toRadians(-90));
     private static final Pose PRELOADPOSE = new Pose(-54.7453+72, 57.527+72, 5.5738);
-    private static final Pose INTAKE1POSE = new Pose(-55.380+72, 48.961+72, 6.264);
-    private static final Pose INTAKE1POSEMISS = new Pose(-53.734+72, 48.961+72, 6.224);
-    private static final Pose INTAKE2POSE = new Pose(-53.173+72, 59.935+72, 6.2103);
-    private static final Pose INTAKE2POSEMISS = new Pose(-50.753+72, 60.200+72, 6.1644);
-    private static final Pose INTAKE3POSE = new Pose(-53.442+72, 57.047+72, 0.296);
+    private static final Pose INTAKE1POSE = new Pose(-55.380+72, 48.961+72, 0); //og: 6.264,  pos (16.62, 120.961)
+    private static final Pose INTAKE1POSEMISS = new Pose(-53.734+72, 48.961+72, 0); //og: 6.224
+    private static final Pose INTAKE2POSE = new Pose(-53.173+72, 59.935+72, Math.toRadians(-1)); //og: 6.2103, pos (18.827, 131.935)
+    private static final Pose INTAKE2POSEMISS = new Pose(-50.753+72, 60.200+72, Math.toRadians(-1)); //og: 6.1644 , pos (21.247, 132.2)
+    private static final Pose INTAKE3POSE = new Pose(-53.442+72, 57.047+72, Math.toRadians(26)); //og: 0.296, (18.558, 129.047)
     private static final Pose BUCKETPOSE = new Pose(-54.7453+72, 57.527+72, 5.5788);
     private static final Pose ASCENTPOSE = new Pose(14.396, 24.882, Math.toRadians(-10));
     private static final Pose ASCENTCONTROL1 = new Pose(18.235, 70.235);
