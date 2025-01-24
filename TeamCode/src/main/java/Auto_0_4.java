@@ -8,8 +8,11 @@ import static mechanisms.IntakeWrist.intakeWristState.TRANSFER;
 
 import android.util.Log;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.pedropathing.follower.*;
 import com.pedropathing.localization.*;
 import com.pedropathing.pathgen.*;
@@ -577,10 +580,10 @@ public class Auto_0_4 extends OpMode {
             wrist.setState(Wrist.wristState.PARK);
         }
         telemetry.update();
-        poseUpdater.update();
-        dashboardPoseTracker.update();
-        Drawing.drawPoseHistory(dashboardPoseTracker, "#4CAF50");
-        Drawing.drawRobot(poseUpdater.getPose(), "#4CAF50");
-        Drawing.sendPacket();
+        TelemetryPacket packet = new TelemetryPacket();
+        packet.fieldOverlay().setStroke("#3F51B5");
+        Drawing.drawRobot(new Pose(follower.getPose().getX(),follower.getPose().getY(),follower.getPose().getHeading()), "blue");
+        FtcDashboard.getInstance().sendTelemetryPacket(packet);
+
     }
 }

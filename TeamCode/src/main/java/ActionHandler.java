@@ -201,6 +201,7 @@ public class ActionHandler {
                 break;
             case TRANSFER_STAGE_2:
                 if (elapsedMs >= 600) {
+//                if (extendo.getPos()<0) {
                     bar.setState(Bar.BarState.TRANSFER);
                     wrist.setState(Wrist.wristState.TRANSFER);
                     Log.d("hello", "hello!!");
