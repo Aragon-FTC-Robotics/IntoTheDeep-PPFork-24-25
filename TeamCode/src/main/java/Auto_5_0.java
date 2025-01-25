@@ -63,16 +63,18 @@ public class Auto_5_0 extends OpMode {
     private static final Pose PUSH3CONTROL = new Pose(-2, 8);
     private static final Pose PUSH3CONTROL1 = new Pose(22, 7);
     private static final Pose PUSH3TOWALLCONTROL = new Pose(74.322, 36.427);
-    private static final Pose PUSH2TOWALLCONTROL = new Pose(31,24);
+    private static final Pose PUSH2TOWALLCONTROL = new Pose(55.3,24);
 
-    private static final Pose WALLPOSE = new Pose(7, 28, Math.toRadians(180));
-    private static final Pose SCORE1POSE = new Pose(-32.5+72, -3.08+72, Math.toRadians(0));
+    private static final Pose WALLPOSE = new Pose(6.3, 28, Math.toRadians(180));
+    private static final Pose SCORE1POSE = new Pose(-31.5+72, -3.08+72, Math.toRadians(0));
+    private static final Pose SCORE1POSECONTROL = new Pose(19, 36);
+    private static final Pose SCORE1POSECONTROL2 = new Pose(14, 71);
     private static final Pose SCORETOWALLCONTROL = new Pose(23.033, 78.722, Math.toRadians(0));
     private static final Pose SCORETOWALLCONTROL2 = new Pose(26.678, 26.667, Math.toRadians(0));
 
-    private static final Pose SCORE2POSE = new Pose(-32.5+72, 1.6+72+2, Math.toRadians(0));
-    private static final Pose SCORE3POSE = new Pose(-32.5+72, 1.677+72+4, Math.toRadians(0));
-    private static final Pose SCORE4POSE = new Pose(-32.5+72, 1.677+72+6, Math.toRadians(0));
+    private static final Pose SCORE2POSE = new Pose(-32+72, 1.6+72+2, Math.toRadians(0));
+    private static final Pose SCORE3POSE = new Pose(-32+72, 1.677+72+4, Math.toRadians(0));
+    private static final Pose SCORE4POSE = new Pose(-32+72, 1.677+72+6, Math.toRadians(0));
     private static final Pose PARKPOSE = new Pose(8.396, 6.882, Math.toRadians(-10));
     private static final Pose PARKCONTROL = new Pose(7.235, 70.235);
 
@@ -117,7 +119,7 @@ public class Auto_5_0 extends OpMode {
                 .setLinearHeadingInterpolation(PUSH2POSE.getHeading(), WALLPOSE.getHeading())
                 .build();
         score1 = follower.pathBuilder()
-                .addPath(new Path(new BezierLine(new Point(WALLPOSE), new Point(SCORE1POSE))))
+                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCORE1POSECONTROL), new Point(SCORE1POSECONTROL2), new Point(SCORE1POSE))))
                 .setLinearHeadingInterpolation(WALLPOSE.getHeading(), SCORE1POSE.getHeading())
                 .build();
         score1ToWall = follower.pathBuilder()
@@ -167,7 +169,7 @@ public class Auto_5_0 extends OpMode {
                 }
                 break;
             case 101:
-                if (pathTime.getElapsedTimeSeconds()>1) {
+                if (pathTime.getElapsedTimeSeconds()>0.5) {
                     slides.setTargetPos(Slides.GROUND);
                     setPathState(2);
                 }
@@ -186,7 +188,7 @@ public class Auto_5_0 extends OpMode {
                 }
                 break;
             case 4:
-                if (Math.abs(follower.getPose().getX()-PUSH1POSE.getX())<1&&Math.abs(follower.getPose().getY()-PUSH1POSE.getY())<1) {
+                if (pathTime.getElapsedTimeSeconds()>1.3) {  //Math.abs(follower.getPose().getX()-PUSH1POSE.getX())<1&&Math.abs(follower.getPose().getY()-PUSH1POSE.getY())<1
                     follower.followPath(prepare2, false);
                     setPathState(5);
                 }
@@ -198,7 +200,7 @@ public class Auto_5_0 extends OpMode {
                 }
                 break;
             case 6:
-                if (!follower.isBusy()) {
+                if (pathTime.getElapsedTimeSeconds()>1.1) { //!follower.isBusy()
                     follower.followPath(push2ToWall, false);
                     setPathState(6001);
                 }
@@ -267,8 +269,8 @@ public class Auto_5_0 extends OpMode {
                 }
                 break;
             case 12:
-                if ((!follower.isBusy())) {
-                    slides.setTargetPos(Slides.LOW);
+                if (!follower.isBusy()) {
+                    slides.setTargetPos(Slides.GROUND);
                     setPathState(13);
                 }
                 break;
@@ -314,7 +316,7 @@ public class Auto_5_0 extends OpMode {
                 break;
             case 16:
                 if (!follower.isBusy()) {
-                    slides.setTargetPos(Slides.LOW);
+                    slides.setTargetPos(Slides.GROUND);
                     setPathState(17);
                 }
                 break;
@@ -358,7 +360,7 @@ public class Auto_5_0 extends OpMode {
                 }
             case 20:
                 if (!follower.isBusy()) {
-                    slides.setTargetPos(Slides.LOW);
+                    slides.setTargetPos(Slides.GROUND);
                     setPathState(21);
                 }
                 break;
@@ -366,7 +368,7 @@ public class Auto_5_0 extends OpMode {
                 if (pathTime.getElapsedTimeSeconds() > 0.22) {
                     claw.setState(Claw.ClawState.OPEN);
                     follower.followPath(score3ToWall, true);
-                    setPathState(22);
+                    setPathState(26);
                 }
                 break;
             case 22:
@@ -402,7 +404,7 @@ public class Auto_5_0 extends OpMode {
                 }
             case 24:
                 if (!follower.isBusy()) {
-                    slides.setTargetPos(Slides.LOW);
+                    slides.setTargetPos(Slides.GROUND);
                     setPathState(25);
                 }
                 break;
