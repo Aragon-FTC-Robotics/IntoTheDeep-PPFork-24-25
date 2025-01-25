@@ -7,7 +7,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 public class LConstants {
     static {
         ThreeWheelConstants.forwardTicksToInches = 0.0029731058;
-        ThreeWheelConstants.strafeTicksToInches = 0.0030195991;
+        ThreeWheelConstants.strafeTicksToInches = 0.0029417417;
         ThreeWheelConstants.turnTicksToInches = 0.0029588020;
         ThreeWheelConstants.leftY = 5.1;
         ThreeWheelConstants.rightY = -5.1;

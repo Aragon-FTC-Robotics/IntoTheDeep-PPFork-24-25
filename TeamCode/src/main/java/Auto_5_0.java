@@ -1,5 +1,7 @@
 import android.util.Log;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
 import com.pedropathing.pathgen.BezierCurve;
@@ -8,6 +10,7 @@ import com.pedropathing.pathgen.Path;
 import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.pathgen.Point;
 import com.pedropathing.util.Constants;
+import com.pedropathing.util.Drawing;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -41,7 +44,7 @@ public class Auto_5_0 extends OpMode {
     //Clip x: 41.29411764705882
     private static final Pose STARTPOSE = new Pose(6.75, 60, Math.toRadians(0));
 
-    private static final Pose PRELOADPOSE = new Pose(-29.597+72, -5.343+72, Math.toRadians(0));
+    private static final Pose PRELOADPOSE = new Pose(-30.077+72, -3.962+72, Math.toRadians(0));
     private static final Pose PREPARE1POSE = new Pose(-14.489+72, -46.716+72, Math.toRadians(0));
     private static final Pose PREPARE1CONTROL = new Pose(3.889, 28.115, Math.toRadians(0));
     private static final Pose PREPARE1CONTROL2 = new Pose(79.701, 37.650, Math.toRadians(0));
@@ -57,23 +60,24 @@ public class Auto_5_0 extends OpMode {
     private static final Pose PREPARE3CONTROL = new Pose(82.235,15, Math.toRadians(0));
 
     private static final Pose PUSH3POSE = new Pose(-54.078+72, -35.570+72, Math.toRadians(0));
-    private static final Pose PUSH3CONTROL = new Pose(8, 1.588, Math.toRadians(0));
-
+    private static final Pose PUSH3CONTROL = new Pose(-2, 8);
+    private static final Pose PUSH3CONTROL1 = new Pose(22, 7);
     private static final Pose PUSH3TOWALLCONTROL = new Pose(74.322, 36.427);
+    private static final Pose PUSH2TOWALLCONTROL = new Pose(31,24);
 
-    private static final Pose WALLPOSE = new Pose(-64.1+72, -44.185+72, Math.toRadians(180));
-    private static final Pose SCORE1POSE = new Pose(-29.597+72, 1.6+72, Math.toRadians(0));
-    private static final Pose SCORETOWALLCONTROL = new Pose(23.033, 76.722, Math.toRadians(0));
-    private static final Pose SCORETOWALLCONTROL2 = new Pose(26.678, 28.667, Math.toRadians(0));
+    private static final Pose WALLPOSE = new Pose(7, 28, Math.toRadians(180));
+    private static final Pose SCORE1POSE = new Pose(-32.5+72, -3.08+72, Math.toRadians(0));
+    private static final Pose SCORETOWALLCONTROL = new Pose(23.033, 78.722, Math.toRadians(0));
+    private static final Pose SCORETOWALLCONTROL2 = new Pose(26.678, 26.667, Math.toRadians(0));
 
-    private static final Pose SCORE2POSE = new Pose(-29.597+72, 1.6+72+2, Math.toRadians(0));
-    private static final Pose SCORE3POSE = new Pose(-29.597+72, 1.677+72+4, Math.toRadians(0));
-    private static final Pose SCORE4POSE = new Pose(-29.597+72, 1.677+72+6, Math.toRadians(0));
+    private static final Pose SCORE2POSE = new Pose(-32.5+72, 1.6+72+2, Math.toRadians(0));
+    private static final Pose SCORE3POSE = new Pose(-32.5+72, 1.677+72+4, Math.toRadians(0));
+    private static final Pose SCORE4POSE = new Pose(-32.5+72, 1.677+72+6, Math.toRadians(0));
     private static final Pose PARKPOSE = new Pose(8.396, 6.882, Math.toRadians(-10));
     private static final Pose PARKCONTROL = new Pose(7.235, 70.235);
 
 
-    private PathChain scorePreload, prepare1, push1, prepare2, push2, prepare3, push3, push3ToWall, score1, score1ToWall, score2, score2ToWall, score3, score3ToWall, score4, park; //Define paths
+    private PathChain scorePreload, prepare1, push1, prepare2, push2, prepare3, push3, push3ToWall, score1, score1ToWall, score2, score2ToWall, score3, score3ToWall, score4, park, push2ToWall; //Define paths
 
     private void buildPaths() {
         scorePreload = follower.pathBuilder()
@@ -101,12 +105,16 @@ public class Auto_5_0 extends OpMode {
                 .setLinearHeadingInterpolation(PUSH2POSE.getHeading(), PREPARE3POSE.getHeading())
                 .build();
         push3 = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(PREPARE3POSE), new Point(PUSH3CONTROL), new Point(PUSH3POSE))))
+                .addPath(new Path(new BezierCurve(new Point(PREPARE3POSE), new Point(PUSH3CONTROL), new Point(PUSH3CONTROL1), new Point(PUSH3POSE))))
                 .setLinearHeadingInterpolation(PREPARE3POSE.getHeading(), PUSH3POSE.getHeading())
                 .build();
         push3ToWall = follower.pathBuilder()
                 .addPath(new Path(new BezierCurve(new Point(PUSH3POSE), new Point(PUSH3TOWALLCONTROL), new Point(WALLPOSE))))
                 .setLinearHeadingInterpolation(PUSH3POSE.getHeading(), WALLPOSE.getHeading())
+                .build();
+        push2ToWall = follower.pathBuilder()
+                .addPath(new Path(new BezierCurve(new Point(PUSH2POSE), new Point(PUSH2TOWALLCONTROL), new Point(WALLPOSE))))
+                .setLinearHeadingInterpolation(PUSH2POSE.getHeading(), WALLPOSE.getHeading())
                 .build();
         score1 = follower.pathBuilder()
                 .addPath(new Path(new BezierLine(new Point(WALLPOSE), new Point(SCORE1POSE))))
@@ -160,45 +168,57 @@ public class Auto_5_0 extends OpMode {
                 break;
             case 101:
                 if (pathTime.getElapsedTimeSeconds()>1) {
-                    slides.setTargetPos(Slides.LOW);
+                    slides.setTargetPos(Slides.GROUND);
                     setPathState(2);
                 }
                 break;
             case 2:
                 if (pathTime.getElapsedTimeSeconds()>0.22) {
                     claw.setState(Claw.ClawState.OPEN);
-                    follower.followPath(prepare1, true);
+                    follower.followPath(prepare1, false);
                     setPathState(3);
                 }
                 break;
             case 3:
                 if (!follower.isBusy()) {
-                    follower.followPath(push1, true);
+                    follower.followPath(push1, false);
                     setPathState(4);
                 }
                 break;
             case 4:
-                if (!follower.isBusy()) {
-                    follower.followPath(prepare2, true);
+                if (Math.abs(follower.getPose().getX()-PUSH1POSE.getX())<1&&Math.abs(follower.getPose().getY()-PUSH1POSE.getY())<1) {
+                    follower.followPath(prepare2, false);
                     setPathState(5);
                 }
                 break;
             case 5:
-                if (!follower.isBusy()) {
-                    follower.followPath(push2, true);
+                if (Math.abs(follower.getPose().getX()-PREPARE2POSE.getX())<1&&Math.abs(follower.getPose().getY()-PREPARE2POSE.getY())<1) {
+                    follower.followPath(push2, false);
                     setPathState(6);
                 }
                 break;
             case 6:
                 if (!follower.isBusy()) {
-                    follower.followPath(prepare3, true);
-                    setPathState(7);
+                    follower.followPath(push2ToWall, false);
+                    setPathState(6001);
+                }
+                break;
+            case 6001:
+                if (pathTime.getElapsedTimeSeconds()>0.3) {
+                    bar.setState(Bar.BarState.WALL);
+                    wrist.setState(Wrist.wristState.WALL);
+                    setPathState(6002);
+                }
+                break;
+            case 6002:
+                if (true) {
+                    setPathState(1001);
                 }
                 break;
             case 7:
                 if (!follower.isBusy()) {
                     wrist.setState(Wrist.wristState.WALL);
-                    follower.followPath(push3, true);
+                    follower.followPath(push3, false);
                     setPathState(8);
                 }
                 break;
@@ -222,20 +242,20 @@ public class Auto_5_0 extends OpMode {
                 }
                 break;
             case 1001:
-                if (pathTime.getElapsedTimeSeconds()>0.5){
+                if (!follower.isBusy()||pathTime.getElapsedTimeSeconds()>5){
                     claw.setState(Claw.ClawState.CLOSE);
                     setPathState(11);
                 }
                 break;
             case 11:
-                if (!follower.isBusy()) {
-                    follower.followPath(score1);
+                if (pathTime.getElapsedTimeSeconds()>0.5) {
+                    slides.setTargetPos(Slides.MED);
                     setPathState(1101);
                 }
                 break;
             case 1101:
                 if (pathTime.getElapsedTimeSeconds()>0.75) {
-                    slides.setTargetPos(Slides.MED);
+                    follower.followPath(score1);
                     setPathState(1102);
                 }
                 break;
@@ -267,20 +287,21 @@ public class Auto_5_0 extends OpMode {
                 }
                 break;
             case 1401:
-                if (pathTime.getElapsedTimeSeconds()>0.5){
+                if (!follower.isBusy()||pathTime.getElapsedTimeSeconds()>5){
                     claw.setState(Claw.ClawState.CLOSE);
                     setPathState(15);
                 }
                 break;
             case 15:
-                if (!follower.isBusy()) {
-                    follower.followPath(score2);
+                if (pathTime.getElapsedTimeSeconds()>0.5) {
+                    slides.setTargetPos(Slides.MED);
+
                     setPathState(1501);
                 }
                 break;
             case 1501:
                 if (pathTime.getElapsedTimeSeconds() > 0.75) {
-                    slides.setTargetPos(Slides.MED);
+                    follower.followPath(score2);
                     setPathState(1502);
                 }
                 break;
@@ -312,20 +333,20 @@ public class Auto_5_0 extends OpMode {
                 }
                 break;
             case 1801:
-                if (pathTime.getElapsedTimeSeconds()>0.5){
+                if (!follower.isBusy()||pathTime.getElapsedTimeSeconds()>5){
                     claw.setState(Claw.ClawState.CLOSE);
                     setPathState(19);
                 }
                 break;
             case 19:
-                if (!follower.isBusy()) {
-                    follower.followPath(score3);
+                if (pathTime.getElapsedTimeSeconds()>0.5) {
+                    slides.setTargetPos(Slides.MED);
                     setPathState(1901);
                 }
                 break;
             case 1901:
                 if (pathTime.getElapsedTimeSeconds() > 0.75) {
-                    slides.setTargetPos(Slides.MED);
+                    follower.followPath(score3);
                     setPathState(1902);
                 }
                 break;
@@ -356,20 +377,20 @@ public class Auto_5_0 extends OpMode {
                 }
                 break;
             case 2201:
-                if (pathTime.getElapsedTimeSeconds()>0.5){
+                if (!follower.isBusy()||pathTime.getElapsedTimeSeconds()>5){
                     claw.setState(Claw.ClawState.CLOSE);
                     setPathState(23);
                 }
                 break;
             case 23:
-                if (!follower.isBusy()) {
-                    follower.followPath(score4);
+                if (pathTime.getElapsedTimeSeconds()>0.5) {
+                    slides.setTargetPos(Slides.MED);
                     setPathState(2301);
                 }
                 break;
             case 2301:
                 if (pathTime.getElapsedTimeSeconds() > 0.75) {
-                    slides.setTargetPos(Slides.MED);
+                    follower.followPath(score4);
                     setPathState(2302);
                 }
                 break;
@@ -438,6 +459,14 @@ public class Auto_5_0 extends OpMode {
         wrist.Loop();
 
     }
+    double currentVoltage = 13;
+    @Override
+    public void init_loop() {
+        currentVoltage += gamepad1.left_stick_y*0.006;
+        telemetry.addData("Use gp1 left stick y", "\nto change current voltage for voltage compensation.");
+        telemetry.addData("Current voltage: ", currentVoltage);
+        telemetry.update();
+    }
     @Override
     public void start() {
         totalTime.resetTimer();
@@ -449,16 +478,21 @@ public class Auto_5_0 extends OpMode {
         updatePaths();
         bar.Loop();
         claw.Loop();
-        extendo.Loop(13);
+        extendo.Loop(currentVoltage);
         intake.Loop();
         intakeWrist.Loop();
-        slides.Loop(13);
+        slides.Loop(currentVoltage);
         wrist.Loop();
         telemetry.addData("path state", pathState);
         telemetry.addData("Elapsed Time", pathTime.getElapsedTimeSeconds());
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());
+        telemetry.addData("slides L/R ", slides.getLPos() + " / " + slides.getRPos());
         telemetry.update();
+        TelemetryPacket packet = new TelemetryPacket();
+        packet.fieldOverlay().setStroke("#3F51B5");
+        Drawing.drawRobot(new Pose(follower.getPose().getX(),follower.getPose().getY(),follower.getPose().getHeading()), "blue");
+        FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
 }
