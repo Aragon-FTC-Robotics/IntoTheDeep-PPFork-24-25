@@ -9,8 +9,8 @@ public class Wrist {
     public enum wristState {TRANSFER, AUTOTRANSFER, BUCKET, WALL, CLIP, NEUTRAL,PARK}
     public wristState currentState = wristState.NEUTRAL;
 
-    public final double TRANSFER = 0.25; //as of jan 17
-    public final double AUTOTRANSFER = 0.25;
+    public final double TRANSFER = 0.26; //as of jan 17
+    public final double AUTOTRANSFER = 0.26;
     public final double WALL = 0.50;
     public final double BUCKET = 1;
     public final double CLIP = 0.34;

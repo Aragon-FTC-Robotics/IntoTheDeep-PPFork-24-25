@@ -200,7 +200,7 @@ public class ActionHandler {
                 }
                 break;
             case TRANSFER_STAGE_2:
-                if (elapsedMs >= 600) {
+                if (elapsedMs >= 400) {
 //                if (extendo.getPos()<0) {
                     bar.setState(Bar.BarState.TRANSFER);
                     wrist.setState(Wrist.wristState.TRANSFER);
@@ -210,14 +210,14 @@ public class ActionHandler {
                 }
                 break;
             case TRANSFER_STAGE_3:
-                if (elapsedMs >= 400) {
+                if (elapsedMs >= 200) {
                     claw.setState(Claw.ClawState.CLOSE);
                     currentActionState = ActionState.TRANSFER_STAGE_4;
                     timer.reset();
                 }
                 break;
             case TRANSFER_STAGE_4:
-                if (elapsedMs >= 250) {
+                if (elapsedMs >= 150) {
                     bar.setState(Bar.BarState.NEUTRAL);
                     wrist.setState(Wrist.wristState.NEUTRAL);
                     transferring = false;
