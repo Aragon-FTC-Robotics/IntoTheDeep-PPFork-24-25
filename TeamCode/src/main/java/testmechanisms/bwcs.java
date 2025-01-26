@@ -5,7 +5,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name = "bwcs", group = "testing")
+@TeleOp(name = "bwcsi", group = "testing")
 public class bwcs extends LinearOpMode {
     MultipleTelemetry dashboardTelemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     public BarTest bar = new BarTest();
@@ -26,6 +26,7 @@ public class bwcs extends LinearOpMode {
         claw.init(hardwareMap);
         wrist.init(hardwareMap);
         slides.init(hardwareMap);
+        intakeWrist.init(hardwareMap);
 
         waitForStart();
 
@@ -34,6 +35,7 @@ public class bwcs extends LinearOpMode {
             claw.Loop();
             wrist.Loop();
             slides.Loop();
+            intakeWrist.Loop();
 //            dashboardTelemetry.addData("Last commanded position:", "%.3f", bar.POS);
             dashboardTelemetry.update();
         }
