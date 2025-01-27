@@ -67,18 +67,18 @@ public class Auto_5_0 extends OpMode {
     private static final Pose PUSH3CONTROL = new Pose(-2, 8);
     private static final Pose PUSH3CONTROL1 = new Pose(22, 7);
     private static final Pose PUSH3TOWALLCONTROL = new Pose(74.322, 36.427);
-    private static final Pose PUSH2TOWALLCONTROL = new Pose(80.3,24);
+    private static final Pose PUSH2TOWALLCONTROL = new Pose(55.3,24); //changed
 
     private static final Pose WALLPOSE = new Pose(6.3, 24, Math.toRadians(180));
     private static final Pose SCORE1POSE = new Pose(-31.9+72, -3.08+72, Math.toRadians(0));
     private static final Pose SCORE1POSECONTROL = new Pose(19, 36);
     private static final Pose SCORE1POSECONTROL2 = new Pose(14, 94);
-    private static final Pose SCORETOWALLCONTROL = new Pose(23.033, 78.722, Math.toRadians(0));
-    private static final Pose SCORETOWALLCONTROL2 = new Pose(26.678, 26.667, Math.toRadians(0));
+    private static final Pose SCORETOWALLCONTROL = new Pose(23.033, 78.722);
+    private static final Pose SCORETOWALLCONTROL2 = new Pose(40.678, 26.667); //changed
 
-    private static final Pose SCORE2POSE = new Pose(-31.9+72, 1.6+72+2, Math.toRadians(0));
-    private static final Pose SCORE3POSE = new Pose(-31.9+72, 1.677+72+4, Math.toRadians(0));
-    private static final Pose SCORE4POSE = new Pose(-32+72, 1.677+72+6, Math.toRadians(0));
+    private static final Pose SCORE2POSE = new Pose(-31.9+72, 1.6+72+1, Math.toRadians(0));
+    private static final Pose SCORE3POSE = new Pose(-31.9+72, 1.677+72+3, Math.toRadians(0));
+    private static final Pose SCORE4POSE = new Pose(-32+72, 1.677+72+5, Math.toRadians(0));
     private static final Pose PARKPOSE = new Pose(8.396, 6.882, Math.toRadians(-10));
     private static final Pose PARKCONTROL = new Pose(7.235, 70.235);
 
@@ -204,7 +204,7 @@ public class Auto_5_0 extends OpMode {
                 }
                 break;
             case 6:
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() || pathTime.getElapsedTimeSeconds() > 2.5) { //fix time
                     follower.followPath(push2ToWall, true);
                     setPathState(6001);
                 }
@@ -217,7 +217,7 @@ public class Auto_5_0 extends OpMode {
                 }
                 break;
             case 1001:
-                if (!follower.isBusy() || pathTime.getElapsedTimeSeconds()>5){
+                if (!follower.isBusy() || pathTime.getElapsedTimeSeconds()>2.5){
                     claw.setState(Claw.ClawState.CLOSE);
                     setPathState(11);
                 }
@@ -236,13 +236,13 @@ public class Auto_5_0 extends OpMode {
                 break;
             case 1102:
                 if (pathTime.getElapsedTimeSeconds()>0.75) {
-                    bar.setState(Bar.BarState.CLIP);
-                    wrist.setState(Wrist.wristState.CLIP);
+                    bar.setState(Bar.BarState.AUTOCLIP);
+                    wrist.setState(Wrist.wristState.AUTOCLIP);
                     setPathState(12);
                 }
                 break;
             case 12:
-                if (!follower.isBusy() || pathTime.getElapsedTimeSeconds()>5) {
+                if (!follower.isBusy() && pathTime.getElapsedTimeSeconds() > 0.5 || pathTime.getElapsedTimeSeconds()>3.5) {
                     slides.setTargetPos(Slides.GROUND);
                     setPathState(13);
                 }
@@ -250,6 +250,11 @@ public class Auto_5_0 extends OpMode {
             case 13:
                 if (pathTime.getElapsedTimeSeconds()>0.22) {
                     claw.setState(Claw.ClawState.OPEN);
+                    setPathState(1301);
+                }
+                break;
+            case 1301:
+                if (pathTime.getElapsedTimeSeconds() > 0.25) {
                     follower.followPath(score1ToWall, true);
                     setPathState(14);
                 }
@@ -262,7 +267,7 @@ public class Auto_5_0 extends OpMode {
                 }
                 break;
             case 1401:
-                if (!follower.isBusy()||pathTime.getElapsedTimeSeconds()>5){
+                if (!follower.isBusy()||pathTime.getElapsedTimeSeconds()>2.5){
                     claw.setState(Claw.ClawState.CLOSE);
                     setPathState(15);
                 }
@@ -270,7 +275,6 @@ public class Auto_5_0 extends OpMode {
             case 15:
                 if (pathTime.getElapsedTimeSeconds()>0.5) {
                     slides.setTargetPos(Slides.MED);
-
                     setPathState(1501);
                 }
                 break;
@@ -282,13 +286,13 @@ public class Auto_5_0 extends OpMode {
                 break;
             case 1502:
                 if (pathTime.getElapsedTimeSeconds() > 0.75) {
-                    bar.setState(Bar.BarState.CLIP);
-                    wrist.setState(Wrist.wristState.CLIP);
+                    bar.setState(Bar.BarState.AUTOCLIP);
+                    wrist.setState(Wrist.wristState.AUTOCLIP);
                     setPathState(16);
                 }
                 break;
             case 16:
-                if (!follower.isBusy()|| pathTime.getElapsedTimeSeconds()>5) {
+                if (!follower.isBusy() && pathTime.getElapsedTimeSeconds() > 0.5 || pathTime.getElapsedTimeSeconds()>2.5) {
                     slides.setTargetPos(Slides.GROUND);
                     setPathState(17);
                 }
@@ -296,6 +300,11 @@ public class Auto_5_0 extends OpMode {
             case 17:
                 if (pathTime.getElapsedTimeSeconds() > 0.22) {
                     claw.setState(Claw.ClawState.OPEN);
+                    setPathState(1701);
+                }
+                break;
+            case 1701:
+                if (pathTime.getElapsedTimeSeconds() > 0.25) {
                     follower.followPath(score2ToWall, true);
                     setPathState(18);
                 }
@@ -308,7 +317,7 @@ public class Auto_5_0 extends OpMode {
                 }
                 break;
             case 1801:
-                if (!follower.isBusy()||pathTime.getElapsedTimeSeconds()>5){
+                if (!follower.isBusy()||pathTime.getElapsedTimeSeconds()>3){
                     claw.setState(Claw.ClawState.CLOSE);
                     setPathState(19);
                 }
@@ -327,69 +336,76 @@ public class Auto_5_0 extends OpMode {
                 break;
             case 1902:
                 if (pathTime.getElapsedTimeSeconds() > 0.75) {
-                    bar.setState(Bar.BarState.CLIP);
-                    wrist.setState(Wrist.wristState.CLIP);
+                    bar.setState(Bar.BarState.AUTOCLIP);
+                    wrist.setState(Wrist.wristState.AUTOCLIP);
                     setPathState(20);
                 }
             case 20:
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() && pathTime.getElapsedTimeSeconds() > 0.5 || pathTime.getElapsedTimeSeconds()>3.5) {
                     slides.setTargetPos(Slides.GROUND);
                     setPathState(21);
                 }
                 break;
             case 21:
-                if (pathTime.getElapsedTimeSeconds() > 0.22) {
+                if (pathTime.getElapsedTimeSeconds() > 0.3) {
                     claw.setState(Claw.ClawState.OPEN);
-                    follower.followPath(score3ToWall, true);
-                    setPathState(26);
+                    setPathState(2101);
                 }
                 break;
-            case 22:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
-                    bar.setState(Bar.BarState.WALL);
-                    wrist.setState(Wrist.wristState.WALL);
-                    setPathState(2201);
-                }
-                break;
-            case 2201:
-                if (!follower.isBusy()||pathTime.getElapsedTimeSeconds()>5){
-                    claw.setState(Claw.ClawState.CLOSE);
-                    setPathState(23);
-                }
-                break;
-            case 23:
-                if (pathTime.getElapsedTimeSeconds()>0.5) {
-                    slides.setTargetPos(Slides.MED);
-                    setPathState(2301);
-                }
-                break;
-            case 2301:
-                if (pathTime.getElapsedTimeSeconds() > 0.75) {
-                    follower.followPath(score4);
-                    setPathState(2302);
-                }
-                break;
-            case 2302:
-                if (pathTime.getElapsedTimeSeconds() > 0.75) {
-                    bar.setState(Bar.BarState.CLIP);
-                    wrist.setState(Wrist.wristState.CLIP);
-                    setPathState(24);
-                }
-            case 24:
-                if (!follower.isBusy()) {
-                    slides.setTargetPos(Slides.GROUND);
-                    setPathState(25);
-                }
-                break;
-            case 25:
-                if (pathTime.getElapsedTimeSeconds() > 0.22) {
-                    claw.setState(Claw.ClawState.OPEN);
+            case 2101:
+                if (pathTime.getElapsedTimeSeconds() > 0.25) {
                     follower.followPath(park, true);
                     setPathState(26);
                 }
                 break;
+//            case 22:
+//                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+//                    bar.setState(Bar.BarState.WALL);
+//                    wrist.setState(Wrist.wristState.WALL);
+//                    setPathState(2201);
+//                }
+//                break;
+//            case 2201:
+//                if (!follower.isBusy()||pathTime.getElapsedTimeSeconds()>3.5){
+//                    claw.setState(Claw.ClawState.CLOSE);
+//                    setPathState(23);
+//                }
+//                break;
+//            case 23:
+//                if (pathTime.getElapsedTimeSeconds()>0.5) {
+//                    slides.setTargetPos(Slides.MED);
+//                    setPathState(2301);
+//                }
+//                break;
+//            case 2301:
+//                if (pathTime.getElapsedTimeSeconds() > 0.75) {
+//                    follower.followPath(score4);
+//                    setPathState(2302);
+//                }
+//                break;
+//            case 2302:
+//                if (pathTime.getElapsedTimeSeconds() > 0.75) {
+//                    bar.setState(Bar.BarState.CLIP);
+//                    wrist.setState(Wrist.wristState.AUTOCLIP);
+//                    setPathState(24);
+//                }
+//            case 24:
+//                if (!follower.isBusy()) {
+//                    slides.setTargetPos(Slides.GROUND);
+//                    setPathState(25);
+//                }
+//                break;
+//            case 25:
+//                if (pathTime.getElapsedTimeSeconds() > 0.22) {
+//                    claw.setState(Claw.ClawState.OPEN);
+//                    follower.followPath(park, true);
+//                    setPathState(26);
+//                }
+//                break;
             case 26:
                 if (pathTime.getElapsedTimeSeconds() > 0.5) { //set bar wrist to a init-able position
+                    bar.setState(Bar.BarState.WALL);
+                    wrist.setState(Wrist.wristState.WALL);
                     setPathState(-1);
                 }
                 break;
