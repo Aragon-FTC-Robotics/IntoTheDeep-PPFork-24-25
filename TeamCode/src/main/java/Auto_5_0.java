@@ -1,6 +1,7 @@
 import android.util.Log;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
@@ -67,7 +68,7 @@ public class Auto_5_0 extends OpMode {
     private static final Pose PUSH3CONTROL = new Pose(-2, 8);
     private static final Pose PUSH3CONTROL1 = new Pose(22, 7);
     private static final Pose PUSH3TOWALLCONTROL = new Pose(74.322, 36.427);
-    private static final Pose PUSH2TOWALLCONTROL = new Pose(55.3,24); //changed
+    private static final Pose PUSH2TOWALLCONTROL = new Pose(35.3,24); //changed
 
     private static final Pose WALLPOSE = new Pose(6.3, 24, Math.toRadians(180));
     private static final Pose SCORE1POSE = new Pose(-31.9+72, -3.08+72, Math.toRadians(0));
@@ -78,8 +79,8 @@ public class Auto_5_0 extends OpMode {
 
     private static final Pose SCORE2POSE = new Pose(-31.9+72, 1.6+72+1, Math.toRadians(0));
     private static final Pose SCORE3POSE = new Pose(-31.9+72, 1.677+72+3, Math.toRadians(0));
-    private static final Pose SCORE4POSE = new Pose(-32+72, 1.677+72+5, Math.toRadians(0));
-    private static final Pose PARKPOSE = new Pose(8.396, 6.882, Math.toRadians(-10));
+    private static final Pose SCORE4POSE = new Pose(-31.9+72, 1.677+72+5, Math.toRadians(0));
+    private static final Pose PARKPOSE = new Pose(11.396, 11.882, Math.toRadians(-10));
     private static final Pose PARKCONTROL = new Pose(7.235, 70.235);
 
 
@@ -198,13 +199,13 @@ public class Auto_5_0 extends OpMode {
                 }
                 break;
             case 5:
-                if (Math.abs(follower.getPose().getX()-PREPARE2POSE.getX())<1&&Math.abs(follower.getPose().getY()-PREPARE2POSE.getY())<1) {
+                if (!follower.isBusy()) { //Math.abs(follower.getPose().getX()-PREPARE2POSE.getX())<1&&Math.abs(follower.getPose().getY()-PREPARE2POSE.getY())<1
                     follower.followPath(push2, false);
                     setPathState(6);
                 }
                 break;
             case 6:
-                if (!follower.isBusy() || pathTime.getElapsedTimeSeconds() > 2.5) { //fix time
+                if (!follower.isBusy()) { //fix time
                     follower.followPath(push2ToWall, true);
                     setPathState(6001);
                 }
@@ -417,6 +418,7 @@ public class Auto_5_0 extends OpMode {
     }
     @Override
     public void init() {
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         pathTime = new Timer();
         totalTime = new Timer();
         totalTime.resetTimer();
