@@ -217,7 +217,7 @@ public class ActionHandler {
                 }
                 break;
             case TRANSFER_STAGE_4:
-                if (elapsedMs >= 150) {
+                if (elapsedMs >= 200) {
                     bar.setState(Bar.BarState.NEUTRAL);
                     wrist.setState(Wrist.wristState.NEUTRAL);
                     transferring = false;
