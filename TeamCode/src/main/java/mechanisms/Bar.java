@@ -14,7 +14,7 @@ public class Bar {
     public final double AUTOTRANSFER = 0.83;
     public final double WALL = 0.97; //new
     public final double BUCKET = 0.20;
-    public final double CLIP = 0.55;
+    public final double CLIP = 0.575;
     public final double AUTOCLIP = 0.575;
     public static final double NEUTRAL = 0.6;
     public final double PARK = 0.36;

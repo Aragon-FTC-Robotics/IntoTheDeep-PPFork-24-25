@@ -79,6 +79,9 @@ public class ActionHandler {
         }
         //clip
         if (gp2.x && !transferring) {
+            intakeWrist.setState(IntakeWrist.intakeWristState.IN);
+            slides.setTargetPos(Slides.GROUND);
+            wrist.setState(Wrist.wristState.WALL);
             wallPickup();
         }
         if (gp2.left_bumper) {
@@ -258,7 +261,6 @@ public class ActionHandler {
             case WALLPICKUP:
                 if (elapsedMs >= 200){
                     bar.setState(Bar.BarState.WALL);
-                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                     currentActionState = ActionState.IDLE;
                 }
                 break;
@@ -357,8 +359,6 @@ public class ActionHandler {
     }
 
     private void wallPickup() {
-        slides.setTargetPos(Slides.GROUND);
-        wrist.setState(Wrist.wristState.WALL);
         currentActionState = ActionState.WALLPICKUP;
         timer.reset();
     }

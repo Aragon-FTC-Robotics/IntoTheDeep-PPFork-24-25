@@ -56,10 +56,10 @@ public class Auto_5_0 extends OpMode {
 
     private static final Pose PUSH1POSE = new Pose(-57.524+72, -43.633+72, Math.toRadians(0));
 
-    private static final Pose PREPARE2POSE = new Pose(-17.629+72, -57.676+72, Math.toRadians(0));
+    private static final Pose PREPARE2POSE = new Pose(-17.629+72, -57.676+72, Math.toRadians(180));
     private static final Pose PREPARE2CONTROL = new Pose(75.176,30.882, Math.toRadians(0));
 
-    private static final Pose PUSH2POSE = new Pose(13.1, 14.7, Math.toRadians(0));
+    private static final Pose PUSH2POSE = new Pose(13.1, 14.7, Math.toRadians(180));
 
     private static final Pose PREPARE3POSE = new Pose(-13.878+72, -62.211+72, Math.toRadians(0));
     private static final Pose PREPARE3CONTROL = new Pose(88.235,15, Math.toRadians(0));
@@ -68,19 +68,19 @@ public class Auto_5_0 extends OpMode {
     private static final Pose PUSH3CONTROL = new Pose(-2, 8);
     private static final Pose PUSH3CONTROL1 = new Pose(22, 7);
     private static final Pose PUSH3TOWALLCONTROL = new Pose(74.322, 36.427);
-    private static final Pose PUSH2TOWALLCONTROL = new Pose(35.3,24); //changed
+    private static final Pose PUSH2TOWALLCONTROL = new Pose(50,24); //old 55
 
     private static final Pose WALLPOSE = new Pose(6.3, 24, Math.toRadians(180));
-    private static final Pose SCORE1POSE = new Pose(-31.9+72, -3.08+72, Math.toRadians(0));
+    private static final Pose SCORE1POSE = new Pose(-29.9+72, -3.08+72, Math.toRadians(0));
     private static final Pose SCORE1POSECONTROL = new Pose(19, 36);
     private static final Pose SCORE1POSECONTROL2 = new Pose(14, 94);
     private static final Pose SCORETOWALLCONTROL = new Pose(23.033, 78.722);
     private static final Pose SCORETOWALLCONTROL2 = new Pose(40.678, 26.667); //changed
 
-    private static final Pose SCORE2POSE = new Pose(-31.9+72, 1.6+72+1, Math.toRadians(0));
-    private static final Pose SCORE3POSE = new Pose(-31.9+72, 1.677+72+3, Math.toRadians(0));
-    private static final Pose SCORE4POSE = new Pose(-31.9+72, 1.677+72+5, Math.toRadians(0));
-    private static final Pose PARKPOSE = new Pose(11.396, 11.882, Math.toRadians(-10));
+    private static final Pose SCORE2POSE = new Pose(-29.9+72, 1.6+72+1, Math.toRadians(0));
+    private static final Pose SCORE3POSE = new Pose(-29.9+72, 1.677+72+3, Math.toRadians(0));
+    private static final Pose SCORE4POSE = new Pose(-29.9+72, 1.677+72+5, Math.toRadians(0));
+    private static final Pose PARKPOSE = new Pose(11.396, 11.882, Math.toRadians(0));
     private static final Pose PARKCONTROL = new Pose(7.235, 70.235);
 
 
@@ -180,8 +180,8 @@ public class Auto_5_0 extends OpMode {
                 }
                 break;
             case 2:
-                if (pathTime.getElapsedTimeSeconds()>0.22) {
-                    claw.setState(Claw.ClawState.OPEN);
+                if (pathTime.getElapsedTimeSeconds()>0.28) {
+                    claw.setState(Claw.ClawState.SUPEROPEN);
                     follower.followPath(prepare1, false);
                     setPathState(3);
                 }
@@ -195,6 +195,8 @@ public class Auto_5_0 extends OpMode {
             case 4:
                 if (!follower.isBusy()) {  //Math.abs(follower.getPose().getX()-PUSH1POSE.getX())<1&&Math.abs(follower.getPose().getY()-PUSH1POSE.getY())<1
                     follower.followPath(prepare2, false);
+                    bar.setState(Bar.BarState.WALL);
+                    wrist.setState(Wrist.wristState.WALL);
                     setPathState(5);
                 }
                 break;
@@ -212,8 +214,7 @@ public class Auto_5_0 extends OpMode {
                 break;
             case 6001:
                 if (pathTime.getElapsedTimeSeconds()>0.5) {
-                    bar.setState(Bar.BarState.WALL);
-                    wrist.setState(Wrist.wristState.WALL);
+                    Log.d("I like to play", "with toys");
                     setPathState(1001);
                 }
                 break;
@@ -250,7 +251,7 @@ public class Auto_5_0 extends OpMode {
                 break;
             case 13:
                 if (pathTime.getElapsedTimeSeconds()>0.22) {
-                    claw.setState(Claw.ClawState.OPEN);
+                    claw.setState(Claw.ClawState.SUPEROPEN);
                     setPathState(1301);
                 }
                 break;
@@ -300,7 +301,7 @@ public class Auto_5_0 extends OpMode {
                 break;
             case 17:
                 if (pathTime.getElapsedTimeSeconds() > 0.22) {
-                    claw.setState(Claw.ClawState.OPEN);
+                    claw.setState(Claw.ClawState.SUPEROPEN);
                     setPathState(1701);
                 }
                 break;

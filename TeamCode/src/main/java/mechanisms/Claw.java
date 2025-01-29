@@ -11,7 +11,7 @@ public class Claw {
 
     public final double OPEN = 0.717;
     public final double CLOSE = 0.881;
-    public final double SUPEROPEN = 0.667;
+    public final double SUPEROPEN = 0.637;
     public void init(HardwareMap hm) {
         claw = hm.get(Servo.class, "claw");
     }
