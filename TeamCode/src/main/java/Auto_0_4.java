@@ -48,13 +48,13 @@ public class Auto_0_4 extends OpMode {
 
     private static final Pose STARTPOSE = new Pose(7.065,96.000, Math.toRadians(-90));
     private static final Pose PRELOADPOSE = new Pose(-54.7453+72, 57.527+72, 5.5738);
-    private static final Pose INTAKE1POSE = new Pose(-55.380+72, 46.961+72, Math.toRadians(-5)); //og: 6.264,  pos (16.62, 120.961)
-    private static final Pose INTAKE1POSEMISS = new Pose(-53.734+72, 46.961+72, Math.toRadians(-5)); //og: 6.224
-    private static final Pose INTAKE2POSE = new Pose(-53.173+72, 57.935+72, Math.toRadians(-7)); //og: 6.2103, pos (18.827, 131.935)
-    private static final Pose INTAKE2POSEMISS = new Pose(-50.753+72, 58.200+72, Math.toRadians(-7)); //og: 6.1644 , pos (21.247, 132.2)
-    private static final Pose INTAKE3POSE = new Pose(-53.442+72, 55.047+72, Math.toRadians(26)); //og: 0.296, (18.558, 129.047)
+    private static final Pose INTAKE1POSE = new Pose(-53.380+72, 49.261+72, Math.toRadians(-5)); //og: 6.264,  pos (16.62, 120.961)
+    private static final Pose INTAKE1POSEMISS = new Pose(-52.734+72, 49.261+72, Math.toRadians(-5)); //og: 6.224
+    private static final Pose INTAKE2POSE = new Pose(-52.173+72, 59.235+72, Math.toRadians(-7)); //og: 6.2103, pos (18.827, 131.935)
+    private static final Pose INTAKE2POSEMISS = new Pose(-50.053+72, 59.300+72, Math.toRadians(-7)); //og: 6.1644 , pos (21.247, 132.2)
+    private static final Pose INTAKE3POSE = new Pose(-50.442+72, 55.047+72, Math.toRadians(24)); //og: 0.296, (18.558, 129.047)
     private static final Pose BUCKETPOSE = new Pose(-54.7453+72, 57.527+72, 5.5788);
-    private static final Pose ASCENTPOSE = new Pose(14.396, 24.882, Math.toRadians(-10));
+    private static final Pose ASCENTPOSE = new Pose(0.396, 24.882, Math.toRadians(0));
     private static final Pose ASCENTCONTROL1 = new Pose(18.235, 70.235);
 
     private Path scorePreload, park;
@@ -186,7 +186,7 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 202:
-                if (extendo.getPos()>1400){
+                if (extendo.getPos()>1900){
                     intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
                     setPathState(3);
                 }
@@ -232,11 +232,16 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 4:
-                if (pathTime.getElapsedTimeSeconds() > 1.5) {
+                if (pathTime.getElapsedTimeSeconds() > 0.5) {
                     claw.setState(Claw.ClawState.OPEN);
-                    bar.setState(Bar.BarState.AUTOTRANSFER);
                     wrist.setState(Wrist.wristState.AUTOTRANSFER);
+                    setPathState(40001);
+                }
+                break;
+            case 40001:
+                if (pathTime.getElapsedTimeSeconds() > 1.0) {
                     extendo.setTargetPos(Extendo.MIN);
+                    bar.setState(Bar.BarState.AUTOTRANSFER);
                     setPathState(5);
                 }
                 break;
@@ -246,7 +251,7 @@ public class Auto_0_4 extends OpMode {
                 }
                  break;
             case 5:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 0.75) {
                     claw.setState(Claw.ClawState.CLOSE);
                     setPathState(6);
                 }
@@ -291,7 +296,7 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 801:
-                if (extendo.getPos()>1400) {
+                if (extendo.getPos()>1800) {
                     intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
                     setPathState(9);
                 }
@@ -341,16 +346,21 @@ public class Auto_0_4 extends OpMode {
                     setPathState(1301);
                 }
             case 10:
-                if (pathTime.getElapsedTimeSeconds() > 1.5) {
+                if (pathTime.getElapsedTimeSeconds() > 0.5) {
                     claw.setState(Claw.ClawState.OPEN);
-                    bar.setState(Bar.BarState.AUTOTRANSFER);
                     wrist.setState(Wrist.wristState.AUTOTRANSFER);
+                    setPathState(10001);
+                }
+                break;
+            case 10001:
+                if (pathTime.getElapsedTimeSeconds() > 1.0) {
+                    bar.setState(Bar.BarState.AUTOTRANSFER);
                     extendo.setTargetPos(Extendo.MIN);
                     setPathState(11);
                 }
                 break;
             case 11:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 0.75) {
                     claw.setState(Claw.ClawState.CLOSE);
                     setPathState(12);
                 }
@@ -394,7 +404,7 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 1401:
-                if (extendo.getPos()>1400) {
+                if (extendo.getPos()>1800) {
                     intakeWrist.setState(OUT);
                     setPathState(15);
                 }
@@ -424,8 +434,8 @@ public class Auto_0_4 extends OpMode {
                     setPathState(1901);
                 }
             case 1501:
-                if(pathTime.getElapsedTimeSeconds()>1) {
-                    intakeWrist.setState(SUPEROUT);
+                if(pathTime.getElapsedTimeSeconds()>0.5) {
+                    intakeWrist.setState(OUT);
                     intake.setState(IN);
                     setPathState(1502);
                 }
@@ -451,16 +461,21 @@ public class Auto_0_4 extends OpMode {
                 break;
 
             case 16:
-                if (pathTime.getElapsedTimeSeconds() > 1.5) {
-                    bar.setState(Bar.BarState.AUTOTRANSFER);
+                if (pathTime.getElapsedTimeSeconds() > 0.5) {
                     wrist.setState(Wrist.wristState.AUTOTRANSFER);
                     claw.setState(Claw.ClawState.OPEN);
+                    setPathState(160001);
+                }
+                break;
+            case 160001:
+                if (pathTime.getElapsedTimeSeconds() > 1.0) {
+                    bar.setState(Bar.BarState.AUTOTRANSFER);
                     extendo.setTargetPos(Extendo.MIN);
                     setPathState(17);
                 }
                 break;
             case 17:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 0.75) {
                     claw.setState(Claw.ClawState.CLOSE);
                     setPathState(18);
                 }

@@ -196,7 +196,7 @@ public class ActionHandler {
         switch (currentActionState) {
             //transfer
             case TRANSFER_STAGE_1:
-                if (elapsedMs >= 600) {
+                if (elapsedMs >= 700) {
                     claw.setState(Claw.ClawState.SUPEROPEN);
                     currentActionState = ActionState.TRANSFER_STAGE_2;
                     timer.reset();

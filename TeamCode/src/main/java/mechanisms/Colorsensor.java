@@ -22,8 +22,8 @@ public class Colorsensor {
     public float [] redLowerHighHSV = {30, 0.9f, 0.4f}; //19
     public float[] redLowerLowHSV = {0, 0.6f, 0.1f};
 
-    public float[] yellowHigherHSV = {80, 0.9f, 0.7f}; //69
-    public float[] yellowLowerHSV = {60, 0.6f, 0.5f};
+    public float[] yellowHigherHSV = {90, 0.9f, 0.7f}; //69
+    public float[] yellowLowerHSV = {60, 0.6f, 0.2f};
 
     public float[] blueHigherHSV = {240, 0.9f, 0.4f};
     public float[] blueLowerHSV = {210, 0.6f, 0.1f}; //224
