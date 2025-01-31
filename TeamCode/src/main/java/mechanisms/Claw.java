@@ -10,8 +10,8 @@ public class Claw {
     public ClawState currentState = ClawState.CLOSE;
 
     public final double OPEN = 0.717;
-    public final double CLOSE = 0.881;
-    public final double SUPEROPEN = 0.637;
+    public final double CLOSE = 0.871;
+    public final double SUPEROPEN = 0.62;
     public void init(HardwareMap hm) {
         claw = hm.get(Servo.class, "claw");
     }

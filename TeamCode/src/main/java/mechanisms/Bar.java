@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Bar {
     private Servo barServoRight;
-    public enum BarState {TRANSFER, AUTOTRANSFER, WALL, BUCKET, CLIP, AUTOCLIP, NEUTRAL, PARK}
+    public enum BarState {TRANSFER, AUTOTRANSFER, WALL, BUCKET, CLIP, AUTOCLIP, NEUTRAL, PARK, DTCLIP1, DTCLIP2, DTWALL}
     public BarState currentState = BarState.NEUTRAL;
 
     public final double TRANSFER = 0.83; //as of jan 25
@@ -17,7 +17,10 @@ public class Bar {
     public final double CLIP = 0.575;
     public final double AUTOCLIP = 0.575;
     public static final double NEUTRAL = 0.6;
+    public final double DTCLIP1 = 0.1;
+    public final double DTCLIP2 = 0.25;
     public final double PARK = 0.36;
+    public final double DTWALL = 0.87;
 
     public void init(HardwareMap hm) {
         barServoRight = hm.get(Servo.class, "bar");
@@ -49,6 +52,15 @@ public class Bar {
                 break;
             case PARK:
                 setPos(PARK);
+                break;
+            case DTCLIP1:
+                setPos(DTCLIP1);
+                break;
+            case DTCLIP2:
+                setPos(DTCLIP2);
+                break;
+            case DTWALL:
+                setPos(DTWALL);
                 break;
             default:
                 setPos(NEUTRAL);

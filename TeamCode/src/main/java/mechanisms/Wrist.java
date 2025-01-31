@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Wrist {
     private Servo wrist;
-    public enum wristState {TRANSFER, AUTOTRANSFER, BUCKET, WALL, CLIP, AUTOCLIP, NEUTRAL,PARK}
+    public enum wristState {TRANSFER, AUTOTRANSFER, BUCKET, WALL, CLIP, AUTOCLIP, NEUTRAL,PARK, DTCLIP, DTWALL}
     public wristState currentState = wristState.NEUTRAL;
 
     public final double TRANSFER = 0.26; //as of jan 17
@@ -17,6 +17,8 @@ public class Wrist {
     public final double AUTOCLIP = 0.36;
     public final double NEUTRAL = 0.2;
     public final double PARK = 0.84;
+    public final double DTCLIP = 1;
+    public final double DTWALL = 0.48;
 
     public void init(HardwareMap hm) {
         wrist = hm.get(Servo.class, "wrist");
@@ -47,6 +49,12 @@ public class Wrist {
                 break;
             case PARK:
                 setPos(PARK);
+                break;
+            case DTCLIP:
+                setPos(DTCLIP);
+                break;
+            case DTWALL:
+                setPos(DTWALL);
                 break;
             default:
                 setPos(NEUTRAL);
