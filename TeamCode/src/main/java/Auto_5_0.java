@@ -49,7 +49,7 @@ public class Auto_5_0 extends OpMode {
     //Clip x: 41.29411764705882
     public static final Pose STARTPOSE = new Pose(6.75, 60, Math.toRadians(0));
 
-    public static final Pose PRELOADPOSE = new Pose(-30.077+72, -3.962+72, Math.toRadians(0));
+    public static final Pose PRELOADPOSE = new Pose(-30.077+72, -5.962+72, Math.toRadians(0));
     public static final Pose PREPARE1POSE = new Pose(-14.489+72, -49.716+72, Math.toRadians(0));
     public static final Pose PREPARE1CONTROL = new Pose(3.889, 28.115, Math.toRadians(0));
     public static final Pose PREPARE1CONTROL2 = new Pose(79.701, 37.650, Math.toRadians(0));
@@ -71,15 +71,15 @@ public class Auto_5_0 extends OpMode {
     public static final Pose PUSH2TOWALLCONTROL = new Pose(50,24); //old 55
 
     public static final Pose WALLPOSE = new Pose(6.3, 24, Math.toRadians(180));
-    public static final Pose SCORE1POSE = new Pose(-26.9+72, 1.6+72, Math.toRadians(0));
+    public static final Pose SCORE1POSE = new Pose(-26.9+72, 0.6+72, Math.toRadians(0));
     public static final Pose SCORE1POSECONTROL = new Pose(19, 36);
     public static final Pose SCORE1POSECONTROL2 = new Pose(14, 94);
     public static final Pose SCORETOWALLCONTROL = new Pose(23.033, 78.722);
     public static final Pose SCORETOWALLCONTROL2 = new Pose(40.678, 26.667); //changed
 
-    public static final Pose SCORE2POSE = new Pose(-26.9+72, 1.6+72+2.5, Math.toRadians(0));
-    public static final Pose SCORE3POSE = new Pose(-26.9+72, 1.677+72+5, Math.toRadians(0));
-    public static final Pose SCORE4POSE = new Pose(-26.9+72, 1.677+72+7.5, Math.toRadians(0));
+    public static final Pose SCORE2POSE = new Pose(-26.9+72, 0.6+72+2, Math.toRadians(0));
+    public static final Pose SCORE3POSE = new Pose(-26.9+72, 0.677+72+4, Math.toRadians(0));
+    public static final Pose SCORE4POSE = new Pose(-26.9+72, 0.677+72+6, Math.toRadians(0));
     public static final Pose PARKPOSE = new Pose(11.396, 11.882, Math.toRadians(0));
     public static final Pose PARKCONTROL = new Pose(7.235, 70.235);
 
