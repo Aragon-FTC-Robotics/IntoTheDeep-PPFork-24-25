@@ -53,7 +53,6 @@ public class Extendo {
     public void DANGEROUS_RESET_ENCODERS() {
         extendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extendo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        targetPos = MIN;
     }
 
     public void setPower(double power) {

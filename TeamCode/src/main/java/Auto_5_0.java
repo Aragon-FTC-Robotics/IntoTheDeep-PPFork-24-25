@@ -444,7 +444,8 @@ public class Auto_5_0 extends OpMode {
         intakeWrist.init(hardwareMap);
         slides.init(hardwareMap);
         wrist.init(hardwareMap);
-
+        slides.DANGEROUS_RESET_ENCODERS();
+        extendo.DANGEROUS_RESET_ENCODERS();
         bar.setState(Bar.BarState.WALL);
         wrist.setState(Wrist.wristState.WALL);
         claw.setState(Claw.ClawState.CLOSE);

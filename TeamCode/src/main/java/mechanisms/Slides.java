@@ -62,7 +62,6 @@ public class Slides {
         slideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         slideRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        targetPos = GROUND;
     }
 
     public void setPower(double power){

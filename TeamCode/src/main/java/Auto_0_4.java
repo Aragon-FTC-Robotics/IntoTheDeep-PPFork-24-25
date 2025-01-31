@@ -557,7 +557,8 @@ public class Auto_0_4 extends OpMode {
         wrist.init(hardwareMap);
         colorsensor.init(hardwareMap);
         led.init(hardwareMap);
-
+        slides.DANGEROUS_RESET_ENCODERS();
+        extendo.DANGEROUS_RESET_ENCODERS();
         claw.setState(Claw.ClawState.CLOSE);
         bar.setState(Bar.BarState.WALL);
         wrist.setState(Wrist.wristState.WALL);
