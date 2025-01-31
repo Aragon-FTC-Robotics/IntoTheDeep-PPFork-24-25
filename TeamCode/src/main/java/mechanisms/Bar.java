@@ -21,7 +21,7 @@ public class Bar {
     public final double DTCLIP2 = 0.25;
     public final double PARK = 0.36;
     public final double DTWALL = 0.87;
-    public final double DTWALLSILLY = 0.92;
+    public final double DTWALLSILLY = 0.94;
 
     public void init(HardwareMap hm) {
         barServoRight = hm.get(Servo.class, "bar");

@@ -132,7 +132,7 @@ public class Auto_Silly_spec extends OpMode {
                 }
                 break;
             case 101:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 0.2) {
                     slides.setTargetPos(Slides.GROUND);
                     setPathState(2);
                 }
@@ -145,13 +145,13 @@ public class Auto_Silly_spec extends OpMode {
                 }
                 break;
             case 3:
-                if (!follower.isBusy()) {
+                if (Math.abs(follower.getPose().getX()-PREPARE1POSE.getX())<3&&Math.abs(follower.getPose().getY()-PREPARE1POSE.getY())<3) {
                     follower.followPath(push1, false);
                     setPathState(4);
                 }
                 break;
             case 4:
-                if (!follower.isBusy()) {
+                if (Math.abs(follower.getPose().getX()-PUSH1POSE.getX())<3&&Math.abs(follower.getPose().getY()-PUSH1POSE.getY())<3) {
                     follower.followPath(prepare2, false);
                     bar.setState(Bar.BarState.DTWALL);
                     wrist.setState(Wrist.wristState.DTWALL);
@@ -160,7 +160,7 @@ public class Auto_Silly_spec extends OpMode {
                 }
                 break;
             case 5:
-                if (!follower.isBusy()) {
+                if (Math.abs(follower.getPose().getX()-PREPARE2POSE.getX())<3&&Math.abs(follower.getPose().getY()-PREPARE2POSE.getY())<3) {
                     follower.followPath(push2, true);
                     setPathState(6);
                 }
