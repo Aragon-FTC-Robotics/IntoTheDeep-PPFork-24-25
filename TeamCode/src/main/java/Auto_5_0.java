@@ -56,7 +56,7 @@ public class Auto_5_0 extends OpMode {
 
     public static final Pose PUSH1POSE = new Pose(-57.524+72, -49.633+72, Math.toRadians(0));
 
-    public static final Pose PREPARE2POSE = new Pose(-17.629+72, -60.676+72, Math.toRadians(180));
+    public static final Pose PREPARE2POSE = new Pose(-17.629+72, 14.7, Math.toRadians(180));
     public static final Pose PREPARE2CONTROL = new Pose(75.176,30.882, Math.toRadians(0));
 
     public static final Pose PUSH2POSE = new Pose(6.3, 14.7, Math.toRadians(180));

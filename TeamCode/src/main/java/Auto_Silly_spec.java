@@ -27,7 +27,7 @@ import mechanisms.Wrist;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 
-@Autonomous(name = "Chopped Chin Autonomous", group = "Auto")
+@Autonomous(name = "Chopped Chin Autonomous (GOOD CLIP!!!)", group = "Auto")
 public class Auto_Silly_spec extends OpMode {
     private Bar bar;
     private Claw claw;
@@ -53,14 +53,14 @@ public class Auto_Silly_spec extends OpMode {
     private static final Pose PREPARE2POSE = Auto_5_0.PREPARE2POSE;
     private static final Pose PREPARE2CONTROL = Auto_5_0.PREPARE2CONTROL;
     private static final Pose PUSH2POSE = Auto_5_0.PUSH2POSE;
-    private static final Pose WALLPOSE = Auto_5_0.WALLPOSE;
+    private static final Pose WALLPOSE = new Pose(7.8, 24, Math.toRadians(180));
     private static final Pose SCORE1POSE = new Pose(Auto_5_0.SCORE1POSE.getX(),Auto_5_0.SCORE1POSE.getY(),Math.toRadians(180));
     private static final Pose SCORE1POSECONTROL = Auto_5_0.SCORE1POSECONTROL;
     private static final Pose SCORE1POSECONTROL2 = Auto_5_0.SCORE1POSECONTROL2;
     private static final Pose SCORETOWALLCONTROL = Auto_5_0.SCORETOWALLCONTROL;
     private static final Pose SCORETOWALLCONTROL2 = Auto_5_0.SCORETOWALLCONTROL2;
-    private static final Pose SCORE2POSE = Auto_5_0.SCORE2POSE;
-    private static final Pose SCORE3POSE = Auto_5_0.SCORE3POSE;
+    private static final Pose SCORE2POSE = new Pose(Auto_5_0.SCORE2POSE.getX(),Auto_5_0.SCORE2POSE.getY(),Math.toRadians(180));
+    private static final Pose SCORE3POSE = new Pose(Auto_5_0.SCORE3POSE.getX(),Auto_5_0.SCORE3POSE.getY(),Math.toRadians(180));
     private static final Pose SCORE4POSE = Auto_5_0.SCORE4POSE;
     private static final Pose PARKPOSE = Auto_5_0.PARKPOSE;
     private static final Pose PARKCONTROL = Auto_5_0.PARKCONTROL;
@@ -117,7 +117,7 @@ public class Auto_Silly_spec extends OpMode {
     private void updatePaths() {
         switch (pathState) {
             case 0:
-                extendo.setTargetPos(-200);
+                extendo.setTargetPos(-100);
                 intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                 slides.setTargetPos(Slides.MED);
                 bar.setState(Bar.BarState.CLIP);
@@ -138,7 +138,7 @@ public class Auto_Silly_spec extends OpMode {
                 }
                 break;
             case 2:
-                if (pathTime.getElapsedTimeSeconds() > 0.4) {
+                if (pathTime.getElapsedTimeSeconds() > 0.28) { //Todo NEEDS HEAVY TUNING
                     claw.setState(Claw.ClawState.SUPEROPEN);
                     follower.followPath(prepare1, false);
                     setPathState(3);
@@ -155,6 +155,7 @@ public class Auto_Silly_spec extends OpMode {
                     follower.followPath(prepare2, false);
                     bar.setState(Bar.BarState.DTWALL);
                     wrist.setState(Wrist.wristState.DTWALL);
+                    intakeWrist.setState(IntakeWrist.intakeWristState.WALLALIGN);
                     setPathState(5);
                 }
                 break;
@@ -165,13 +166,20 @@ public class Auto_Silly_spec extends OpMode {
                 }
                 break;
             case 6:
-                if (!follower.isBusy() || follower.isRobotStuck()) {
+                if (!follower.isBusy() || follower.isRobotStuck()) { //Todo IDK!!!!
                     claw.setState(Claw.ClawState.CLOSE);
+                    setPathState(601);
+                }
+                break;
+            case 601:
+                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                    bar.setState(Bar.BarState.DTWALLSILLY);
                     setPathState(7);
                 }
                 break;
             case 7:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 0.35) {
+                    bar.setState(Bar.BarState.CLIP);
                     follower.followPath(score1);
                     setPathState(8);
                 }
@@ -196,7 +204,7 @@ public class Auto_Silly_spec extends OpMode {
                 }
                 break;
             case 10:
-                if (pathTime.getElapsedTimeSeconds() > 0.6) { //.needs heavy tuning
+                if (pathTime.getElapsedTimeSeconds() > 0.4) { //Todo needs heavy tuning
                     claw.setState(Claw.ClawState.SUPEROPEN);
                     bar.setState(Bar.BarState.DTWALL);
                     wrist.setState(Wrist.wristState.DTWALL);
@@ -204,13 +212,20 @@ public class Auto_Silly_spec extends OpMode {
                 }
                 break;
             case 11:
-                if (!follower.isBusy() || follower.isRobotStuck()) {
+                if (!follower.isBusy() || follower.isRobotStuck()) { //Todo idk
                     claw.setState(Claw.ClawState.CLOSE);
+                    setPathState(1101);
+                }
+                break;
+            case 1101:
+                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                    bar.setState(Bar.BarState.DTWALLSILLY);
                     setPathState(12);
                 }
                 break;
             case 12:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 0.35) {
+                    bar.setState(Bar.BarState.CLIP);
                     follower.followPath(score2);
                     setPathState(13);
                 }
@@ -221,6 +236,7 @@ public class Auto_Silly_spec extends OpMode {
                     wrist.setState(Wrist.wristState.DTCLIP);
                     setPathState(14);
                 }
+                break;
             case 14:
                 if (!follower.isBusy() || follower.isRobotStuck()) {
                     bar.setState(Bar.BarState.DTCLIP2);
@@ -234,7 +250,7 @@ public class Auto_Silly_spec extends OpMode {
                 }
                 break;
             case 15:
-                if (pathTime.getElapsedTimeSeconds() > 0.6) { //needs heavy tuning,,,,
+                if (pathTime.getElapsedTimeSeconds() > 0.4) { //Todo needs heavy tuning,,,,
                     claw.setState(Claw.ClawState.SUPEROPEN);
                     bar.setState(Bar.BarState.DTWALL);
                     wrist.setState(Wrist.wristState.DTWALL);
@@ -242,13 +258,20 @@ public class Auto_Silly_spec extends OpMode {
                 }
                 break;
             case 16:
-                if (!follower.isBusy() || follower.isRobotStuck()) {
+                if (!follower.isBusy() || follower.isRobotStuck()) { //Todo IDK!!!
                     claw.setState(Claw.ClawState.CLOSE);
+                    setPathState(1601);
+                }
+                break;
+            case 1601:
+                if(pathTime.getElapsedTimeSeconds() > 0.5) {
+                    bar.setState(Bar.BarState.DTWALLSILLY);
                     setPathState(17);
                 }
                 break;
             case 17:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 0.35) {
+                    bar.setState(Bar.BarState.CLIP);
                     follower.followPath(score3);
                     setPathState(18);
                 }
@@ -259,8 +282,10 @@ public class Auto_Silly_spec extends OpMode {
                     wrist.setState(Wrist.wristState.DTCLIP);
                     setPathState(19);
                 }
+                break;
             case 19:
                 if (!follower.isBusy() || follower.isRobotStuck()) {
+                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                     bar.setState(Bar.BarState.DTCLIP2);
                     setPathState(1901);
                 }
@@ -272,7 +297,7 @@ public class Auto_Silly_spec extends OpMode {
                 }
                 break;
             case 20:
-                if (pathTime.getElapsedTimeSeconds() > 0.6) { //needs heavy tuning,,,,
+                if (pathTime.getElapsedTimeSeconds() > 0.4) { //Todo needs heavy tuning,,,,
                     claw.setState(Claw.ClawState.SUPEROPEN);
                     bar.setState(Bar.BarState.DTWALL);
                     wrist.setState(Wrist.wristState.DTWALL);
@@ -314,7 +339,8 @@ public class Auto_Silly_spec extends OpMode {
         intakeWrist.init(hardwareMap);
         slides.init(hardwareMap);
         wrist.init(hardwareMap);
-
+        slides.DANGEROUS_RESET_ENCODERS();
+        extendo.DANGEROUS_RESET_ENCODERS();
         bar.setState(Bar.BarState.WALL);
         wrist.setState(Wrist.wristState.WALL);
         claw.setState(Claw.ClawState.CLOSE);
@@ -360,6 +386,7 @@ public class Auto_Silly_spec extends OpMode {
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());
+        telemetry.addData("claw state: ", claw.currentState);
         telemetry.addData("slides L/R ", slides.getLPos() + " / " + slides.getRPos());
         telemetry.update();
         Drawing.drawPoseHistory(dashboardPoseTracker, "#4CAF50");
