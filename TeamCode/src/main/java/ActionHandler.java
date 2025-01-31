@@ -223,17 +223,17 @@ public class ActionHandler {
                 if (elapsedMs >= 200) {
                     bar.setState(Bar.BarState.NEUTRAL);
                     wrist.setState(Wrist.wristState.NEUTRAL);
+                    currentActionState = ActionState.TRANSFER_STAGE_5;
+                    timer.reset();
+                }
+                break;
+            case TRANSFER_STAGE_5:
+                if (elapsedMs >= 300) {
                     transferring = false;
                     currentActionState = ActionState.IDLE;
                     timer.reset();
                 }
                 break;
-//            case TRANSFER_STAGE_5:
-//                if (elapsedMs >= 500) {
-//                    currentActionState = ActionState.TRANSFER_STAGE_6;
-//                    timer.reset();
-//                }
-//                break;
 //            case TRANSFER_STAGE_6:
 //                if (elapsedMs >= 500) {
 //                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
