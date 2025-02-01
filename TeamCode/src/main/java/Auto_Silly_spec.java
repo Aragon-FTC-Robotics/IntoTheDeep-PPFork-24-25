@@ -53,10 +53,12 @@ public class Auto_Silly_spec extends OpMode {
     private static final Pose PREPARE2POSE = Auto_5_0.PREPARE2POSE;
     private static final Pose PREPARE2CONTROL = Auto_5_0.PREPARE2CONTROL;
     private static final Pose PUSH2POSE = Auto_5_0.PUSH2POSE;
+    private static final Pose PUSH2MID = new Pose(12, 33, Math.toRadians(-70));
     private static final Pose WALLPOSE = new Pose(7.8, 24, Math.toRadians(180));
     private static final Pose SCORE1POSE = new Pose(Auto_5_0.SCORE1POSE.getX(),Auto_5_0.SCORE1POSE.getY(),Math.toRadians(180));
-    private static final Pose SCORE1POSECONTROL = Auto_5_0.SCORE1POSECONTROL;
-    private static final Pose SCORE1POSECONTROL2 = Auto_5_0.SCORE1POSECONTROL2;
+    private static final Pose SCORE1CONTROL = new Pose(22, 77); //for scoring first sampel after moving out of observation
+    private static final Pose SCOREPOSECONTROL = Auto_5_0.SCOREPOSECONTROL;
+    private static final Pose SCOREPOSECONTROL2 = Auto_5_0.SCOREPOSECONTROL2;
     private static final Pose SCORETOWALLCONTROL = Auto_5_0.SCORETOWALLCONTROL;
     private static final Pose SCORETOWALLCONTROL2 = Auto_5_0.SCORETOWALLCONTROL2;
     private static final Pose SCORE2POSE = new Pose(Auto_5_0.SCORE2POSE.getX(),Auto_5_0.SCORE2POSE.getY(),Math.toRadians(180));
@@ -90,15 +92,17 @@ public class Auto_Silly_spec extends OpMode {
                 .setLinearHeadingInterpolation(PREPARE2POSE.getHeading(), PUSH2POSE.getHeading())
                 .build();
         score1 = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(PUSH2POSE), new Point(SCORE1POSECONTROL), new Point(SCORE1POSECONTROL2), new Point(SCORE1POSE))))
-                .setLinearHeadingInterpolation(PUSH2POSE.getHeading(), SCORE1POSE.getHeading())
+                .addPath(new Path(new BezierLine(new Point(PUSH2POSE), new Point(PUSH2MID))))
+                .setLinearHeadingInterpolation(PUSH2POSE.getHeading(), PUSH2MID.getHeading())
+                .addPath(new Path(new BezierCurve(new Point(PUSH2MID), new Point(SCORE1CONTROL), new Point(SCORE1POSE))))
+                .setLinearHeadingInterpolation(PUSH2MID.getHeading(), SCORE1POSE.getHeading())
                 .build();
         score1ToWall = follower.pathBuilder()
                 .addPath(new Path(new BezierCurve(new Point(SCORE1POSE), new Point(SCORETOWALLCONTROL), new Point(SCORETOWALLCONTROL2), new Point(WALLPOSE))))
                 .setLinearHeadingInterpolation(SCORE1POSE.getHeading(), WALLPOSE.getHeading())
                 .build();
         score2 = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCORE1POSECONTROL), new Point(SCORE1POSECONTROL2), new Point(SCORE2POSE))))
+                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCOREPOSECONTROL), new Point(SCOREPOSECONTROL2), new Point(SCORE2POSE))))
                 .setLinearHeadingInterpolation(WALLPOSE.getHeading(), SCORE2POSE.getHeading())
                 .build();
         score2ToWall = follower.pathBuilder()
@@ -106,7 +110,7 @@ public class Auto_Silly_spec extends OpMode {
                 .setLinearHeadingInterpolation(SCORE2POSE.getHeading(), WALLPOSE.getHeading())
                 .build();
         score3 = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCORE1POSECONTROL), new Point(SCORE1POSECONTROL2), new Point(SCORE3POSE))))
+                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCOREPOSECONTROL), new Point(SCOREPOSECONTROL2), new Point(SCORE3POSE))))
                 .setLinearHeadingInterpolation(WALLPOSE.getHeading(), SCORE3POSE.getHeading())
                 .build();
         score3ToWall = follower.pathBuilder()
@@ -174,6 +178,7 @@ public class Auto_Silly_spec extends OpMode {
             case 601:
                 if (pathTime.getElapsedTimeSeconds() > 0.5) {
                     bar.setState(Bar.BarState.DTWALLSILLY);
+                    wrist.setState(Wrist.wristState.DTWALLSILLY);
                     setPathState(7);
                 }
                 break;
@@ -220,6 +225,7 @@ public class Auto_Silly_spec extends OpMode {
             case 1101:
                 if (pathTime.getElapsedTimeSeconds() > 0.5) {
                     bar.setState(Bar.BarState.DTWALLSILLY);
+                    wrist.setState(Wrist.wristState.DTWALLSILLY);
                     setPathState(12);
                 }
                 break;
@@ -266,6 +272,7 @@ public class Auto_Silly_spec extends OpMode {
             case 1601:
                 if(pathTime.getElapsedTimeSeconds() > 0.5) {
                     bar.setState(Bar.BarState.DTWALLSILLY);
+                    wrist.setState(Wrist.wristState.DTWALLSILLY);
                     setPathState(17);
                 }
                 break;
@@ -362,6 +369,8 @@ public class Auto_Silly_spec extends OpMode {
         telemetry.addData("The way he ts chopped his ts", "\nis so tuff");
         telemetry.addData("Use gp1 left stick y", "\nto change current voltage for voltage compensation.");
         telemetry.addData("Current voltage: ", currentVoltage);
+        extendo.Loop(currentVoltage);
+        slides.Loop(currentVoltage);
         telemetry.update();
     }
     @Override

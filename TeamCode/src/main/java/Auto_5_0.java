@@ -2,7 +2,6 @@ import android.util.Log;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
 import com.pedropathing.localization.PoseUpdater;
@@ -72,8 +71,8 @@ public class Auto_5_0 extends OpMode {
 
     public static final Pose WALLPOSE = new Pose(6.3, 24, Math.toRadians(180));
     public static final Pose SCORE1POSE = new Pose(-26.9+72, 0.6+72, Math.toRadians(0));
-    public static final Pose SCORE1POSECONTROL = new Pose(19, 36);
-    public static final Pose SCORE1POSECONTROL2 = new Pose(14, 94);
+    public static final Pose SCOREPOSECONTROL = new Pose(19, 36);
+    public static final Pose SCOREPOSECONTROL2 = new Pose(14, 94);
     public static final Pose SCORETOWALLCONTROL = new Pose(23.033, 78.722);
     public static final Pose SCORETOWALLCONTROL2 = new Pose(40.678, 26.667); //changed
 
@@ -124,7 +123,7 @@ public class Auto_5_0 extends OpMode {
                 .setLinearHeadingInterpolation(PUSH2POSE.getHeading(), WALLPOSE.getHeading())
                 .build();
         score1 = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(PUSH2POSE), new Point(SCORE1POSECONTROL), new Point(SCORE1POSECONTROL2), new Point(SCORE1POSE))))
+                .addPath(new Path(new BezierCurve(new Point(PUSH2POSE), new Point(SCOREPOSECONTROL), new Point(SCOREPOSECONTROL2), new Point(SCORE1POSE))))
                 .setLinearHeadingInterpolation(PUSH2POSE.getHeading(), SCORE1POSE.getHeading())
                 .build();
         score1ToWall = follower.pathBuilder()
@@ -132,7 +131,7 @@ public class Auto_5_0 extends OpMode {
                 .setLinearHeadingInterpolation(SCORE1POSE.getHeading(), WALLPOSE.getHeading())
                 .build();
         score2 = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCORE1POSECONTROL), new Point(SCORE1POSECONTROL2), new Point(SCORE2POSE))))
+                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCOREPOSECONTROL), new Point(SCOREPOSECONTROL2), new Point(SCORE2POSE))))
                 .setLinearHeadingInterpolation(WALLPOSE.getHeading(), SCORE2POSE.getHeading())
                 .build();
         score2ToWall = follower.pathBuilder()
@@ -140,7 +139,7 @@ public class Auto_5_0 extends OpMode {
                 .setLinearHeadingInterpolation(SCORE2POSE.getHeading(), WALLPOSE.getHeading())
                 .build();
         score3 = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCORE1POSECONTROL), new Point(SCORE1POSECONTROL2), new Point(SCORE3POSE))))
+                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCOREPOSECONTROL), new Point(SCOREPOSECONTROL2), new Point(SCORE3POSE))))
                 .setLinearHeadingInterpolation(WALLPOSE.getHeading(), SCORE3POSE.getHeading())
                 .build();
         score3ToWall = follower.pathBuilder()
@@ -148,7 +147,7 @@ public class Auto_5_0 extends OpMode {
                 .setLinearHeadingInterpolation(SCORE3POSE.getHeading(), WALLPOSE.getHeading())
                 .build();
         score4 = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCORE1POSECONTROL), new Point(SCORE1POSECONTROL2), new Point(SCORE4POSE))))
+                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCOREPOSECONTROL), new Point(SCOREPOSECONTROL2), new Point(SCORE4POSE))))
                 .setLinearHeadingInterpolation(WALLPOSE.getHeading(), SCORE4POSE.getHeading())
                 .build();
         park = follower.pathBuilder()
