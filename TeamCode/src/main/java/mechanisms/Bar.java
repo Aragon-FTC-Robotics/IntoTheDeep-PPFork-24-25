@@ -19,7 +19,7 @@ public class Bar {
     public static final double NEUTRAL = 0.6;
     public final double DTCLIP1 = 0.1;
     public final double DTCLIP2 = 0.25;
-    public final double PARK = 0.36;
+    public final double PARK = 0.41;
     public final double DTWALL = 0.87;
     public final double DTWALLSILLY = 0.94;
 

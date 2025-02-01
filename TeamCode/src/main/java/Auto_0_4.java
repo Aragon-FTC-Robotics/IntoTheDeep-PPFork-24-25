@@ -50,9 +50,9 @@ public class Auto_0_4 extends OpMode {
     private static final Pose PRELOADPOSE = new Pose(-54.7453+72, 57.527+72, 5.5738);
     private static final Pose INTAKE1POSE = new Pose(-50.745+72, 35.325+72, 0.4734); //og: 6.264,  pos (16.62, 120.961)
     private static final Pose INTAKE1POSEMISS = new Pose(-50.245+72, 36.325+72, 0.4734); //og: 6.224
-    private static final Pose INTAKE2POSE = new Pose(-54.0456+72, 46.7468+72, 0.2915); //og: 6.2103, pos (18.827, 131.935)
-    private static final Pose INTAKE2POSEMISS = new Pose(-53.0456+72, 47.7468+72, 0.2915); //og: 6.1644 , pos (21.247, 132.2)
-    private static final Pose INTAKE3POSE = new Pose(-51.442+72, 53.047+72, Math.toRadians(24)); //og: 0.296, (18.558, 129.047)
+    private static final Pose INTAKE2POSE = new Pose(-52.0456+72, 47.7468+72, 0.2915); //og: 6.2103, pos (18.827, 131.935)
+    private static final Pose INTAKE2POSEMISS = new Pose(-51.0456+72, 48.7468+72, 0.2915); //og: 6.1644 , pos (21.247, 132.2)
+    private static final Pose INTAKE3POSE = new Pose(-49.442+72, 52.047+72, Math.toRadians(20)); //og: 0.296, (18.558, 129.047)
     private static final Pose BUCKETPOSE = new Pose(-54.7453+72, 57.527+72, 5.5788);
     private static final Pose ASCENTPOSE = new Pose(0.396, 24.882, Math.toRadians(0));
     private static final Pose ASCENTCONTROL1 = new Pose(18.235, 70.235);
@@ -232,15 +232,19 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 4:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
-                    claw.setState(Claw.ClawState.OPEN);
+                if (pathTime.getElapsedTimeSeconds() > 0.2) {
+                    extendo.setTargetPos(Extendo.MIN);
                     wrist.setState(Wrist.wristState.AUTOTRANSFER);
                     setPathState(40001);
                 }
                 break;
             case 40001:
-                if (pathTime.getElapsedTimeSeconds() > 1.0) {
-                    extendo.setTargetPos(Extendo.MIN);
+                if (pathTime.getElapsedTimeSeconds() > 0.75){
+                    claw.setState(Claw.ClawState.OPEN);
+                    setPathState(40002);
+                }
+            case 40002:
+                if (pathTime.getElapsedTimeSeconds() > 0.75) {
                     bar.setState(Bar.BarState.AUTOTRANSFER);
                     setPathState(5);
                 }
