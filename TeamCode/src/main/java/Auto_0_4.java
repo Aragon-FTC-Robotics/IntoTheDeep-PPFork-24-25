@@ -54,7 +54,8 @@ public class Auto_0_4 extends OpMode {
     private static final Pose INTAKE2POSEMISS = new Pose(-51.0456+72, 48.7468+72, 0.2915); //og: 6.1644 , pos (21.247, 132.2)
     private static final Pose INTAKE3POSE = new Pose(-49.442+72, 52.047+72, Math.toRadians(20)); //og: 0.296, (18.558, 129.047)
     private static final Pose BUCKETPOSE = new Pose(-54.7453+72, 57.527+72, 5.5788);
-    private static final Pose ASCENTPOSE = new Pose(0.396, 24.882, Math.toRadians(0));
+    private static final Pose FINALBUCKETPOSE = new Pose(-51.7453+72, 56.527+72, 5.5788);
+    private static final Pose ASCENTPOSE = new Pose(-16, 24.882, Math.toRadians(0));
     private static final Pose ASCENTCONTROL1 = new Pose(18.235, 70.235);
 
     private Path scorePreload, park;
@@ -132,9 +133,9 @@ public class Auto_0_4 extends OpMode {
         //intake 3 -> bucket
         score3 = follower.pathBuilder()
                 .addPath(
-                        new BezierLine(new Point(INTAKE3POSE), new Point(BUCKETPOSE))
+                        new BezierLine(new Point(INTAKE3POSE), new Point(FINALBUCKETPOSE))
                 )
-                .setLinearHeadingInterpolation(INTAKE3POSE.getHeading(), BUCKETPOSE.getHeading())
+                .setLinearHeadingInterpolation(INTAKE3POSE.getHeading(), FINALBUCKETPOSE.getHeading())
                 .build();
 
         //Bucket -> ascent (bezier curve)
