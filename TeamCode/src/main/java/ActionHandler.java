@@ -49,7 +49,8 @@ public class ActionHandler {
         RESETSLIDES,
         NUDGE1, NUDGE2, NUDGE3, CLIPPOS, TRANSFER_STAGE_6, NUDGE4,
         FLIP,
-        SPIT, SPIT2, SPIT3
+        SPIT, SPIT2, SPIT3,
+        THROW1, THROWGRAB
     }
 
     public void init(Slides s, Extendo e, Bar b, Wrist w, Intake f, Claw c, IntakeWrist iw, Colorsensor cs, LEDlight l, String alliance) {
@@ -122,7 +123,7 @@ public class ActionHandler {
             currentColor = ColorState.NOTHING;
         }
         if (gp2.left_stick_button && gp2.right_stick_button) {
-            nudge();
+            gp2.rumbleBlips(2);
         }
 
         if (gp2.dpad_up && !transferring) {
@@ -189,7 +190,6 @@ public class ActionHandler {
         light();
         TimedActions();
     }
-
     public void TimedActions() {
         long elapsedMs = timer.time(TimeUnit.MILLISECONDS);
 
@@ -351,7 +351,20 @@ public class ActionHandler {
                     currentActionState=ActionState.IDLE;
                 }
                 break;
-
+            case THROWGRAB:
+                if (elapsedMs>=500) {
+                    bar.setState(Bar.BarState.BUCKET);
+                    wrist.setState(Wrist.wristState.BUCKET);
+                    currentActionState = ActionState.IDLE;
+                }
+                break;
+            case THROW1:
+                if (elapsedMs >= 15) {
+                    bar.setState(Bar.BarState.CLIP);
+                    wrist.setState(Wrist.wristState.CLIP);
+                    currentActionState = ActionState.IDLE;
+                }
+                break;
             default:
                 currentActionState = ActionState.IDLE;
                 break;
@@ -382,7 +395,16 @@ public class ActionHandler {
             intakeWrist.setState(IntakeWrist.intakeWristState.SUPEROUT);
         }
     }
-
+    public void throwgrab() {
+        slides.setTargetPos(Slides.HIGH);
+        currentActionState = ActionState.THROWGRAB;
+        timer.reset();
+    }
+    public void throw2() {
+        claw.setState(Claw.ClawState.OPEN);
+        currentActionState = ActionState.THROW1;
+        timer.reset();
+    }
     private void transfer() {
         bar.setState(Bar.BarState.NEUTRAL);
         wrist.setState(Wrist.wristState.TRANSFER);

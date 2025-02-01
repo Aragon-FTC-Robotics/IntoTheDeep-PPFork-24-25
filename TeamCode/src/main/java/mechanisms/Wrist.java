@@ -13,7 +13,7 @@ public class Wrist {
     public final double AUTOTRANSFER = 0.26;
     public final double WALL = 0.50;
     public final double BUCKET = 1;
-    public final double CLIP = 0.36;
+    public final double CLIP = 0.32;
     public final double AUTOCLIP = 0.36;
     public final double NEUTRAL = 0.2;
     public final double PARK = 0.84;

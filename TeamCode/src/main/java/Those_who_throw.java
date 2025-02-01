@@ -1,22 +1,18 @@
+
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import mechanisms.Bar;
-import mechanisms.Claw;
-import mechanisms.Colorsensor;
-import mechanisms.Drivetrain;
-import mechanisms.Extendo;
-import mechanisms.Intake;
-import mechanisms.IntakeWrist;
-import mechanisms.LEDlight;
-import mechanisms.Slides;
-import mechanisms.Wrist;
+import java.util.HashMap;
+import java.util.Map;
 
-@TeleOp(name="♿️Blue Teleop", group="!!!")
-public class FullTeleOpBlue extends LinearOpMode {
+import mechanisms.*;
+
+@TeleOp(name="💀Those who throw", group="!!!")
+public class Those_who_throw extends LinearOpMode {
     public Bar bar = new Bar();
     public Claw claw = new Claw();
     public Colorsensor colorsensor = new Colorsensor();
@@ -56,7 +52,7 @@ public class FullTeleOpBlue extends LinearOpMode {
         slides.DANGEROUS_RESET_ENCODERS();
         extendo.DANGEROUS_RESET_ENCODERS();
         voltageSensor = hardwareMap.get(VoltageSensor.class, "Control Hub");
-        actionHandler.init(slides,extendo,bar,wrist,intake,claw,intakeWrist,colorsensor,led, "blue");
+        actionHandler.init(slides,extendo,bar,wrist,intake,claw,intakeWrist,colorsensor,led, "red");
 
         gp1 = gamepad1;
         gp2 = gamepad2;
@@ -85,6 +81,12 @@ public class FullTeleOpBlue extends LinearOpMode {
             wrist.Loop();
             led.Loop();
             actionHandler.Loop(gp1, gp2); /// :)
+            if (gp2.left_stick_button) {
+                actionHandler.throwgrab();
+            }
+            if (gp2.right_stick_button) {
+                actionHandler.throw2();
+            }
             if (lastVoltageCheck.milliseconds() > 500) { //check every 500ms
                 currentVoltage = voltageSensor.getVoltage();
                 lastVoltageCheck.reset();

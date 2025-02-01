@@ -11,7 +11,7 @@ import java.util.Map;
 
 import mechanisms.*;
 
-@TeleOp(name="\uD83D\uDFE5 Red Teleop", group="!!!")
+@TeleOp(name="🦐🩸Red Teleop", group="!!!")
 public class FullTeleOpRed extends LinearOpMode {
     public Bar bar = new Bar();
     public Claw claw = new Claw();
@@ -69,7 +69,7 @@ public class FullTeleOpRed extends LinearOpMode {
             colorsensor.Loop();
             claw.Loop();
             drivetrain.Loop(gp1, gp2); //Gamepad inputs handled by class
-            if (slides.getLPos() > 1000) {
+            if (slides.getLPos() > 1300) {
                 drivetrain.slowModeON();
             } else {
                 drivetrain.slowModeOFF();
