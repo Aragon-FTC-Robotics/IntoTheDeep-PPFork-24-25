@@ -15,6 +15,7 @@ import com.pedropathing.util.DashboardPoseTracker;
 import com.pedropathing.util.Drawing;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import mechanisms.Bar;
@@ -27,7 +28,8 @@ import mechanisms.Wrist;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 
-@Autonomous(name = "5+0 (CLIP!)", group = "Auto")
+@Disabled
+@Autonomous(name = "3 Clip normal wall pickup (CLIP!)", group = "Auto")
 public class Auto_5_0 extends OpMode {
     private Bar bar;
     private Claw claw;
@@ -48,12 +50,13 @@ public class Auto_5_0 extends OpMode {
     //Clip x: 41.29411764705882
     public static final Pose STARTPOSE = new Pose(6.75, 60, Math.toRadians(0));
 
-    public static final Pose PRELOADPOSE = new Pose(-30.077+72, -5.962+72, Math.toRadians(0));
-    public static final Pose PREPARE1POSE = new Pose(-14.489+72, -49.716+72, Math.toRadians(0));
-    public static final Pose PREPARE1CONTROL = new Pose(3.889, 28.115, Math.toRadians(0));
-    public static final Pose PREPARE1CONTROL2 = new Pose(79.701, 37.650, Math.toRadians(0));
+    public static final Pose PRELOADPOSE = new Pose(47.923, 66.038, Math.toRadians(0));
+    public static final Pose PREPARE1POSE = new Pose(57, 34, Math.toRadians(180));
+    public static final Pose PREPARE1CONTROL = new Pose(11, 67);
+    public static final Pose PREPARE1CONTROL2 = new Pose(44, 6);
+    public static final Pose PREPARE1CONTROL3 = new Pose(60, 50);
 
-    public static final Pose PUSH1POSE = new Pose(-57.524+72, -49.633+72, Math.toRadians(0));
+    public static final Pose PUSH1POSE = new Pose(7, -49.633+72, Math.toRadians(180));
 
     public static final Pose PREPARE2POSE = new Pose(-17.629+72, 14.7, Math.toRadians(180));
     public static final Pose PREPARE2CONTROL = new Pose(75.176,30.882, Math.toRadians(0));
@@ -69,7 +72,7 @@ public class Auto_5_0 extends OpMode {
     public static final Pose PUSH3TOWALLCONTROL = new Pose(74.322, 36.427);
     public static final Pose PUSH2TOWALLCONTROL = new Pose(50,24); //old 55
 
-    public static final Pose WALLPOSE = new Pose(6.3, 24, Math.toRadians(180));
+    public static final Pose WALLPOSE = new Pose(5.2, 24, Math.toRadians(180));
     public static final Pose SCORE1POSE = new Pose(-26.9+72, 0.6+72, Math.toRadians(0));
     public static final Pose SCOREPOSECONTROL = new Pose(19, 36);
     public static final Pose SCOREPOSECONTROL2 = new Pose(14, 94);
@@ -91,7 +94,7 @@ public class Auto_5_0 extends OpMode {
                 .setLinearHeadingInterpolation(STARTPOSE.getHeading(), PRELOADPOSE.getHeading())
                 .build();
         prepare1 = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(PRELOADPOSE), new Point(PREPARE1CONTROL), new Point(PREPARE1CONTROL2), new Point(PREPARE1POSE))))
+                .addPath(new Path(new BezierCurve(new Point(PRELOADPOSE), new Point(PREPARE1CONTROL), new Point(PREPARE1CONTROL2), new Point(PREPARE1CONTROL3), new Point(PREPARE1POSE))))
                 .setLinearHeadingInterpolation(PRELOADPOSE.getHeading(), PREPARE1POSE.getHeading())
                 .build();
         push1 = follower.pathBuilder()

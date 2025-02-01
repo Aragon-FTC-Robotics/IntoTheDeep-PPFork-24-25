@@ -27,7 +27,7 @@ import mechanisms.Wrist;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 
-@Autonomous(name = "Chopped Chin Autonomous (GOOD CLIP!!!)", group = "Auto")
+@Autonomous(name = "\uD83E\uDD21\uD83D\uDCCE Clip Auto", group = "Auto")
 public class Auto_Silly_spec extends OpMode {
     private Bar bar;
     private Claw claw;
@@ -46,15 +46,18 @@ public class Auto_Silly_spec extends OpMode {
 
     private static final Pose STARTPOSE = Auto_5_0.STARTPOSE;
     private static final Pose PRELOADPOSE = Auto_5_0.PRELOADPOSE;
-    private static final Pose PREPARE1POSE = Auto_5_0.PREPARE1POSE;
-    private static final Pose PREPARE1CONTROL = Auto_5_0.PREPARE1CONTROL;
-    private static final Pose PREPARE1CONTROL2 = Auto_5_0.PREPARE1CONTROL2;
-    private static final Pose PUSH1POSE = Auto_5_0.PUSH1POSE;
+    private static final Pose PREPAREMID = new Pose(32,46, Math.toRadians(0));
+    private static final Pose PREPAREMIDCONTROL = new Pose(31, 66);
+    private static final Pose PREPARE1POSE = new Pose(57,34,Math.toRadians(180));
+    private static final Pose PREPARE1CONTROL = new Pose(19, 69);
+    private static final Pose PREPARE1CONTROL2 = new Pose(24, 28);
+    private static final Pose PUSH1POSE = new Pose(-12,23,Math.toRadians(180));
+    private static final Pose PUSH1CONTROL = new Pose(65,16);
     private static final Pose PREPARE2POSE = Auto_5_0.PREPARE2POSE;
     private static final Pose PREPARE2CONTROL = Auto_5_0.PREPARE2CONTROL;
     private static final Pose PUSH2POSE = Auto_5_0.PUSH2POSE;
-    private static final Pose PUSH2MID = new Pose(12, 33, Math.toRadians(-70));
-    private static final Pose WALLPOSE = new Pose(7.8, 24, Math.toRadians(180));
+    private static final Pose PUSH2MID = new Pose(12, 33, Math.toRadians(240));
+    private static final Pose WALLPOSE = new Pose(5, 24, Math.toRadians(180));
     private static final Pose SCORE1POSE = new Pose(Auto_5_0.SCORE1POSE.getX(),Auto_5_0.SCORE1POSE.getY(),Math.toRadians(180));
     private static final Pose SCORE1CONTROL = new Pose(22, 77); //for scoring first sampel after moving out of observation
     private static final Pose SCOREPOSECONTROL = Auto_5_0.SCOREPOSECONTROL;
@@ -77,10 +80,11 @@ public class Auto_Silly_spec extends OpMode {
                 .build();
         prepare1 = follower.pathBuilder()
                 .addPath(new Path(new BezierCurve(new Point(PRELOADPOSE), new Point(PREPARE1CONTROL), new Point(PREPARE1CONTROL2), new Point(PREPARE1POSE))))
-                .setLinearHeadingInterpolation(PRELOADPOSE.getHeading(), PREPARE1POSE.getHeading())
+                .setTangentHeadingInterpolation()
+                .setReversed(true)
                 .build();
         push1 = follower.pathBuilder()
-                .addPath(new Path(new BezierLine(new Point(PREPARE1POSE), new Point(PUSH1POSE))))
+                .addPath(new Path(new BezierCurve(new Point(PREPARE1POSE), new Point(PUSH1CONTROL), new Point(PUSH1POSE))))
                 .setLinearHeadingInterpolation(PREPARE1POSE.getHeading(), PUSH1POSE.getHeading())
                 .build();
         prepare2 = follower.pathBuilder()
@@ -123,39 +127,40 @@ public class Auto_Silly_spec extends OpMode {
             case 0:
                 extendo.setTargetPos(-100);
                 intakeWrist.setState(IntakeWrist.intakeWristState.IN);
-                slides.setTargetPos(Slides.MED);
-                bar.setState(Bar.BarState.CLIP);
-                wrist.setState(Wrist.wristState.CLIP);
+                slides.setTargetPos(900);
+                bar.setState(Bar.BarState.DTFIRSTCLIP);
+                wrist.setState(Wrist.wristState.DTFIRSTCLIP);
                 follower.followPath(scorePreload, true);
                 setPathState(1);
                 break;
             case 1:
-                if (!follower.isBusy()) { //Wait for robot to reach clip position
+                if (Math.abs(follower.getPose().getX()-44.923)<2 || follower.isRobotStuck()) { //Wait for robot to reach clip position
                     Log.d("Hello!", "It's my birthday!");
-                    setPathState(101);
-                }
-                break;
-            case 101:
-                if (pathTime.getElapsedTimeSeconds() > 0.2) {
-                    slides.setTargetPos(Slides.GROUND);
                     setPathState(2);
                 }
                 break;
+//            case 101:
+//                if (pathTime.getElapsedTimeSeconds() > 0.05) {
+//                    slides.setTargetPos(Slides.GROUND);
+//                    setPathState(2);
+//                }
+//                break;
             case 2:
-                if (pathTime.getElapsedTimeSeconds() > 0.28) { //Todo NEEDS HEAVY TUNING
+                if (true) {
+                    slides.setTargetPos(Slides.GROUND);
                     claw.setState(Claw.ClawState.SUPEROPEN);
                     follower.followPath(prepare1, false);
                     setPathState(3);
                 }
                 break;
             case 3:
-                if (Math.abs(follower.getPose().getX()-PREPARE1POSE.getX())<3&&Math.abs(follower.getPose().getY()-PREPARE1POSE.getY())<3) {
+                if (Math.abs(follower.getPose().getX()-PREPARE1POSE.getX())<6&&Math.abs(follower.getPose().getY()-PREPARE1POSE.getY())<6) {
                     follower.followPath(push1, false);
                     setPathState(4);
                 }
                 break;
             case 4:
-                if (Math.abs(follower.getPose().getX()-PUSH1POSE.getX())<3&&Math.abs(follower.getPose().getY()-PUSH1POSE.getY())<3) {
+                if (Math.abs(follower.getPose().getX()-13)<6) {
                     follower.followPath(prepare2, false);
                     bar.setState(Bar.BarState.DTWALL);
                     wrist.setState(Wrist.wristState.DTWALL);
@@ -203,7 +208,7 @@ public class Auto_Silly_spec extends OpMode {
                 }
                 break;
             case 901:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 0.05) {
                     follower.followPath(score1ToWall, true);
                     setPathState(10);
                 }
@@ -250,7 +255,7 @@ public class Auto_Silly_spec extends OpMode {
                 }
                 break;
             case 1401:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 0.05) {
                     follower.followPath(score2ToWall, true);
                     setPathState(15);
                 }
@@ -298,7 +303,7 @@ public class Auto_Silly_spec extends OpMode {
                 }
                 break;
             case 1901:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 0.05) {
                     follower.followPath(score3ToWall, true);
                     setPathState(20);
                 }

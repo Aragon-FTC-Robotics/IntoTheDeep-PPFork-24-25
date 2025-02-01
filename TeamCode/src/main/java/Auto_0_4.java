@@ -26,7 +26,7 @@ import mechanisms.*;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 @Config
-@Autonomous(name = "0+4 (BUCKET!)", group = "Auto")
+@Autonomous(name = "\uD83E\uDEA3\uD83D\uDDD1\uFE0F Bucket Auto", group = "Auto")
 public class Auto_0_4 extends OpMode {
     private Bar bar;
     private Claw claw;
