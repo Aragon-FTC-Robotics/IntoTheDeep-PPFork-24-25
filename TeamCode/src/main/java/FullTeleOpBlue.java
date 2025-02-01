@@ -53,8 +53,6 @@ public class FullTeleOpBlue extends LinearOpMode {
         slides.init(hardwareMap);
         wrist.init(hardwareMap);
         led.init(hardwareMap);
-        slides.DANGEROUS_RESET_ENCODERS();
-        extendo.DANGEROUS_RESET_ENCODERS();
         voltageSensor = hardwareMap.get(VoltageSensor.class, "Control Hub");
         actionHandler.init(slides,extendo,bar,wrist,intake,claw,intakeWrist,colorsensor,led, "blue");
 
@@ -91,7 +89,7 @@ public class FullTeleOpBlue extends LinearOpMode {
             }
             telemetry.addData("High time (ms)", highestTime[0] + "; at " + highestTime[1]);
             telemetry.addData("STATE", actionHandler.currentActionState);
-            telemetry.addData("intaking? extendoing? transferring?", actionHandler.isIntaking() + " / " + actionHandler.isExtendoout() + " / " + actionHandler.isTransferring());
+            telemetry.addData("intaking? extendoing? transferring? sharing?", actionHandler.isIntaking() + " / " + actionHandler.isExtendoout() + " / " + actionHandler.isTransferring() + " / " + actionHandler.isSharing());
             telemetry.addData("slides L/R ", slides.getLPos() + " " + slides.getRPos());
             telemetry.addData("intakewrist state", intakeWrist.getState());
             telemetry.addData("red? / yellow? / blue?", colorsensor.sensorIsRed() + " " + colorsensor.sensorIsYellow() + " " + colorsensor.sensorIsBlue());

@@ -57,7 +57,7 @@ public class Auto_Silly_spec extends OpMode {
     private static final Pose PREPARE2CONTROL = Auto_5_0.PREPARE2CONTROL;
     private static final Pose PUSH2POSE = Auto_5_0.PUSH2POSE;
     private static final Pose PUSH2MID = new Pose(12, 33, Math.toRadians(240));
-    private static final Pose WALLPOSE = new Pose(5, 24, Math.toRadians(180));
+    private static final Pose WALLPOSE = new Pose(6, 24, Math.toRadians(180));
     private static final Pose SCORE1POSE = new Pose(Auto_5_0.SCORE1POSE.getX(),Auto_5_0.SCORE1POSE.getY(),Math.toRadians(180));
     private static final Pose SCORE1CONTROL = new Pose(22, 77); //for scoring first sampel after moving out of observation
     private static final Pose SCOREPOSECONTROL = Auto_5_0.SCOREPOSECONTROL;
@@ -190,6 +190,7 @@ public class Auto_Silly_spec extends OpMode {
             case 7:
                 if (pathTime.getElapsedTimeSeconds() > 0.35) {
                     bar.setState(Bar.BarState.CLIP);
+                    wrist.setState(Wrist.wristState.PARK);
                     follower.followPath(score1);
                     setPathState(8);
                 }
@@ -237,6 +238,7 @@ public class Auto_Silly_spec extends OpMode {
             case 12:
                 if (pathTime.getElapsedTimeSeconds() > 0.35) {
                     bar.setState(Bar.BarState.CLIP);
+                    wrist.setState(Wrist.wristState.PARK);
                     follower.followPath(score2);
                     setPathState(13);
                 }
@@ -282,8 +284,9 @@ public class Auto_Silly_spec extends OpMode {
                 }
                 break;
             case 17:
-                if (pathTime.getElapsedTimeSeconds() > 0.35) {
+                if (pathTime.getElapsedTimeSeconds() > 0.5) {
                     bar.setState(Bar.BarState.CLIP);
+                    wrist.setState(Wrist.wristState.PARK);
                     follower.followPath(score3);
                     setPathState(18);
                 }

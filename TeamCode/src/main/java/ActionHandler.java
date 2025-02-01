@@ -20,7 +20,7 @@ public class ActionHandler {
 
     private static boolean intaking, transferring = false;
     private static boolean extendoout = false;
-
+    private static boolean sharing = false;
     private String alliance;
 
     private ElapsedTime timer = new ElapsedTime();
@@ -75,8 +75,13 @@ public class ActionHandler {
     }
 
     public void Loop(Gamepad gp1, Gamepad gp2) {
-        if (gp1.share) {
+        if (gp1.share && !sharing) {
             extendo.DANGEROUS_RESET_ENCODERS();
+            gp1.rumbleBlips(5);
+            sharing = true;
+        }
+        if (!gp1.share && sharing) {
+            sharing = false;
         }
         //clip
         if (gp2.x && !transferring) {
@@ -220,7 +225,7 @@ public class ActionHandler {
                 }
                 break;
             case TRANSFER_STAGE_4:
-                if (elapsedMs >= 200) {
+                if (elapsedMs >= 250) {
                     bar.setState(Bar.BarState.NEUTRAL);
                     wrist.setState(Wrist.wristState.NEUTRAL);
                     currentActionState = ActionState.TRANSFER_STAGE_5;
@@ -492,6 +497,9 @@ public class ActionHandler {
 
     public boolean isIntaking() {
         return intaking;
+    }
+    public boolean isSharing() {
+        return sharing;
     }
     public boolean isTransferring() {return transferring;}
     public boolean isExtendoout() {return extendoout;}
