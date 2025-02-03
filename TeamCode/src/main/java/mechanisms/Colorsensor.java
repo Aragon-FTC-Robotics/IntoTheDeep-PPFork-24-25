@@ -19,14 +19,14 @@ public class Colorsensor {
     public float[] redHigherHighHSV = {359, 1, 1}; //(Hue, Saturation, Value)
     public float[] redHigherLowHSV = {358, 0.6f, 0.6f};
 
-    public float [] redLowerHighHSV = {50, 0.9f, 0.4f}; //42
-    public float[] redLowerLowHSV = {0, 0.4f, 0.08f};
+    public float [] redLowerHighHSV = {80, 0.9f, 0.4f}; //64, 38 near comp field
+    public float[] redLowerLowHSV = {0, 0.4f, 0.05f};
 
     public float[] yellowHigherHSV = {98, 0.9f, 0.7f}; //86
-    public float[] yellowLowerHSV = {65, 0.6f, 0.2f};
+    public float[] yellowLowerHSV = {65, 0.55f, 0.1f};
 
     public float[] blueHigherHSV = {240, 0.9f, 0.4f};
-    public float[] blueLowerHSV = {200, 0.6f, 0.08f}; //215
+    public float[] blueLowerHSV = {200, 0.55f, 0.08f}; //215
     public void init(HardwareMap hm) {
         colorSensor = hm.get(NormalizedColorSensor.class, "sensor_color");
         colorSensor.setGain(gain);

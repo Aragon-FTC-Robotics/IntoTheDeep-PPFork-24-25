@@ -14,8 +14,8 @@ public class Bar {
     public final double AUTOTRANSFER = 0.83 + DISPLACEDTICKS;
     public final double WALL = 0.92 + DISPLACEDTICKS; //new
     public final double BUCKET = 0.20 + DISPLACEDTICKS;
-    public final double CLIP = 0.575 + DISPLACEDTICKS;
-    public final double AUTOCLIP = 0.575 + DISPLACEDTICKS;
+    public final double CLIP = 0.585 + DISPLACEDTICKS;
+    public final double AUTOCLIP = 0.585 + DISPLACEDTICKS;
     public final double NEUTRAL = 0.6 + DISPLACEDTICKS;
     public final double DTCLIP1 = 0.1 + DISPLACEDTICKS;
     public final double DTCLIP2 = 0.25 + DISPLACEDTICKS;

@@ -16,6 +16,7 @@ import com.pedropathing.util.Drawing;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import mechanisms.Bar;
 import mechanisms.Claw;
@@ -36,7 +37,7 @@ public class Auto_Silly_spec extends OpMode {
     private IntakeWrist intakeWrist;
     private Slides slides;
     private Wrist wrist;
-
+    private Servo led;
     private Follower follower;
     private Timer pathTime, totalTime;
     private int pathState = 0;
@@ -57,7 +58,7 @@ public class Auto_Silly_spec extends OpMode {
     private static final Pose PREPARE2CONTROL = Auto_5_0.PREPARE2CONTROL;
     private static final Pose PUSH2POSE = Auto_5_0.PUSH2POSE;
     private static final Pose PUSH2MID = new Pose(12, 33, Math.toRadians(240));
-    private static final Pose WALLPOSE = new Pose(6, 24, Math.toRadians(180));
+    private static final Pose WALLPOSE = new Pose(8.3, 24, Math.toRadians(180));
     private static final Pose SCORE1POSE = new Pose(Auto_5_0.SCORE1POSE.getX(),Auto_5_0.SCORE1POSE.getY(),Math.toRadians(180));
     private static final Pose SCORE1CONTROL = new Pose(22, 77); //for scoring first sampel after moving out of observation
     private static final Pose SCOREPOSECONTROL = Auto_5_0.SCOREPOSECONTROL;
@@ -65,7 +66,7 @@ public class Auto_Silly_spec extends OpMode {
     private static final Pose SCORETOWALLCONTROL = Auto_5_0.SCORETOWALLCONTROL;
     private static final Pose SCORETOWALLCONTROL2 = Auto_5_0.SCORETOWALLCONTROL2;
     private static final Pose SCORE2POSE = new Pose(Auto_5_0.SCORE2POSE.getX(),Auto_5_0.SCORE2POSE.getY(),Math.toRadians(180));
-    private static final Pose SCORE3POSE = new Pose(Auto_5_0.SCORE3POSE.getX(),Auto_5_0.SCORE3POSE.getY(),Math.toRadians(180));
+    private static final Pose SCORE3POSE = new Pose(Auto_5_0.SCORE3POSE.getX()+2,Auto_5_0.SCORE3POSE.getY(),Math.toRadians(180));
     private static final Pose SCORE4POSE = Auto_5_0.SCORE4POSE;
     private static final Pose PARKPOSE = Auto_5_0.PARKPOSE;
     private static final Pose PARKCONTROL = Auto_5_0.PARKCONTROL;
@@ -134,7 +135,7 @@ public class Auto_Silly_spec extends OpMode {
                 setPathState(1);
                 break;
             case 1:
-                if (Math.abs(follower.getPose().getX()-44.923)<2 || follower.isRobotStuck()) { //Wait for robot to reach clip position
+                if ((Math.abs(follower.getPose().getX()-44.923)<4) || follower.isRobotStuck()) { //Wait for robot to reach clip position
                     Log.d("Hello!", "It's my birthday!");
                     setPathState(2);
                 }
@@ -170,6 +171,7 @@ public class Auto_Silly_spec extends OpMode {
                 break;
             case 5:
                 if (Math.abs(follower.getPose().getX()-PREPARE2POSE.getX())<3&&Math.abs(follower.getPose().getY()-PREPARE2POSE.getY())<3) {
+                    follower.setMaxPower(0.6);
                     follower.followPath(push2, true);
                     setPathState(6);
                 }
@@ -191,6 +193,7 @@ public class Auto_Silly_spec extends OpMode {
                 if (pathTime.getElapsedTimeSeconds() > 0.35) {
                     bar.setState(Bar.BarState.CLIP);
                     wrist.setState(Wrist.wristState.PARK);
+                    follower.setMaxPower(0.85);
                     follower.followPath(score1);
                     setPathState(8);
                 }
@@ -210,6 +213,7 @@ public class Auto_Silly_spec extends OpMode {
                 break;
             case 901:
                 if (pathTime.getElapsedTimeSeconds() > 0.05) {
+                    follower.setMaxPower(0.6);
                     follower.followPath(score1ToWall, true);
                     setPathState(10);
                 }
@@ -239,6 +243,7 @@ public class Auto_Silly_spec extends OpMode {
                 if (pathTime.getElapsedTimeSeconds() > 0.35) {
                     bar.setState(Bar.BarState.CLIP);
                     wrist.setState(Wrist.wristState.PARK);
+                    follower.setMaxPower(0.85);
                     follower.followPath(score2);
                     setPathState(13);
                 }
@@ -258,6 +263,7 @@ public class Auto_Silly_spec extends OpMode {
                 break;
             case 1401:
                 if (pathTime.getElapsedTimeSeconds() > 0.05) {
+                    follower.setMaxPower(0.6);
                     follower.followPath(score2ToWall, true);
                     setPathState(15);
                 }
@@ -287,6 +293,7 @@ public class Auto_Silly_spec extends OpMode {
                 if (pathTime.getElapsedTimeSeconds() > 0.5) {
                     bar.setState(Bar.BarState.CLIP);
                     wrist.setState(Wrist.wristState.PARK);
+                    follower.setMaxPower(0.85);
                     follower.followPath(score3);
                     setPathState(18);
                 }
@@ -312,7 +319,7 @@ public class Auto_Silly_spec extends OpMode {
                 }
                 break;
             case 20:
-                if (pathTime.getElapsedTimeSeconds() > 0.4) { //Todo needs heavy tuning,,,,
+                if (pathTime.getElapsedTimeSeconds() > 0.5) { //Todo needs heavy tuning,,,,
                     claw.setState(Claw.ClawState.SUPEROPEN);
                     bar.setState(Bar.BarState.DTWALL);
                     wrist.setState(Wrist.wristState.DTWALL);
@@ -347,6 +354,7 @@ public class Auto_Silly_spec extends OpMode {
         slides = new Slides();
         wrist = new Wrist();
 
+        led = hardwareMap.get(Servo.class, "shiny");
         bar.init(hardwareMap);
         claw.init(hardwareMap);
         extendo.init(hardwareMap);
@@ -383,6 +391,7 @@ public class Auto_Silly_spec extends OpMode {
     }
     @Override
     public void start() {
+        led.setPosition(0.722);
         totalTime.resetTimer();
         setPathState(0);
     }

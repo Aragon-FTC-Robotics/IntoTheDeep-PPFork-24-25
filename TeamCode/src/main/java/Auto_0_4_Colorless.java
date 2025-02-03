@@ -3,31 +3,45 @@ import static mechanisms.Intake.intakeState.STOP;
 import static mechanisms.IntakeWrist.intakeWristState.OUT;
 import static mechanisms.IntakeWrist.intakeWristState.SPIT;
 import static mechanisms.IntakeWrist.intakeWristState.SUPERALMOSTOUT;
-import static mechanisms.IntakeWrist.intakeWristState.SUPEROUT;
 import static mechanisms.IntakeWrist.intakeWristState.TRANSFER;
 
 import android.util.Log;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.arcrobotics.ftclib.geometry.Pose2d;
-import com.pedropathing.follower.*;
-import com.pedropathing.localization.*;
-import com.pedropathing.pathgen.*;
-import com.pedropathing.util.*;
+import com.pedropathing.follower.Follower;
+import com.pedropathing.localization.Pose;
+import com.pedropathing.localization.PoseUpdater;
+import com.pedropathing.pathgen.BezierCurve;
+import com.pedropathing.pathgen.BezierLine;
+import com.pedropathing.pathgen.Path;
+import com.pedropathing.pathgen.PathChain;
+import com.pedropathing.pathgen.Point;
+import com.pedropathing.util.Constants;
+import com.pedropathing.util.DashboardPoseTracker;
+import com.pedropathing.util.Drawing;
+import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import mechanisms.*;
+import mechanisms.Bar;
+import mechanisms.Claw;
+import mechanisms.Colorsensor;
+import mechanisms.Extendo;
+import mechanisms.Intake;
+import mechanisms.IntakeWrist;
+import mechanisms.LEDshenanigans;
+import mechanisms.Slides;
+import mechanisms.Wrist;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
+
 @Config
-@Autonomous(name = "\uD83E\uDEA3\uD83D\uDDD1\uFE0F Bucket Auto", group = "Auto")
-public class Auto_0_4 extends OpMode {
+@Autonomous(name = "🦷🗑️ NO COLOR bucket", group = "Auto")
+public class Auto_0_4_Colorless extends OpMode {
     private Bar bar;
     private Claw claw;
     private Extendo extendo;
@@ -193,22 +207,15 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 3:
-                if (pathTime.getElapsedTimeSeconds() > 2 || colorsensor.sensorIsYellow()) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
                     intake.setState(Intake.intakeState.STOP);
 
 
-                    if(!colorsensor.sensorIsYellow()) { //FAIL
+
                         intakeWrist.setState(IntakeWrist.intakeWristState.SPIT);
                         Log.d("FAIL!!!!", "GO BACK TO SCHOOL");
                         follower.followPath(grab1_fix, true);
                         setPathState(301);
-                    }
-                    else { //Success
-                        follower.followPath(score1, true); //Samp 1 -> bucket
-                        intakeWrist.setState(TRANSFER);
-                        extendo.setTargetPos(-100);
-                        setPathState(4);
-                    }
                 }
                 break;
             case 301:
@@ -219,17 +226,13 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 302:
-                if(pathTime.getElapsedTimeSeconds() > 2 || colorsensor.sensorIsYellow()) {
+                if(pathTime.getElapsedTimeSeconds() > 2) {
                     intake.setState(Intake.intakeState.STOP);
 
                     intakeWrist.setState(TRANSFER);
                     follower.followPath(score1_fix, true); //Samp 1 -> bucket
                     extendo.setTargetPos(-100);
-                    if(colorsensor.sensorIsYellow()) { //SUCCESS
-                        setPathState(4);
-                    } else {
-                        setPathState(401);
-                    }
+                    setPathState(4);
                 }
                 break;
             case 4:
@@ -307,21 +310,12 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 9:
-                if (pathTime.getElapsedTimeSeconds() > 2 || colorsensor.sensorIsYellow()) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
                     intake.setState(Intake.intakeState.STOP);
-                    if(!colorsensor.sensorIsYellow()) { //FAIL
-                        Log.d("FAIL!!!!", "GO BACK TO SCHOOL");
-                        intakeWrist.setState(IntakeWrist.intakeWristState.SPIT);
-                        follower.followPath(grab2_fix, true);
-                        setPathState(901);
-                    }
-                    else { //Success
-                        follower.followPath(score2, true); //Samp 2 -> bucket
-                        intakeWrist.setState(TRANSFER);
-                        claw.setState(Claw.ClawState.CLOSE);
-                        extendo.setTargetPos(-100);
-                        setPathState(10);
-                    }
+                    Log.d("FAIL!!!!", "GO BACK TO SCHOOL");
+                    intakeWrist.setState(IntakeWrist.intakeWristState.SPIT);
+                    follower.followPath(grab2_fix, true);
+                    setPathState(901);
                 }
                 break;
             case 901:
@@ -332,18 +326,13 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 902:
-                if(pathTime.getElapsedTimeSeconds() > 2 || colorsensor.sensorIsYellow()) {
+                if(pathTime.getElapsedTimeSeconds() > 2) {
                     intake.setState(Intake.intakeState.STOP);
                     claw.setState(Claw.ClawState.CLOSE);
                     intakeWrist.setState(TRANSFER);
                     follower.followPath(score2_fix, true); //Samp 1 -> bucket
                     extendo.setTargetPos(-100);
-                    if(colorsensor.sensorIsYellow()) { //succeed
-                        setPathState(10);
-                    } else {
-                        setPathState(9001);
-                    }
-
+                    setPathState(10);
                 }
                 break;
             case 9001:
@@ -415,23 +404,10 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 15:
-                if (pathTime.getElapsedTimeSeconds() > 2 || colorsensor.sensorIsYellow()) {
-                    if (!colorsensor.sensorIsYellow()) {//FAIL
-                        intakeWrist.setState(SPIT);
-                        intake.setState(STOP);
-                        setPathState(1501);
-                    } else {
-                        intake.setState(STOP);
-                        extendo.setTargetPos(-100);
-                        claw.setState(Claw.ClawState.CLOSE);
-                        intakeWrist.setState(TRANSFER);
-                        follower.followPath(score3, true); //Samp 3 -> bucket
-                        if(colorsensor.sensorIsYellow()) {//SUICCEed
-                            setPathState(16);
-                        } else {
-                            setPathState(15001);
-                        }
-                    }
+                if (pathTime.getElapsedTimeSeconds() > 2) {
+                    intakeWrist.setState(SPIT);
+                    intake.setState(STOP);
+                    setPathState(1501);
                 }
                 break;
             case 15001:
@@ -446,17 +422,13 @@ public class Auto_0_4 extends OpMode {
                 }
                 break;
             case 1502:
-                if (pathTime.getElapsedTimeSeconds() > 2 || colorsensor.sensorIsYellow()) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
                         intake.setState(STOP);
                         extendo.setTargetPos(-100);
                         claw.setState(Claw.ClawState.CLOSE);
                         intakeWrist.setState(TRANSFER);
                         follower.followPath(score3, true); //Samp 3 -> bucket
-                        if (colorsensor.sensorIsYellow()) {// succede
-                            setPathState(16);
-                        } else {
-                            setPathState(15002);
-                        }
+                        setPathState(16);
                     }
                 break;
             case 15002:
