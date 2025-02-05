@@ -44,9 +44,9 @@ public class Drivetrain {
 //        double y = Math.pow(gp1.left_stick_y, 3); // Remember, Y stick value is reversed
 //        double x = Math.pow(gp1.left_stick_x, 3) * -1.1; // Counteract imperfect strafing
 //        double rx = Math.pow(gp1.right_stick_x, 3) * -0.6;
-        double y = gp1.left_stick_y;
-        double x = gp1.left_stick_x * -1.1;
-        double rx = gp1.right_stick_x * -1;
+        double y = gp1.left_stick_y * gp1.left_stick_y * gp1.left_stick_y;
+        double x = gp1.left_stick_x * gp1.left_stick_x * gp1.left_stick_x * -1.1;
+        double rx = gp1.right_stick_x * gp1.right_stick_x * gp1.right_stick_x * -1;
         maxSpeed = slowMode ? 0.5 : 1;
         minSpeed = slowMode ? -0.5 : -1;
 //        if (gp1.dpad_up) {
