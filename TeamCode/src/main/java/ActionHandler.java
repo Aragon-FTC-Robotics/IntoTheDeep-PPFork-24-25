@@ -32,6 +32,12 @@ public class ActionHandler {
         NOTHING, BLUE, RED, YELLOW
     }
 
+    Gamepad currentGamepad1 = new Gamepad();
+    Gamepad currentGamepad2 = new Gamepad();
+
+    Gamepad previousGamepad1 = new Gamepad();
+    Gamepad previousGamepad2 = new Gamepad();
+
     public ActionState currentActionState = ActionState.IDLE;
 
     enum ActionState {
@@ -75,6 +81,11 @@ public class ActionHandler {
     }
 
     public void Loop(Gamepad gp1, Gamepad gp2) {
+        previousGamepad1.copy(currentGamepad1);
+        previousGamepad2.copy(currentGamepad2);
+
+        currentGamepad1.copy(gp1);
+        currentGamepad2.copy(gp2);
         if (gp1.share && !sharing) {
             extendo.DANGEROUS_RESET_ENCODERS();
             gp1.rumbleBlips(5);
@@ -105,8 +116,20 @@ public class ActionHandler {
             wrist.setState(Wrist.wristState.NEUTRAL);
         }
         //intake
-        if (gp1.y) {
-            intake();
+        if (currentGamepad1.y && !previousGamepad1.y) {
+            if (!intaking) {
+                intaking = true;
+                intake.setState(Intake.intakeState.IN);
+                if (extendoout) {
+                    intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
+                } else {
+                    intakeWrist.setState(IntakeWrist.intakeWristState.SUPEROUT);
+                }
+            } else {
+                intaking = false;
+                intake.setState(Intake.intakeState.STOP);
+                intakeWrist.setState(IntakeWrist.intakeWristState.IN);
+            }
             currentColor = ColorState.NOTHING;
         }
         intakeCheck();
@@ -391,15 +414,6 @@ public class ActionHandler {
         timer.reset();
     }
 
-    private void intake() {
-        intaking = true;
-        intake.setState(Intake.intakeState.IN);
-        if (extendoout) {
-            intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
-        } else {
-            intakeWrist.setState(IntakeWrist.intakeWristState.SUPEROUT);
-        }
-    }
     public void throwgrab() {
         slides.setTargetPos(Slides.HIGH);
         currentActionState = ActionState.THROWGRAB;
