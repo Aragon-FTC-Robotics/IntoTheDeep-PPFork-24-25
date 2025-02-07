@@ -3,11 +3,33 @@ import android.util.Log;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import mechanisms.*;
 
 public class ActionHandler {
+    public enum CycleMode {
+        SPECIMEN_INTAKING,
+        SPECIMEN_SCORING,
+        SAMPLE_SCORING,
+        CLIMBING
+    }
+    public enum SpecimenStage {
+        EXTENDED,
+        INTAKING,
+        RETRACTED,
+        SPITTING
+    }
+    public enum SampleStage {
+        EXTENDED,
+        INTAKING,
+        TRANSFERRING,
+        LIFTING,
+        DEPOSIT,
+        IDLE
+    }
     private Slides slides;
     private Extendo extendo;
     private Bar bar;
@@ -26,14 +48,16 @@ public class ActionHandler {
     private ElapsedTime timer = new ElapsedTime();
     private ElapsedTime intakeTimer = new ElapsedTime();
     private boolean waitingForSecondCheck = false;
+    Gamepad previousGamepad1 = new Gamepad();
+    Gamepad previousGamepad2 = new Gamepad();
+    Gamepad currentGamepad1 = new Gamepad();
+    Gamepad currentGamepad2 = new Gamepad();
 
-    public ColorState currentColor = ColorState.NOTHING;
-    enum ColorState{
-        NOTHING, BLUE, RED, YELLOW
-    }
 
     public ActionState currentActionState = ActionState.IDLE;
-
+    public CycleMode robotMode = CycleMode.SAMPLE_SCORING;
+    public SpecimenStage specimenStage;
+    public SampleStage sampleStage;
     enum ActionState {
         IDLE,
         TRANSFER_STAGE_1, //intakewrist in BEFORE, stage1: claw close when wait is done
@@ -75,125 +99,138 @@ public class ActionHandler {
     }
 
     public void Loop(Gamepad gp1, Gamepad gp2) {
-        if (gp1.share && !sharing) {
-            extendo.DANGEROUS_RESET_ENCODERS();
-            gp1.rumbleBlips(5);
-            sharing = true;
+        previousGamepad1.copy(currentGamepad1);
+        previousGamepad2.copy(currentGamepad2);
+        currentGamepad1.copy(gp1);
+        currentGamepad2.copy(gp2);
+        switch (robotMode) {
+            case SAMPLE_SCORING:
+                updateSamples();
+                if (currentGamepad1.right_bumper && !previousGamepad1.right_bumper && currentActionState == ActionState.IDLE) {
+                    nextSampleStage();
+                }
+                if (currentGamepad1.left_bumper && !previousGamepad1.left_bumper && currentActionState == ActionState.IDLE) {
+                    previousSampleStage();
+                }
+                break;
         }
-        if (!gp1.share && sharing) {
-            sharing = false;
+        if (currentGamepad1.dpad_left) {
+            robotMode = CycleMode.SAMPLE_SCORING;
         }
-        //clip
-        if (gp2.x && !transferring) {
-            intakeWrist.setState(IntakeWrist.intakeWristState.IN);
-            slides.setTargetPos(Slides.GROUND);
-            wrist.setState(Wrist.wristState.WALL);
-            wallPickup();
+        if (currentGamepad1.dpad_up) {
+            robotMode = CycleMode.SPECIMEN_SCORING;
         }
-        if (gp2.left_bumper) {
-            claw.setState(Claw.ClawState.CLOSE);
+        if (currentGamepad1.dpad_right) {
+            robotMode = CycleMode.SPECIMEN_INTAKING;
         }
-
-        if (gp2.y && !transferring) {
-            clippos();
+        TimedActions(); //Update FSM
+    }
+    public void nextSampleStage() {
+        switch (sampleStage) {
+            case IDLE:
+                sampleStage = SampleStage.EXTENDED;
+                break;
+            case EXTENDED:
+                intake.setState(Intake.intakeState.IN);
+                sampleStage = SampleStage.INTAKING;
+                break;
+            case INTAKING:
+                sampleStage = SampleStage.TRANSFERRING;
+                currentActionState = ActionState.TRANSFER_STAGE_1;
+                timer.reset();
+                break;
+            case TRANSFERRING:
+                sampleStage = SampleStage.LIFTING;
+                currentActionState = ActionState.HIGHBUCKET;
+                timer.reset();
+                break;
+            case LIFTING:
+                sampleStage = SampleStage.DEPOSIT;
+                break;
+            case DEPOSIT:
+                sampleStage = SampleStage.IDLE;
+                currentActionState = ActionState.SLIDESDOWN;
+                timer.reset();
+                break;
         }
-        if (gp2.a && !transferring) {
-            clip_down();
+    }
+    public void previousSampleStage() {
+        switch (sampleStage) {
+            case EXTENDED:
+                sampleStage = SampleStage.IDLE;
+                break;
+            case INTAKING:
+                intake.setState(Intake.intakeState.STOP);
+                sampleStage = SampleStage.EXTENDED;
+                break;
+            case TRANSFERRING:
+                currentActionState = ActionState.TRANSFER_STAGE_1;
+                timer.reset();
+                sampleStage = SampleStage.EXTENDED
+                break;
+            case LIFTING:
+                sampleStage = SampleStage.TRANSFERRING;
+                currentActionState = ActionState.TRANSFER_STAGE_1;
+                timer.reset();
+                break;
+            default:
+                //Do nothing
         }
-        if (gp2.b){
-            bar.setState(Bar.BarState.NEUTRAL);
-            wrist.setState(Wrist.wristState.NEUTRAL);
+    }
+    public void updateSamples() {
+        switch (sampleStage) {
+            case IDLE:
+                extendo.setTargetPos(Extendo.MIN);
+                bar.setState(Bar.BarState.NEUTRAL);
+                wrist.setState(Wrist.wristState.NEUTRAL);
+                claw.setState(Claw.ClawState.CLOSE);
+//                slides.setTargetPos(Slides.GROUND); //Handled by Actionhandler FSM
+                intakeWrist.setState(IntakeWrist.intakeWristState.IN);
+                intake.setState(Intake.intakeState.STOP);
+                break;
+            case EXTENDED:
+                extendo.setTargetPos(Extendo.MAX);
+                bar.setState(Bar.BarState.NEUTRAL);
+                wrist.setState(Wrist.wristState.NEUTRAL);
+                claw.setState(Claw.ClawState.CLOSE);
+                slides.setTargetPos(Slides.GROUND);
+                intakeWrist.setState(IntakeWrist.intakeWristState.IN);
+                intake.setState(Intake.intakeState.STOP);
+                break;
+            case INTAKING:
+                extendo.setTargetPos(Extendo.MAX);
+                bar.setState(Bar.BarState.NEUTRAL);
+                wrist.setState(Wrist.wristState.NEUTRAL);
+                claw.setState(Claw.ClawState.CLOSE);
+                slides.setTargetPos(Slides.GROUND);
+                intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
+                break;
+            case TRANSFERRING:
+                extendo.setTargetPos(Extendo.MIN);
+                //bar, wrist, claw, intakeWrist handled by ActionState FSM
+                slides.setTargetPos(Slides.GROUND);
+                intake.setState(Intake.intakeState.STOP);
+                break;
+            case LIFTING:
+                extendo.setTargetPos(Extendo.MIN);
+//                bar.setState(Bar.BarState.NEUTRAL);
+//                wrist.setState(Wrist.wristState.NEUTRAL);
+                //bar, wrist handled by ActionState FSM
+                claw.setState(Claw.ClawState.CLOSE);
+                slides.setTargetPos(Slides.HIGH);
+                intakeWrist.setState(IntakeWrist.intakeWristState.IN);
+                intake.setState(Intake.intakeState.STOP);
+                break;
+            case DEPOSIT:
+                extendo.setTargetPos(Extendo.MIN);
+                bar.setState(Bar.BarState.BUCKET);
+                wrist.setState(Wrist.wristState.BUCKET);
+                claw.setState(Claw.ClawState.OPEN);
+                slides.setTargetPos(Slides.HIGH);
+                intakeWrist.setState(IntakeWrist.intakeWristState.IN);
+                intake.setState(Intake.intakeState.STOP);
+                break;
         }
-        //intake
-        if (gp1.y) {
-            intake();
-            currentColor = ColorState.NOTHING;
-        }
-        intakeCheck();
-
-        //flip
-        if (gp1.a && !transferring){
-            intake.setState(Intake.intakeState.OUT);
-            currentActionState = ActionState.FLIP;
-            timer.reset();
-            currentColor = ColorState.NOTHING;
-        }
-
-        if (gp1.left_bumper && !transferring) {
-            extendo.setTargetPos(Extendo.MIN);
-            claw.setState(Claw.ClawState.CLOSE);
-            extendoout = false;
-            transfer();
-            transferring = true;
-            currentColor = ColorState.NOTHING;
-        }
-        if (gp2.left_stick_button && gp2.right_stick_button) {
-            gp2.rumbleBlips(2);
-        }
-
-        if (gp2.dpad_up && !transferring) {
-            highBucket();
-        }
-        if (gp2.right_bumper){
-            claw.setState(Claw.ClawState.OPEN);
-        }
-
-        if (gp2.dpad_down && !transferring) {
-            slidesDown();
-        }
-
-        //extendo
-        if (gp1.right_bumper){
-            extendo.setTargetPos(Extendo.MAX);
-            extendoout = true;
-        }
-//        if (gp1.right_trigger > 0.8){
-//            extendo.setTargetPos(Extendo.MAX);
-//            extendoout = true;
-//            if (intakeWrist.currentState != IntakeWrist.intakeWristState.IN) {
-//                if (isExtendoout()) {
-//                    intakeWrist.setState(IntakeWrist.intakeWristState.OUT);
-//                } else {
-//                    intakeWrist.setState(IntakeWrist.intakeWristState.SUPEROUT);
-//                }
-//            }
-//        }
-        if (gp1.left_trigger > 0.8){
-            intakeWrist.setState(IntakeWrist.intakeWristState.IN);
-            extendo.setTargetPos(Extendo.MIN);
-            extendoout = false;
-        }
-        if (gp1.options) {
-            intake.setState(Intake.intakeState.OUT);
-            intaking = false;
-            currentColor = ColorState.NOTHING;
-        }
-
-        //spit
-        if (gp1.right_trigger > 0.8 && currentActionState == ActionState.IDLE) {
-            intakeWrist.setState(IntakeWrist.intakeWristState.SPIT);
-            currentActionState = ActionState.SPIT;
-            timer.reset();
-            currentColor = ColorState.NOTHING;
-        }
-
-        //reset
-//        if (gp1.touchpad_finger_1 && gp1.touchpad_finger_2 && gp2.touchpad_finger_1 && gp2.touchpad_finger_2) {
-//            resetExtendo();
-//            resetSlides();
-//            gp1.rumbleBlips(1);
-//            gp2.rumbleBlips(1);
-//        }
-
-        if (gp1.touchpad_finger_1 && gp1.touchpad_finger_2){
-            intakeWrist.setState(IntakeWrist.intakeWristState.IN);
-            intake.setState(Intake.intakeState.STOP);
-            intaking = false;
-            gp1.rumbleBlips(3);
-            gp2.rumbleBlips(3);
-        }
-        light();
-        TimedActions();
     }
     public void TimedActions() {
         long elapsedMs = timer.time(TimeUnit.MILLISECONDS);
@@ -278,25 +315,6 @@ public class ActionHandler {
                 }
                 break;
 
-            //reset extendo
-            case RESETEXTENDO:
-                if (elapsedMs >= 1000) {
-                    extendo.DANGEROUS_RESET_ENCODERS();
-                    slides.DANGEROUS_RESET_ENCODERS();
-                    slides.setPower(0);
-                    extendo.setPower(0);
-                    extendo.usingpid = true;
-                    slides.usingpid = true;
-                    currentActionState = ActionState.IDLE;
-                }
-                break;
-            case RESETSLIDES:
-                if (elapsedMs >= 1000){
-                    slides.setPower(0);
-                    slides.usingpid = true;
-                    currentActionState = ActionState.IDLE;
-                }
-                break;
 
             //flip
             case FLIP:
@@ -450,7 +468,6 @@ public class ActionHandler {
                         if (wrongColor) {
                             intake.setState(Intake.intakeState.OUT); // Reverse flywheel to eject
                             intaking = false; // Stop intaking
-                            currentColor = ColorState.NOTHING;
                         }
                         intakeTimer.reset(); // Reset timer for the next cycle
                     }
@@ -486,14 +503,6 @@ public class ActionHandler {
         timer.reset();
     }
 
-    private void resetExtendoSlides() {
-        extendo.setPower(-0.3);
-        Log.d("reseting", "extendo");
-        slides.setPower(-0.3);
-        Log.d("reseting", "slides");
-        currentActionState = ActionState.RESETEXTENDO;
-        timer.reset();
-    }
 
     public boolean isIntaking() {
         return intaking;
@@ -503,39 +512,8 @@ public class ActionHandler {
     }
     public boolean isTransferring() {return transferring;}
     public boolean isExtendoout() {return extendoout;}
-
-    public void light(){
-        if (colorSensor.sensorIsRed()){
-            currentColor = ColorState.RED;
-        }
-        if (colorSensor.sensorIsBlue()){
-            currentColor = ColorState.BLUE;
-        }
-        if (colorSensor.sensorIsYellow()){
-            currentColor = ColorState.YELLOW;
-        }
-
-        switch (currentColor){
-            case BLUE:
-                light.setState(LEDlight.LEDState.BLUE);
-                Log.d("LED", "BLUE");
-                break;
-            case YELLOW:
-                light.setState(LEDlight.LEDState.YELLOW);
-                Log.d("LED", "YELLOW");
-                break;
-            case RED:
-                light.setState(LEDlight.LEDState.RED);
-                Log.d("LED", "RED");
-                break;
-            case NOTHING:
-                light.setState(LEDlight.LEDState.WHITE);
-                Log.d("LED", "WHITE");
-                break;
-            default:
-                light.setState(LEDlight.LEDState.WHITE);
-                Log.d("LED", "WHITE");
-                break;
-        }
+    public boolean isBusy() {
+        return currentActionState == ActionState.IDLE;
     }
+
 }
