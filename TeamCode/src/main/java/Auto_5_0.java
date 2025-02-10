@@ -72,7 +72,7 @@ public class Auto_5_0 extends OpMode {
     public static final Pose PUSH3TOWALLCONTROL = new Pose(74.322, 36.427);
     public static final Pose PUSH2TOWALLCONTROL = new Pose(50,24); //old 55
 
-    public static final Pose WALLPOSE = new Pose(5.2, 24, Math.toRadians(180));
+    public static final Pose WALLPOSE = new Pose(12, 24, Math.toRadians(180));
     public static final Pose SCORE1POSE = new Pose(-26.9+72, 0.6+72, Math.toRadians(0));
     public static final Pose SCOREPOSECONTROL = new Pose(19, 36);
     public static final Pose SCOREPOSECONTROL2 = new Pose(14, 94);
