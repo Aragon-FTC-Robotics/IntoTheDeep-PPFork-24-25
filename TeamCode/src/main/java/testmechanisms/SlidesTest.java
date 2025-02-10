@@ -20,8 +20,8 @@ public class SlidesTest {
         slideLeft = hm.get(DcMotorEx.class, "slideLeft");
         slideRight = hm.get(DcMotorEx.class, "slideRight");
 
-        slideLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        slideRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        slideLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        slideRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         slideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

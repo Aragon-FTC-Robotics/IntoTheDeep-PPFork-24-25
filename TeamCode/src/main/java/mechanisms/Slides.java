@@ -14,10 +14,10 @@ public class Slides {
     DcMotorEx slideRight;
     private double pid, pidpower;
     public double power;
-    public static final int GROUND = 30;
-    public static final int LOW = -200;
-    public static final int MED = -2050;
-    public static final int HIGH = -2900;
+    public static final int GROUND = -30;
+    public static final int LOW = 200;
+    public static final int MED = 2050;
+    public static final int HIGH = 2900;
     public int targetPos = 0;
     double adjustedP;
     public boolean usingpid = true;
@@ -27,8 +27,8 @@ public class Slides {
         slideLeft = hm.get(DcMotorEx.class, "slideLeft");
         slideRight = hm.get(DcMotorEx.class, "slideRight");
 
-        slideLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        slideRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        slideLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        slideRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         slideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
