@@ -14,10 +14,10 @@ public class Slides {
     DcMotorEx slideRight;
     private double pid, pidpower;
     public double power;
-    public static final int GROUND = -30;
-    public static final int LOW = 200;
-    public static final int MED = 1300;
-    public static final int HIGH = 2800;
+    public static final int GROUND = 30;
+    public static final int LOW = -200;
+    public static final int MED = -2050;
+    public static final int HIGH = -2900;
     public int targetPos = 0;
     double adjustedP;
     public boolean usingpid = true;

@@ -11,9 +11,9 @@ public class Wrist {
 
     public final double TRANSFER = 0.26; //as of jan 17
     public final double AUTOTRANSFER = 0.26;
-    public final double WALL = 0.50;
-    public final double BUCKET = 1;
-    public final double CLIP = 0.32;
+    public final double WALL = 0.24;
+    public final double BUCKET = 0.8;
+    public final double CLIP = 1;
     public final double AUTOCLIP = 0.36;
     public final double NEUTRAL = 0.2;
     public final double PARK = 0.84;
