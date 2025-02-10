@@ -85,6 +85,7 @@ public class FullTeleOpRed extends LinearOpMode {
                 currentVoltage = voltageSensor.getVoltage();
                 lastVoltageCheck.reset();
             }
+            telemetry.addData("Loops per second", 1 / loopTimer.seconds());
             telemetry.addData("High time (ms)", highestTime[0] + "; at " + highestTime[1]);
             telemetry.addData("STATE", actionHandler.currentActionState);
             telemetry.addData("intaking? extendoing? transferring? sharing?", actionHandler.isIntaking() + " / " + actionHandler.isExtendoout() + " / " + actionHandler.isTransferring() + " / " + actionHandler.isSharing());
@@ -94,7 +95,7 @@ public class FullTeleOpRed extends LinearOpMode {
             telemetry.addData("EXTENDO POS | pid?", extendo.getPos() + " " + extendo.usingpid);
             telemetry.addData("voltage / voltage check timer", currentVoltage + " / " + lastVoltageCheck.milliseconds());
             telemetry.update();
-            if (loopTime>highestTime[0] || (highestTime[1]-opTime > 5000)) { //If loop time is greater than the highest time OR 5 seconds have passed since last highest time
+            if (loopTime>highestTime[0] || (opTime-highestTime[1] > 5000)) { //If loop time is greater than the highest time OR 5 seconds have passed since last highest time
                 highestTime[0] = loopTime; //set highest time to loop time
                 highestTime[1] = opTime; //set timestamp to current time
             }
