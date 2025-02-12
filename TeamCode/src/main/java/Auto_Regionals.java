@@ -332,10 +332,6 @@ public class Auto_Regionals extends OpMode {
         bar.Loop();
         wrist.Loop();
 
-        poseUpdater = new PoseUpdater(hardwareMap);
-
-        dashboardPoseTracker = new DashboardPoseTracker(poseUpdater);
-        poseUpdater.setStartingPose(STARTPOSE);
 
     }
 
@@ -343,7 +339,6 @@ public class Auto_Regionals extends OpMode {
     @Override
     public void init_loop() {
         currentVoltage += gamepad1.left_stick_y*0.006;
-        telemetry.addData("The way he ts chopped his ts", "\nis so tuff");
         telemetry.addData("Use gp1 left stick y", "\nto change current voltage for voltage compensation.");
         telemetry.addData("Current voltage: ", currentVoltage);
         extendo.Loop(currentVoltage);
@@ -352,6 +347,7 @@ public class Auto_Regionals extends OpMode {
     }
     @Override
     public void start() {
+        follower.drawOnDashBoard();
         led.setPosition(0.722);
         totalTime.resetTimer();
         setPathState(0);
@@ -359,6 +355,7 @@ public class Auto_Regionals extends OpMode {
     @Override
     public void loop() {
         follower.update();
+        follower.drawOnDashBoard();
         poseUpdater.update();
         updatePaths();
         bar.Loop();
@@ -376,9 +373,6 @@ public class Auto_Regionals extends OpMode {
         telemetry.addData("claw state: ", claw.currentState);
         telemetry.addData("slides L/R ", slides.getLPos() + " / " + slides.getRPos());
         telemetry.update();
-        Drawing.drawPoseHistory(dashboardPoseTracker, "#4CAF50");
-        Drawing.drawRobot(poseUpdater.getPose(), "#4CAF50");
-        Drawing.sendPacket();
     }
 
 }
