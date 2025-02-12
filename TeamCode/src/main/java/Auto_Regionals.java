@@ -42,8 +42,6 @@ public class Auto_Regionals extends OpMode {
     private Timer pathTime, totalTime;
     private int pathState = 0;
 
-    private PoseUpdater poseUpdater;
-    private DashboardPoseTracker dashboardPoseTracker;
 
     private static final Pose STARTPOSE = Auto_5_0.STARTPOSE;
     private static final Pose PRELOADPOSE = Auto_5_0.PRELOADPOSE;
@@ -356,7 +354,6 @@ public class Auto_Regionals extends OpMode {
     public void loop() {
         follower.update();
         follower.drawOnDashBoard();
-        poseUpdater.update();
         updatePaths();
         bar.Loop();
         claw.Loop();

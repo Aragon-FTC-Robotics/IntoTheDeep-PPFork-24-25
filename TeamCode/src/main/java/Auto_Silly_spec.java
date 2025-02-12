@@ -15,6 +15,7 @@ import com.pedropathing.util.DashboardPoseTracker;
 import com.pedropathing.util.Drawing;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -27,7 +28,7 @@ import mechanisms.Slides;
 import mechanisms.Wrist;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
-
+@Disabled
 @Autonomous(name = "\uD83E\uDD21\uD83D\uDCCE Clip Auto", group = "Auto")
 public class Auto_Silly_spec extends OpMode {
     private Bar bar;
