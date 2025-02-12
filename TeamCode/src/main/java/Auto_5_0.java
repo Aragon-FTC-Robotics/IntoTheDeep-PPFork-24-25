@@ -48,9 +48,9 @@ public class Auto_5_0 extends OpMode {
     private DashboardPoseTracker dashboardPoseTracker;
 
     //Clip x: 41.29411764705882
-    public static final Pose STARTPOSE = new Pose(6.75, 60, Math.toRadians(0));
+    public static final Pose STARTPOSE = new Pose(6.75, 60, Math.toRadians(180));
 
-    public static final Pose PRELOADPOSE = new Pose(49.923, 67.038, Math.toRadians(0));
+    public static final Pose PRELOADPOSE = new Pose(49.923, 67.038, Math.toRadians(180));
     public static final Pose PREPARE1POSE = new Pose(57, 34, Math.toRadians(180));
     public static final Pose PREPARE1CONTROL = new Pose(11, 67);
     public static final Pose PREPARE1CONTROL2 = new Pose(44, 6);
@@ -59,7 +59,7 @@ public class Auto_5_0 extends OpMode {
     public static final Pose PUSH1POSE = new Pose(7, -49.633+72, Math.toRadians(180));
 
     public static final Pose PREPARE2POSE = new Pose(-17.629+72, 14.7, Math.toRadians(180));
-    public static final Pose PREPARE2CONTROL = new Pose(75.176,30.882, Math.toRadians(0));
+    public static final Pose PREPARE2CONTROL = new Pose(75.176,30.882);
 
     public static final Pose PUSH2POSE = new Pose(6.3, 14.7, Math.toRadians(180));
 
@@ -79,9 +79,9 @@ public class Auto_5_0 extends OpMode {
     public static final Pose SCORETOWALLCONTROL = new Pose(23.033, 78.722);
     public static final Pose SCORETOWALLCONTROL2 = new Pose(40.678, 26.667); //changed
 
-    public static final Pose SCORE2POSE = new Pose(-26.9+72, 0.6+72+2, Math.toRadians(0));
-    public static final Pose SCORE3POSE = new Pose(-26.9+72, 0.677+72+4, Math.toRadians(0));
-    public static final Pose SCORE4POSE = new Pose(-26.9+72, 0.677+72+6, Math.toRadians(0));
+    public static final Pose SCORE2POSE = new Pose(-28.9+72, 0.6+72+2, Math.toRadians(180));
+    public static final Pose SCORE3POSE = new Pose(-28.9+72, 0.677+72+4, Math.toRadians(180));
+    public static final Pose SCORE4POSE = new Pose(-28.9+72, 0.677+72+6, Math.toRadians(180));
     public static final Pose PARKPOSE = new Pose(11.396, 11.882, Math.toRadians(0));
     public static final Pose PARKCONTROL = new Pose(7.235, 70.235);
 
