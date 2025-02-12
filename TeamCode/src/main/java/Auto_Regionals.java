@@ -168,7 +168,7 @@ public class Auto_Regionals extends OpMode {
                 break;
             case 5:
                 if (Math.abs(follower.getPose().getX()-PREPARE2POSE.getX())<3&&Math.abs(follower.getPose().getY()-PREPARE2POSE.getY())<3) {
-                    follower.setMaxPower(0.6);
+                    follower.setMaxPower(0.85);
                     follower.followPath(push2, true);
                     setPathState(6);
                 }
@@ -184,14 +184,14 @@ public class Auto_Regionals extends OpMode {
                     bar.setState(Bar.BarState.CLIP);
                     wrist.setState(Wrist.wristState.CLIP);
                     slides.setTargetPos(Slides.MED);
-                    follower.setMaxPower(0.85);
+                    follower.setMaxPower(1);
                     follower.followPath(score1);
                     setPathState(901);
                 }
                 break;
             case 901:
                 if (pathTime.getElapsedTimeSeconds() > 0.05) {
-                    follower.setMaxPower(0.6);
+                    follower.setMaxPower(0.85);
                     follower.followPath(score1ToWall, true);
                     setPathState(10);
                 }
@@ -216,14 +216,14 @@ public class Auto_Regionals extends OpMode {
                     bar.setState(Bar.BarState.CLIP);
                     wrist.setState(Wrist.wristState.CLIP);
                     slides.setTargetPos(Slides.MED);
-                    follower.setMaxPower(0.85);
+                    follower.setMaxPower(1);
                     follower.followPath(score2);
                     setPathState(1401);
                 }
                 break;
             case 1401:
                 if (pathTime.getElapsedTimeSeconds() > 0.05) {
-                    follower.setMaxPower(0.6);
+                    follower.setMaxPower(0.85);
                     follower.followPath(score2ToWall, true);
                     setPathState(15);
                 }
@@ -254,7 +254,7 @@ public class Auto_Regionals extends OpMode {
                 if (pathTime.getElapsedTimeSeconds() > 0.5) {
                     bar.setState(Bar.BarState.CLIP);
                     wrist.setState(Wrist.wristState.CLIP);
-                    follower.setMaxPower(0.85);
+                    follower.setMaxPower(1);
                     follower.followPath(score3);
                     setPathState(18);
                 }
@@ -304,7 +304,7 @@ public class Auto_Regionals extends OpMode {
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap);
         follower.setStartingPose(STARTPOSE);
-        follower.setMaxPower(0.85);
+        follower.setMaxPower(1);
         buildPaths();
 
         bar = new Bar();
