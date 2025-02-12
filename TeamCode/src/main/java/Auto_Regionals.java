@@ -140,12 +140,6 @@ public class Auto_Regionals extends OpMode {
                     setPathState(2);
                 }
                 break;
-//            case 101:
-//                if (pathTime.getElapsedTimeSeconds() > 0.05) {
-//                    slides.setTargetPos(Slides.GROUND);
-//                    setPathState(2);
-//                }
-//                break;
             case 2:
                 if (true) {
                     claw.setState(Claw.ClawState.SUPEROPEN);
@@ -185,13 +179,6 @@ public class Auto_Regionals extends OpMode {
                     setPathState(7);
                 }
                 break;
-//            case 601:
-//                if (pathTime.getElapsedTimeSeconds() > 0.5) {
-//                    bar.setState(Bar.BarState.DTWALLSILLY);
-//                    wrist.setState(Wrist.wristState.DTWALLSILLY);
-//                    setPathState(7);
-//                }
-//                break;
             case 7:
                 if (pathTime.getElapsedTimeSeconds() > 0.35) {
                     bar.setState(Bar.BarState.CLIP);
@@ -202,19 +189,6 @@ public class Auto_Regionals extends OpMode {
                     setPathState(901);
                 }
                 break;
-//            case 8:
-//                if (pathTime.getElapsedTimeSeconds() > 0.5) {
-//                    bar.setState(Bar.BarState.DTCLIP1);
-//                    wrist.setState(Wrist.wristState.DTCLIP);
-//                    setPathState(9);
-//                }
-//                break;
-//            case 9:
-//                if (!follower.isBusy() || follower.isRobotStuck()) {
-//                    bar.setState(Bar.BarState.DTCLIP2);
-//                    setPathState(901);
-//                }
-//                break;
             case 901:
                 if (pathTime.getElapsedTimeSeconds() > 0.05) {
                     follower.setMaxPower(0.6);
@@ -237,13 +211,6 @@ public class Auto_Regionals extends OpMode {
                     setPathState(12);
                 }
                 break;
-//            case 1101:
-//                if (pathTime.getElapsedTimeSeconds() > 0.5) {
-//                    bar.setState(Bar.BarState.DTWALLSILLY);
-//                    wrist.setState(Wrist.wristState.DTWALLSILLY);
-//                    setPathState(12);
-//                }
-//                break;
             case 12:
                 if (pathTime.getElapsedTimeSeconds() > 0.35) {
                     bar.setState(Bar.BarState.CLIP);
@@ -251,22 +218,9 @@ public class Auto_Regionals extends OpMode {
                     slides.setTargetPos(Slides.MED);
                     follower.setMaxPower(0.85);
                     follower.followPath(score2);
-                    setPathState(13);
+                    setPathState(1401);
                 }
                 break;
-//            case 13:
-//                if (pathTime.getElapsedTimeSeconds() > 0.5) {
-//                    bar.setState(Bar.BarState.DTCLIP1);
-//                    wrist.setState(Wrist.wristState.DTCLIP);
-//                    setPathState(14);
-//                }
-//                break;
-//            case 14:
-//                if (!follower.isBusy() || follower.isRobotStuck()) {
-//                    bar.setState(Bar.BarState.DTCLIP2);
-//                    setPathState(1401);
-//                }
-//                break;
             case 1401:
                 if (pathTime.getElapsedTimeSeconds() > 0.05) {
                     follower.setMaxPower(0.6);
@@ -279,6 +233,7 @@ public class Auto_Regionals extends OpMode {
                     claw.setState(Claw.ClawState.SUPEROPEN);
                     bar.setState(Bar.BarState.WALL);
                     wrist.setState(Wrist.wristState.WALL);
+                    slides.setTargetPos(Slides.GROUND);
                     setPathState(16);
                 }
                 break;
