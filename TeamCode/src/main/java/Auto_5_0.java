@@ -48,7 +48,7 @@ public class Auto_5_0 extends OpMode {
     private DashboardPoseTracker dashboardPoseTracker;
 
     //Clip x: 41.29411764705882
-    public static final Pose STARTPOSE = new Pose(6.75, 60, Math.toRadians(180));
+    public static final Pose STARTPOSE = new Pose(6.75, 60, Math.toRadians(90));
 
     public static final Pose PRELOADPOSE = new Pose(49.923, 67.038, Math.toRadians(180));
     public static final Pose PREPARE1POSE = new Pose(57, 34, Math.toRadians(180));

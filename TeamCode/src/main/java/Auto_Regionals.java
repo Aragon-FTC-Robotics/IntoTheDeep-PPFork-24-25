@@ -128,9 +128,9 @@ public class Auto_Regionals extends OpMode {
             case 0:
                 extendo.setTargetPos(-100);
                 intakeWrist.setState(IntakeWrist.intakeWristState.IN);
-                slides.setTargetPos(Slides.MED);
-                bar.setState(Bar.BarState.CLIP);
-                wrist.setState(Wrist.wristState.CLIP);
+                slides.setTargetPos(900);
+                bar.setState(Bar.BarState.DTFIRSTCLIP);
+                wrist.setState(Wrist.wristState.DTFIRSTCLIP);
                 follower.followPath(scorePreload, true);
                 setPathState(1);
                 break;
@@ -140,20 +140,20 @@ public class Auto_Regionals extends OpMode {
                     setPathState(2);
                 }
                 break;
+//            case 101:
+//                if (pathTime.getElapsedTimeSeconds() > 0.05) {
+//                    slides.setTargetPos(Slides.GROUND);
+//                    setPathState(2);
+//                }
+//                break;
             case 2:
                 if (true) {
+                    slides.setTargetPos(Slides.GROUND);
                     claw.setState(Claw.ClawState.SUPEROPEN);
                     follower.followPath(prepare1, false);
-                    setPathState(2001);
-                }
-                break;
-            case 2001:
-                if(pathTime.getElapsedTimeSeconds() > 0.5){
-                    slides.setTargetPos(Slides.GROUND);
-                    bar.setState(Bar.BarState.WALL);
-                    wrist.setState(Wrist.wristState.WALL);
                     setPathState(3);
                 }
+                break;
             case 3:
                 if (Math.abs(follower.getPose().getX()-PREPARE1POSE.getX())<6&&Math.abs(follower.getPose().getY()-PREPARE1POSE.getY())<6) {
                     follower.followPath(push1, false);
