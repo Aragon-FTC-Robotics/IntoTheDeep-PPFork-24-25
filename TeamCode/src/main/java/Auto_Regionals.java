@@ -4,16 +4,8 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
-import com.pedropathing.localization.PoseUpdater;
-import com.pedropathing.pathgen.BezierCurve;
-import com.pedropathing.pathgen.BezierLine;
-import com.pedropathing.pathgen.Path;
-import com.pedropathing.pathgen.PathChain;
-import com.pedropathing.pathgen.Point;
-import com.pedropathing.util.Constants;
-import com.pedropathing.util.DashboardPoseTracker;
-import com.pedropathing.util.Drawing;
-import com.pedropathing.util.Timer;
+import com.pedropathing.pathgen.*;
+import com.pedropathing.util.*;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -43,69 +35,62 @@ public class Auto_Regionals extends OpMode {
     private int pathState = 0;
 
 
-    private static final Pose STARTPOSE = Auto_5_0.STARTPOSE;
-    private static final Pose PRELOADPOSE = Auto_5_0.PRELOADPOSE;
-    private static final Pose PREPAREMID = new Pose(32,46, Math.toRadians(0));
-    private static final Pose PREPAREMIDCONTROL = new Pose(31, 66);
+    private static final Pose STARTPOSE = new Pose(6.75, 60, Math.toRadians(180));
+    private static final Pose PRELOADPOSE = new Pose(50, 67, Math.toRadians(180));
     private static final Pose PREPARE1POSE = new Pose(57,34,Math.toRadians(180));
     private static final Pose PREPARE1CONTROL = new Pose(19, 69);
     private static final Pose PREPARE1CONTROL2 = new Pose(24, 28);
-    private static final Pose PUSH1POSE = new Pose(-12,23,Math.toRadians(180));
+    private static final Pose PUSH1POSE = new Pose(15,23,Math.toRadians(180));
     private static final Pose PUSH1CONTROL = new Pose(65,16);
-    private static final Pose PREPARE2POSE = Auto_5_0.PREPARE2POSE;
-    private static final Pose PREPARE2CONTROL = Auto_5_0.PREPARE2CONTROL;
-    private static final Pose PUSH2POSE = Auto_5_0.PUSH2POSE;
-    private static final Pose PUSH2MID = new Pose(12, 33, Math.toRadians(240));
+    private static final Pose PREPARE2POSE = new Pose(54, 14.7, Math.toRadians(180));;
+    private static final Pose PREPARE2CONTROL = new Pose(88,15);
+    private static final Pose PUSH2POSE = new Pose(15, 15);
+    private static final Pose PREPARE3POSE = new Pose(54, 6, Math.toRadians(180));
+    private static final Pose PREPARE3CONTROL = new Pose(67, 16);
+    private static final Pose PUSH3POSE = new Pose(12, 7, Math.toRadians(180));
+    private static final Pose SCORE1MID = new Pose(12, 33, Math.toRadians(240));
+    //Push3 -> score1 mid -> score1pose (with score1control)
+    private static final Pose SCORE1CONTROL = new Pose(22, 77);
+    private static final Pose SCORE1POSE = new Pose(39, 72.6, Math.toRadians(180));
     private static final Pose WALLPOSE = new Pose(8.3, 24, Math.toRadians(180));
-    private static final Pose SCORE1POSE = new Pose(Auto_5_0.SCORE1POSE.getX(),Auto_5_0.SCORE1POSE.getY(),Math.toRadians(180));
-    private static final Pose SCORE1CONTROL = new Pose(22, 77); //for scoring first sampel after moving out of observation
-    private static final Pose SCOREPOSECONTROL = Auto_5_0.SCOREPOSECONTROL;
-    private static final Pose SCOREPOSECONTROL2 = Auto_5_0.SCOREPOSECONTROL2;
-    private static final Pose SCORETOWALLCONTROL = Auto_5_0.SCORETOWALLCONTROL;
-    private static final Pose SCORETOWALLCONTROL2 = Auto_5_0.SCORETOWALLCONTROL2;
-    private static final Pose SCORE2POSE = new Pose(Auto_5_0.SCORE2POSE.getX(),Auto_5_0.SCORE2POSE.getY(),Math.toRadians(180));
-    private static final Pose SCORE3POSE = new Pose(Auto_5_0.SCORE3POSE.getX()+2,Auto_5_0.SCORE3POSE.getY(),Math.toRadians(180));
-    private static final Pose SCORE4POSE = Auto_5_0.SCORE4POSE;
-    private static final Pose PARKPOSE = Auto_5_0.PARKPOSE;
-    private static final Pose PARKCONTROL = Auto_5_0.PARKCONTROL;
+    private static final Pose SCORECONTROL = new Pose(19, 36);
+    private static final Pose SCORECONTROL2 = new Pose(14, 94);
+    private static final Pose SCORETOWALLCONTROL = new Pose(23, 79);
+    private static final Pose SCORETOWALLCONTROL2 = new Pose(40, 26);
+    private static final Pose SCORE2POSE = new Pose(43.1, 72.6+2, Math.toRadians(180));
+    private static final Pose SCORE3POSE =new Pose(43.1, 72.6+4, Math.toRadians(180));
+    private static final Pose SCORE4POSE = new Pose(43.1, 72.6+6, Math.toRadians(180));
+    private static final Pose PARK = new Pose(16, 21, Math.toRadians(-105));
 
-
-    private PathChain scorePreload, prepare1, push1, prepare2, push2, score1, score1ToWall, score2, score2ToWall, score3, score3ToWall, score4, score4ToWall, park;
+    private PathChain scorePreload, pushSamples, score1, score1ToWall, score2, score2ToWall, score3, score3ToWall, score4, park;
 
     private void buildPaths() {
+
         scorePreload = follower.pathBuilder()
                 .addPath(new Path(new BezierLine(new Point(STARTPOSE), new Point(PRELOADPOSE))))
                 .setLinearHeadingInterpolation(STARTPOSE.getHeading(), PRELOADPOSE.getHeading())
                 .build();
-        prepare1 = follower.pathBuilder()
+        pushSamples = follower.pathBuilder()
+                .setConstantHeadingInterpolation(PRELOADPOSE.getHeading())
                 .addPath(new Path(new BezierCurve(new Point(PRELOADPOSE), new Point(PREPARE1CONTROL), new Point(PREPARE1CONTROL2), new Point(PREPARE1POSE))))
-                .setTangentHeadingInterpolation()
-                .setReversed(true)
-                .build();
-        push1 = follower.pathBuilder()
                 .addPath(new Path(new BezierCurve(new Point(PREPARE1POSE), new Point(PUSH1CONTROL), new Point(PUSH1POSE))))
-                .setLinearHeadingInterpolation(PREPARE1POSE.getHeading(), PUSH1POSE.getHeading())
-                .build();
-        prepare2 = follower.pathBuilder()
                 .addPath(new Path(new BezierCurve(new Point(PUSH1POSE), new Point(PREPARE2CONTROL), new Point(PREPARE2POSE))))
-                .setLinearHeadingInterpolation(PUSH1POSE.getHeading(), PREPARE2POSE.getHeading())
-                .build();
-        push2 = follower.pathBuilder()
                 .addPath(new Path(new BezierLine(new Point(PREPARE2POSE), new Point(PUSH2POSE))))
-                .setLinearHeadingInterpolation(PREPARE2POSE.getHeading(), PUSH2POSE.getHeading())
+                .addPath(new Path(new BezierCurve(new Point(PUSH2POSE), new Point(PREPARE3CONTROL), new Point(PREPARE3POSE))))
+                .addPath(new Path(new BezierLine(new Point(PREPARE3POSE), new Point(PUSH3POSE))))
                 .build();
         score1 = follower.pathBuilder()
-                .addPath(new Path(new BezierLine(new Point(PUSH2POSE), new Point(PUSH2MID))))
-                .setLinearHeadingInterpolation(PUSH2POSE.getHeading(), PUSH2MID.getHeading())
-                .addPath(new Path(new BezierCurve(new Point(PUSH2MID), new Point(SCORE1CONTROL), new Point(SCORE1POSE))))
-                .setLinearHeadingInterpolation(PUSH2MID.getHeading(), SCORE1POSE.getHeading())
+                .addPath(new Path(new BezierLine(new Point(PUSH3POSE), new Point(SCORE1MID))))
+                .setLinearHeadingInterpolation(PUSH3POSE.getHeading(), SCORE1MID.getHeading())
+                .addPath(new Path(new BezierCurve(new Point(SCORE1MID), new Point(SCORE1CONTROL), new Point(SCORE1POSE))))
+                .setLinearHeadingInterpolation(SCORE1MID.getHeading(), SCORE1POSE.getHeading())
                 .build();
         score1ToWall = follower.pathBuilder()
                 .addPath(new Path(new BezierCurve(new Point(SCORE1POSE), new Point(SCORETOWALLCONTROL), new Point(SCORETOWALLCONTROL2), new Point(WALLPOSE))))
                 .setLinearHeadingInterpolation(SCORE1POSE.getHeading(), WALLPOSE.getHeading())
                 .build();
         score2 = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCOREPOSECONTROL), new Point(SCOREPOSECONTROL2), new Point(SCORE2POSE))))
+                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCORECONTROL), new Point(SCORECONTROL2), new Point(SCORE2POSE))))
                 .setLinearHeadingInterpolation(WALLPOSE.getHeading(), SCORE2POSE.getHeading())
                 .build();
         score2ToWall = follower.pathBuilder()
@@ -113,13 +98,64 @@ public class Auto_Regionals extends OpMode {
                 .setLinearHeadingInterpolation(SCORE2POSE.getHeading(), WALLPOSE.getHeading())
                 .build();
         score3 = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCOREPOSECONTROL), new Point(SCOREPOSECONTROL2), new Point(SCORE3POSE))))
+                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCORECONTROL), new Point(SCORECONTROL2), new Point(SCORE3POSE))))
                 .setLinearHeadingInterpolation(WALLPOSE.getHeading(), SCORE3POSE.getHeading())
                 .build();
         score3ToWall = follower.pathBuilder()
                 .addPath(new Path(new BezierCurve(new Point(SCORE3POSE), new Point(SCORETOWALLCONTROL), new Point(SCORETOWALLCONTROL2), new Point(WALLPOSE))))
                 .setLinearHeadingInterpolation(SCORE3POSE.getHeading(), WALLPOSE.getHeading())
                 .build();
+        score4 = follower.pathBuilder()
+                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCORECONTROL), new Point(SCORECONTROL2), new Point(SCORE4POSE))))
+                .setLinearHeadingInterpolation(WALLPOSE.getHeading(), SCORE3POSE.getHeading())
+                .build();
+        park = follower.pathBuilder()
+                .addPath(new Path(new BezierLine(new Point(SCORE4POSE), new Point(PARK))))
+                .setLinearHeadingInterpolation(SCORE4POSE.getHeading(), PARK.getHeading())
+                .build();
+
+//        prepare1 = follower.pathBuilder()
+//                .addPath(new Path(new BezierCurve(new Point(PRELOADPOSE), new Point(PREPARE1CONTROL), new Point(PREPARE1CONTROL2), new Point(PREPARE1POSE))))
+//                .setConstantHeadingInterpolation(PRELOADPOSE.getHeading())
+//                .build();
+//        push1 = follower.pathBuilder()
+//                .addPath(new Path(new BezierCurve(new Point(PREPARE1POSE), new Point(PUSH1CONTROL), new Point(PUSH1POSE))))
+//                .setLinearHeadingInterpolation(PREPARE1POSE.getHeading(), PUSH1POSE.getHeading())
+//                .build();
+//        prepare2 = follower.pathBuilder()
+//                .addPath(new Path(new BezierCurve(new Point(PUSH1POSE), new Point(PREPARE2CONTROL), new Point(PREPARE2POSE))))
+//                .setLinearHeadingInterpolation(PUSH1POSE.getHeading(), PREPARE2POSE.getHeading())
+//                .build();
+//        push2 = follower.pathBuilder()
+//                .addPath(new Path(new BezierLine(new Point(PREPARE2POSE), new Point(PUSH2POSE))))
+//                .setLinearHeadingInterpolation(PREPARE2POSE.getHeading(), PUSH2POSE.getHeading())
+//                .build();
+//        score1 = follower.pathBuilder()
+//                .addPath(new Path(new BezierLine(new Point(PUSH2POSE), new Point(SCORE1MID))))
+//                .setLinearHeadingInterpolation(PUSH2POSE.getHeading(), SCORE1MID.getHeading())
+//                .addPath(new Path(new BezierCurve(new Point(SCORE1MID), new Point(SCORE1CONTROL), new Point(SCORE1POSE))))
+//                .setLinearHeadingInterpolation(SCORE1MID.getHeading(), SCORE1POSE.getHeading())
+//                .build();
+//        score1ToWall = follower.pathBuilder()
+//                .addPath(new Path(new BezierCurve(new Point(SCORE1POSE), new Point(SCORETOWALLCONTROL), new Point(SCORETOWALLCONTROL2), new Point(WALLPOSE))))
+//                .setLinearHeadingInterpolation(SCORE1POSE.getHeading(), WALLPOSE.getHeading())
+//                .build();
+//        score2 = follower.pathBuilder()
+//                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCOREPOSECONTROL), new Point(SCOREPOSECONTROL2), new Point(SCORE2POSE))))
+//                .setLinearHeadingInterpolation(WALLPOSE.getHeading(), SCORE2POSE.getHeading())
+//                .build();
+//        score2ToWall = follower.pathBuilder()
+//                .addPath(new Path(new BezierCurve(new Point(SCORE2POSE), new Point(SCORETOWALLCONTROL), new Point(SCORETOWALLCONTROL2), new Point(WALLPOSE))))
+//                .setLinearHeadingInterpolation(SCORE2POSE.getHeading(), WALLPOSE.getHeading())
+//                .build();
+//        score3 = follower.pathBuilder()
+//                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCOREPOSECONTROL), new Point(SCOREPOSECONTROL2), new Point(SCORE3POSE))))
+//                .setLinearHeadingInterpolation(WALLPOSE.getHeading(), SCORE3POSE.getHeading())
+//                .build();
+//        score3ToWall = follower.pathBuilder()
+//                .addPath(new Path(new BezierCurve(new Point(SCORE3POSE), new Point(SCORETOWALLCONTROL), new Point(SCORETOWALLCONTROL2), new Point(WALLPOSE))))
+//                .setLinearHeadingInterpolation(SCORE3POSE.getHeading(), WALLPOSE.getHeading())
+//                .build();
     }
     private void updatePaths() {
         switch (pathState) {
