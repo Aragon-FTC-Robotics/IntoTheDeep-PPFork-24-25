@@ -266,7 +266,7 @@ public class Auto_Regionals extends OpMode {
                     wrist.setState(Wrist.wristState.PARK);
                     slides.setTargetPos(Slides.GROUND);
                     extendo.setTargetPos(Extendo.MAX);
-                    setPathState(20);
+                    setPathState(-1);
                 }
                 break;
         }
