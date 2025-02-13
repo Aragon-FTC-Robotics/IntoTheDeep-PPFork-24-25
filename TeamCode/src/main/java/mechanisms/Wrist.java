@@ -17,10 +17,10 @@ public class Wrist {
     public final double AUTOCLIP = 0.36;
     public final double NEUTRAL = 0.2;
     public final double PARK = 0.84;
-    public final double DTCLIP = 1;
+    public final double DTCLIP = 0.6;
     public final double DTWALL = 0.48;
     public final double DTWALLSILLY = 0.43;
-    public final double DTFIRSTCLIP = 0.5;
+    public final double DTFIRSTCLIP = 0.75;
 
     public void init(HardwareMap hm) {
         wrist = hm.get(Servo.class, "wrist");

@@ -20,7 +20,7 @@ import mechanisms.Wrist;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 
-@Autonomous(name = "Hopefully better Clip Auto", group = "Auto")
+@Autonomous(name = "Regional auo", group = "Auto")
 public class Auto_Regionals extends OpMode {
     private Bar bar;
     private Claw claw;
@@ -31,23 +31,23 @@ public class Auto_Regionals extends OpMode {
     private Wrist wrist;
     private Servo led;
     private Follower follower;
-    private Timer pathTime, totalTime;
+    private Timer pathTime, totalTime, loopTime;
     private int pathState = 0;
 
 
     private static final Pose STARTPOSE = new Pose(6.75, 60, Math.toRadians(180));
-    private static final Pose PRELOADPOSE = new Pose(50, 67, Math.toRadians(180));
+    private static final Pose PRELOADPOSE = new Pose(45, 67, Math.toRadians(180));
     private static final Pose PREPARE1POSE = new Pose(57,34,Math.toRadians(180));
     private static final Pose PREPARE1CONTROL = new Pose(19, 69);
     private static final Pose PREPARE1CONTROL2 = new Pose(24, 28);
-    private static final Pose PUSH1POSE = new Pose(15,23,Math.toRadians(180));
+    private static final Pose PUSH1POSE = new Pose(20,23,Math.toRadians(180));
     private static final Pose PUSH1CONTROL = new Pose(65,16);
     private static final Pose PREPARE2POSE = new Pose(54, 14.7, Math.toRadians(180));;
     private static final Pose PREPARE2CONTROL = new Pose(88,15);
-    private static final Pose PUSH2POSE = new Pose(15, 15);
+    private static final Pose PUSH2POSE = new Pose(20, 15);
     private static final Pose PREPARE3POSE = new Pose(54, 6, Math.toRadians(180));
     private static final Pose PREPARE3CONTROL = new Pose(67, 16);
-    private static final Pose PUSH3POSE = new Pose(12, 7, Math.toRadians(180));
+    private static final Pose PUSH3POSE = new Pose(18, 7, Math.toRadians(180));
     private static final Pose SCORE1MID = new Pose(12, 33, Math.toRadians(240));
     //Push3 -> score1 mid -> score1pose (with score1control)
     private static final Pose SCORE1CONTROL = new Pose(22, 77);
@@ -71,13 +71,18 @@ public class Auto_Regionals extends OpMode {
                 .setLinearHeadingInterpolation(STARTPOSE.getHeading(), PRELOADPOSE.getHeading())
                 .build();
         pushSamples = follower.pathBuilder()
-                .setConstantHeadingInterpolation(PRELOADPOSE.getHeading())
                 .addPath(new Path(new BezierCurve(new Point(PRELOADPOSE), new Point(PREPARE1CONTROL), new Point(PREPARE1CONTROL2), new Point(PREPARE1POSE))))
+                .setConstantHeadingInterpolation(PRELOADPOSE.getHeading())
                 .addPath(new Path(new BezierCurve(new Point(PREPARE1POSE), new Point(PUSH1CONTROL), new Point(PUSH1POSE))))
+                .setConstantHeadingInterpolation(PRELOADPOSE.getHeading())
                 .addPath(new Path(new BezierCurve(new Point(PUSH1POSE), new Point(PREPARE2CONTROL), new Point(PREPARE2POSE))))
+                .setConstantHeadingInterpolation(PRELOADPOSE.getHeading())
                 .addPath(new Path(new BezierLine(new Point(PREPARE2POSE), new Point(PUSH2POSE))))
+                .setConstantHeadingInterpolation(PRELOADPOSE.getHeading())
                 .addPath(new Path(new BezierCurve(new Point(PUSH2POSE), new Point(PREPARE3CONTROL), new Point(PREPARE3POSE))))
+                .setConstantHeadingInterpolation(PRELOADPOSE.getHeading())
                 .addPath(new Path(new BezierLine(new Point(PREPARE3POSE), new Point(PUSH3POSE))))
+                .setConstantHeadingInterpolation(PRELOADPOSE.getHeading())
                 .build();
         score1 = follower.pathBuilder()
                 .addPath(new Path(new BezierLine(new Point(PUSH3POSE), new Point(SCORE1MID))))
@@ -125,7 +130,7 @@ public class Auto_Regionals extends OpMode {
                 setPathState(1);
                 break;
             case 1: //leaving
-                if (Math.abs(follower.getPose().getX() - PRELOADPOSE.getX())<5) {
+                if (Math.abs(follower.getPose().getX() - PRELOADPOSE.getX())<10) {
                     bar.setState(Bar.BarState.DTCLIP2);
                     follower.followPath(pushSamples); ///fix after michael changes it to a chain
                     setPathState(2);
@@ -281,10 +286,12 @@ public class Auto_Regionals extends OpMode {
         pathTime = new Timer();
         totalTime = new Timer();
         totalTime.resetTimer();
+        loopTime = new Timer();
+        loopTime.resetTimer();
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap);
         follower.setStartingPose(STARTPOSE);
-        follower.setMaxPower(1);
+        follower.setMaxPower(0.85);
         buildPaths();
 
         bar = new Bar();
@@ -330,6 +337,7 @@ public class Auto_Regionals extends OpMode {
         follower.drawOnDashBoard();
         led.setPosition(0.722);
         totalTime.resetTimer();
+        loopTime.resetTimer();
         setPathState(0);
     }
     @Override
@@ -344,6 +352,7 @@ public class Auto_Regionals extends OpMode {
         intakeWrist.Loop();
         slides.Loop(currentVoltage);
         wrist.Loop();
+        telemetry.addData("Loops per second", 1 / loopTime.getElapsedTimeSeconds());
         telemetry.addData("path state", pathState);
         telemetry.addData("Elapsed Time", pathTime.getElapsedTimeSeconds());
         telemetry.addData("x", follower.getPose().getX());
@@ -352,6 +361,7 @@ public class Auto_Regionals extends OpMode {
         telemetry.addData("claw state: ", claw.currentState);
         telemetry.addData("slides L/R ", slides.getLPos() + " / " + slides.getRPos());
         telemetry.update();
+        loopTime.resetTimer();
     }
 
 }
