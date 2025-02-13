@@ -113,216 +113,162 @@ public class Auto_Regionals extends OpMode {
                 .addPath(new Path(new BezierLine(new Point(SCORE4POSE), new Point(PARK))))
                 .setLinearHeadingInterpolation(SCORE4POSE.getHeading(), PARK.getHeading())
                 .build();
-
-//        prepare1 = follower.pathBuilder()
-//                .addPath(new Path(new BezierCurve(new Point(PRELOADPOSE), new Point(PREPARE1CONTROL), new Point(PREPARE1CONTROL2), new Point(PREPARE1POSE))))
-//                .setConstantHeadingInterpolation(PRELOADPOSE.getHeading())
-//                .build();
-//        push1 = follower.pathBuilder()
-//                .addPath(new Path(new BezierCurve(new Point(PREPARE1POSE), new Point(PUSH1CONTROL), new Point(PUSH1POSE))))
-//                .setLinearHeadingInterpolation(PREPARE1POSE.getHeading(), PUSH1POSE.getHeading())
-//                .build();
-//        prepare2 = follower.pathBuilder()
-//                .addPath(new Path(new BezierCurve(new Point(PUSH1POSE), new Point(PREPARE2CONTROL), new Point(PREPARE2POSE))))
-//                .setLinearHeadingInterpolation(PUSH1POSE.getHeading(), PREPARE2POSE.getHeading())
-//                .build();
-//        push2 = follower.pathBuilder()
-//                .addPath(new Path(new BezierLine(new Point(PREPARE2POSE), new Point(PUSH2POSE))))
-//                .setLinearHeadingInterpolation(PREPARE2POSE.getHeading(), PUSH2POSE.getHeading())
-//                .build();
-//        score1 = follower.pathBuilder()
-//                .addPath(new Path(new BezierLine(new Point(PUSH2POSE), new Point(SCORE1MID))))
-//                .setLinearHeadingInterpolation(PUSH2POSE.getHeading(), SCORE1MID.getHeading())
-//                .addPath(new Path(new BezierCurve(new Point(SCORE1MID), new Point(SCORE1CONTROL), new Point(SCORE1POSE))))
-//                .setLinearHeadingInterpolation(SCORE1MID.getHeading(), SCORE1POSE.getHeading())
-//                .build();
-//        score1ToWall = follower.pathBuilder()
-//                .addPath(new Path(new BezierCurve(new Point(SCORE1POSE), new Point(SCORETOWALLCONTROL), new Point(SCORETOWALLCONTROL2), new Point(WALLPOSE))))
-//                .setLinearHeadingInterpolation(SCORE1POSE.getHeading(), WALLPOSE.getHeading())
-//                .build();
-//        score2 = follower.pathBuilder()
-//                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCOREPOSECONTROL), new Point(SCOREPOSECONTROL2), new Point(SCORE2POSE))))
-//                .setLinearHeadingInterpolation(WALLPOSE.getHeading(), SCORE2POSE.getHeading())
-//                .build();
-//        score2ToWall = follower.pathBuilder()
-//                .addPath(new Path(new BezierCurve(new Point(SCORE2POSE), new Point(SCORETOWALLCONTROL), new Point(SCORETOWALLCONTROL2), new Point(WALLPOSE))))
-//                .setLinearHeadingInterpolation(SCORE2POSE.getHeading(), WALLPOSE.getHeading())
-//                .build();
-//        score3 = follower.pathBuilder()
-//                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCOREPOSECONTROL), new Point(SCOREPOSECONTROL2), new Point(SCORE3POSE))))
-//                .setLinearHeadingInterpolation(WALLPOSE.getHeading(), SCORE3POSE.getHeading())
-//                .build();
-//        score3ToWall = follower.pathBuilder()
-//                .addPath(new Path(new BezierCurve(new Point(SCORE3POSE), new Point(SCORETOWALLCONTROL), new Point(SCORETOWALLCONTROL2), new Point(WALLPOSE))))
-//                .setLinearHeadingInterpolation(SCORE3POSE.getHeading(), WALLPOSE.getHeading())
-//                .build();
     }
     private void updatePaths() {
         switch (pathState) {
-            case 0:
+            case 0: //clip #1
                 extendo.setTargetPos(-100);
                 intakeWrist.setState(IntakeWrist.intakeWristState.IN);
-                slides.setTargetPos(900);
-                bar.setState(Bar.BarState.DTFIRSTCLIP);
-                wrist.setState(Wrist.wristState.DTFIRSTCLIP);
-                follower.followPath(scorePreload, true);
+                bar.setState(Bar.BarState.DTCLIP1);
+                wrist.setState(Wrist.wristState.DTCLIP);
+                follower.followPath(scorePreload);
                 setPathState(1);
                 break;
-            case 1:
-                if ((Math.abs(follower.getPose().getX()-44.923)<4) || follower.isRobotStuck()) { //Wait for robot to reach clip position
-                    Log.d("Hello!", "It's my birthday!");
+            case 1: //leaving
+                if (Math.abs(follower.getPose().getX() - PRELOADPOSE.getX())<5) {
+                    bar.setState(Bar.BarState.DTCLIP2);
+                    follower.followPath(pushSamples); ///fix after michael changes it to a chain
                     setPathState(2);
                 }
                 break;
-//            case 101:
-//                if (pathTime.getElapsedTimeSeconds() > 0.05) {
-//                    slides.setTargetPos(Slides.GROUND);
-//                    setPathState(2);
-//                }
-//                break;
-            case 2:
-                if (true) {
-                    slides.setTargetPos(Slides.GROUND);
-                    claw.setState(Claw.ClawState.SUPEROPEN);
-                    follower.followPath(prepare1, false);
+            case 2: //open claw
+                if (pathTime.getElapsedTimeSeconds() > 0.4) { /// find exact timing
+                    claw.setState(Claw.ClawState.OPEN);
                     setPathState(3);
                 }
                 break;
-            case 3:
-                if (Math.abs(follower.getPose().getX()-PREPARE1POSE.getX())<6&&Math.abs(follower.getPose().getY()-PREPARE1POSE.getY())<6) {
-                    follower.followPath(push1, false);
+            case 3: // go to push samples
+                if(follower.getCurrentTValue() > 0.2) {
+                    bar.setState(Bar.BarState.WALL);
+                    wrist.setState(Wrist.wristState.WALL);
                     setPathState(4);
                 }
                 break;
-            case 4:
-                if (Math.abs(follower.getPose().getX()-13)<6) {
-                    follower.followPath(prepare2, false);
+            case 4: // grab score 1 (technically 2)
+                if (!follower.isBusy()) {
+                    claw.setState(Claw.ClawState.CLOSE);
                     setPathState(5);
                 }
                 break;
-            case 5:
-                if (Math.abs(follower.getPose().getX()-PREPARE2POSE.getX())<3&&Math.abs(follower.getPose().getY()-PREPARE2POSE.getY())<3) {
-                    follower.setMaxPower(0.85);
-                    follower.followPath(push2, true);
-                    setPathState(6);
-                }
-                break;
-            case 6:
-                if (!follower.isBusy() || follower.isRobotStuck()) { //Todo IDK!!!!
-                    claw.setState(Claw.ClawState.CLOSE);
-                    setPathState(7);
-                }
-                break;
-            case 7:
+            case 5: // get into position/move to bar/clip
                 if (pathTime.getElapsedTimeSeconds() > 0.35) {
                     bar.setState(Bar.BarState.CLIP);
                     wrist.setState(Wrist.wristState.CLIP);
                     slides.setTargetPos(Slides.MED);
-                    follower.setMaxPower(1);
-                    follower.followPath(score1);
-                    setPathState(901);
-                }
-                break;
-            case 901:
-                if (pathTime.getElapsedTimeSeconds() > 0.05) {
                     follower.setMaxPower(0.85);
-                    follower.followPath(score1ToWall, true);
-                    setPathState(10);
+                    follower.followPath(score1);
+                    setPathState(6);
                 }
                 break;
-            case 10:
-                if (pathTime.getElapsedTimeSeconds() > 0.1) { //Todo needs heavy tuning
-                    claw.setState(Claw.ClawState.SUPEROPEN);
+            case 6: //let go of clip after clipped
+                if (Math.abs(follower.getPose().getX() - SCORE1POSE.getX()) < 5){
+                    claw.setState(Claw.ClawState.OPEN);
+                    follower.followPath(score1ToWall);
+                    setPathState(7);
+                }
+                break;
+            case 7: // get ready to grab 2nd clip
+                if (follower.getCurrentTValue() > 0.25) {
                     bar.setState(Bar.BarState.WALL);
                     wrist.setState(Wrist.wristState.WALL);
                     slides.setTargetPos(Slides.GROUND);
-                    setPathState(11);
+                    setPathState(8);
                 }
                 break;
-            case 11:
-                if (!follower.isBusy() || follower.isRobotStuck()) { //Todo idk
+            case 8: // grab 2nd clip
+                if (!follower.isBusy()) { /// make sure it works
                     claw.setState(Claw.ClawState.CLOSE);
-                    setPathState(12);
+                    setPathState(9);
                 }
                 break;
-            case 12:
+            case 9: // go to clip 2nd clip
                 if (pathTime.getElapsedTimeSeconds() > 0.35) {
                     bar.setState(Bar.BarState.CLIP);
                     wrist.setState(Wrist.wristState.CLIP);
                     slides.setTargetPos(Slides.MED);
                     follower.setMaxPower(1);
                     follower.followPath(score2);
-                    setPathState(1401);
+                    setPathState(10);
                 }
                 break;
-            case 1401:
-                if (pathTime.getElapsedTimeSeconds() > 0.05) {
-                    follower.setMaxPower(0.85);
-                    follower.followPath(score2ToWall, true);
+            case 10: // let go of clip
+                if (Math.abs(follower.getPose().getX() - SCORE2POSE.getX()) < 5){
+                    claw.setState(Claw.ClawState.OPEN);
+                    follower.followPath(score2ToWall);
+                    setPathState(11);
+                }
+                break;
+            case 11: // get ready for clip #3
+                if (follower.getCurrentTValue() > 0.25) {
+                    bar.setState(Bar.BarState.WALL);
+                    wrist.setState(Wrist.wristState.WALL);
+                    slides.setTargetPos(Slides.GROUND);
+                    setPathState(12);
+                }
+                break;
+            case 12: // grab clip #3
+                if (!follower.isBusy()) { /// make sure it works
+                    claw.setState(Claw.ClawState.CLOSE);
+                    setPathState(13);
+                }
+                break;
+            case 13: // go to clip #3
+                if (pathTime.getElapsedTimeSeconds() > 0.35) {
+                    bar.setState(Bar.BarState.CLIP);
+                    wrist.setState(Wrist.wristState.CLIP);
+                    slides.setTargetPos(Slides.MED);
+                    follower.setMaxPower(1);
+                    follower.followPath(score3);
+                    setPathState(14);
+                }
+                break;
+            case 14: // let go of clip
+                if (Math.abs(follower.getPose().getX() - SCORE3POSE.getX()) < 5){
+                    claw.setState(Claw.ClawState.OPEN);
+                    follower.followPath(score3ToWall);
                     setPathState(15);
                 }
                 break;
-            case 15:
-                if (pathTime.getElapsedTimeSeconds() > 0.1) { //Todo needs heavy tuning,,,,
-                    claw.setState(Claw.ClawState.SUPEROPEN);
+            case 15: // go to grab clip #4
+                if (follower.getCurrentTValue() > 0.25) {
                     bar.setState(Bar.BarState.WALL);
                     wrist.setState(Wrist.wristState.WALL);
                     slides.setTargetPos(Slides.GROUND);
                     setPathState(16);
                 }
                 break;
-            case 16:
-                if (!follower.isBusy() || follower.isRobotStuck()) { //Todo IDK!!!
+            case 16: // grab #4
+                if (!follower.isBusy()) { /// make sure it works
                     claw.setState(Claw.ClawState.CLOSE);
-                    setPathState(1601);
+                    setPathState(17);
                 }
                 break;
-//            case 1601:
-//                if(pathTime.getElapsedTimeSeconds() > 0.5) {
-//                    bar.setState(Bar.BarState.DTWALLSILLY);
-//                    wrist.setState(Wrist.wristState.DTWALLSILLY);
-//                    setPathState(17);
-//                }
-//                break;
-            case 17:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+            case 17: // go to clip #4
+                if (pathTime.getElapsedTimeSeconds() > 0.35) {
                     bar.setState(Bar.BarState.CLIP);
                     wrist.setState(Wrist.wristState.CLIP);
+                    slides.setTargetPos(Slides.MED);
                     follower.setMaxPower(1);
-                    follower.followPath(score3);
+                    follower.followPath(score4);
                     setPathState(18);
                 }
                 break;
-//            case 18:
-//                if (pathTime.getElapsedTimeSeconds() > 0.5) {
-//                    bar.setState(Bar.BarState.DTCLIP1);
-//                    wrist.setState(Wrist.wristState.DTCLIP);
-//                    setPathState(19);
-//                }
-//                break;
-//            case 19:
-//                if (!follower.isBusy() || follower.isRobotStuck()) {
-//                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
-//                    bar.setState(Bar.BarState.DTCLIP2);
-//                    setPathState(1901);
-//                }
-//                break;
-            case 1901:
-                if (pathTime.getElapsedTimeSeconds() > 0.05) {
-                    follower.followPath(score3ToWall, true);
+            case 18: // let go of clip
+                if (Math.abs(follower.getPose().getX() - SCORE4POSE.getX()) < 5){
+                    claw.setState(Claw.ClawState.OPEN);
+                    follower.followPath(park);
+                    setPathState(19);
+                }
+                break;
+            case 19: // return & get ready for teleop
+                if (follower.getCurrentTValue() > 0.25) {
+                    bar.setState(Bar.BarState.PARK);
+                    wrist.setState(Wrist.wristState.PARK);
+                    slides.setTargetPos(Slides.GROUND);
+                    extendo.setTargetPos(Extendo.MAX);
                     setPathState(20);
                 }
                 break;
-            case 20:
-                if (pathTime.getElapsedTimeSeconds() > 0.1) { //Todo needs heavy tuning,,,,
-                    claw.setState(Claw.ClawState.SUPEROPEN);
-                    bar.setState(Bar.BarState.WALL);
-                    wrist.setState(Wrist.wristState.WALL);
-                    setPathState(-1);
-                }
-                break;
-
-
         }
     }
     private void setPathState(int n) {
