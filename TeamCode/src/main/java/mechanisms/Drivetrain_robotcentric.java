@@ -36,7 +36,7 @@ public class Drivetrain_robotcentric {
         - Robot-Centric Mode: true
         */
 
-        drive.setTeleOpMovementVectors(-gp1.left_stick_y, -gp1.left_stick_y, -gp1.right_stick_x, true);
+        drive.setTeleOpMovementVectors(gp1.left_stick_y, gp1.left_stick_y, -gp1.right_stick_x, true);
         drive.update();
     }
 }
