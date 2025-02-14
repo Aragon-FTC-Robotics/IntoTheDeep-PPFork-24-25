@@ -50,5 +50,7 @@ public class FConstants {
         FollowerConstants.pathEndVelocityConstraint = 0.1; //Up this number?
         FollowerConstants.pathEndTranslationalConstraint = 0.1;
         FollowerConstants.pathEndHeadingConstraint = 0.007;
+
+        FollowerConstants.useBrakeModeInTeleOp = true;
     }
 }
