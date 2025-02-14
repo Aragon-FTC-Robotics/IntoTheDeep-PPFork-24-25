@@ -17,7 +17,7 @@ public class FullTeleOpRed extends LinearOpMode {
     public Claw claw = new Claw();
     public Colorsensor colorsensor = new Colorsensor();
     public Slides slides = new Slides();
-    public Drivetrain drivetrain = new Drivetrain();
+    public Drivetrain_robotcentric drivetrain = new Drivetrain_robotcentric();
     public Extendo extendo = new Extendo();
     public Intake intake = new Intake();
     public IntakeWrist intakeWrist = new IntakeWrist();
@@ -58,6 +58,8 @@ public class FullTeleOpRed extends LinearOpMode {
         gp2 = gamepad2;
 
         waitForStart();
+        drivetrain.start();
+
         highestTime = new double[]{0.000, 0};
         loopTimer.reset();
         opTimer.reset();
@@ -68,7 +70,7 @@ public class FullTeleOpRed extends LinearOpMode {
             bar.Loop();
             colorsensor.Loop();
             claw.Loop();
-            drivetrain.Loop(gp1, gp2); //Gamepad inputs handled by class
+            drivetrain.Loop(gp1); //Gamepad inputs handled by class
             if (slides.getLPos() > 2200) {
                 drivetrain.slowModeON();
             } else {
