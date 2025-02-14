@@ -312,8 +312,8 @@ public class Auto_Regionals extends OpMode {
         wrist.init(hardwareMap);
         slides.DANGEROUS_RESET_ENCODERS();
         extendo.DANGEROUS_RESET_ENCODERS();
-        bar.setState(Bar.BarState.WALL);
-        wrist.setState(Wrist.wristState.WALL);
+        bar.setState(Bar.BarState.AUTOINIT);
+        wrist.setState(Wrist.wristState.AUTOINIT);
         claw.setState(Claw.ClawState.CLOSE);
         claw.Loop(); //update Position
         bar.Loop();
