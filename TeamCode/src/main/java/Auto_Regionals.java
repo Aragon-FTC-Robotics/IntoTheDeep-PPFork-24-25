@@ -45,9 +45,9 @@ public class Auto_Regionals extends OpMode {
     private static final Pose PREPARE2POSE = new Pose(54, 14.7, Math.toRadians(180));;
     private static final Pose PREPARE2CONTROL = new Pose(88,15);
     private static final Pose PUSH2POSE = new Pose(20, 15);
-    private static final Pose PREPARE3POSE = new Pose(54, 6, Math.toRadians(180));
+    private static final Pose PREPARE3POSE = new Pose(54, 14, Math.toRadians(180));
     private static final Pose PREPARE3CONTROL = new Pose(67, 16);
-    private static final Pose PUSH3POSE = new Pose(18, 7, Math.toRadians(180));
+    private static final Pose PUSH3POSE = new Pose(8.3, 14, Math.toRadians(180));
     private static final Pose SCORE1MID = new Pose(12, 33, Math.toRadians(240));
     //Push3 -> score1 mid -> score1pose (with score1control)
     private static final Pose SCORE1CONTROL = new Pose(22, 77);
@@ -132,7 +132,7 @@ public class Auto_Regionals extends OpMode {
             case 1: //leaving
                 if (Math.abs(follower.getPose().getX() - PRELOADPOSE.getX())<10) {
                     bar.setState(Bar.BarState.DTCLIP2);
-                    follower.followPath(pushSamples); ///fix after michael changes it to a chain
+                    follower.followPath(pushSamples);
                     setPathState(2);
                 }
                 break;
@@ -343,7 +343,6 @@ public class Auto_Regionals extends OpMode {
     @Override
     public void loop() {
         follower.update();
-        follower.drawOnDashBoard();
         updatePaths();
         bar.Loop();
         claw.Loop();
@@ -362,6 +361,7 @@ public class Auto_Regionals extends OpMode {
         telemetry.addData("slides L/R ", slides.getLPos() + " / " + slides.getRPos());
         telemetry.update();
         loopTime.resetTimer();
+        follower.telemetryDebug(telemetry);
     }
 
 }
