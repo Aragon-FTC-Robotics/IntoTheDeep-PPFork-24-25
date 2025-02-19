@@ -90,6 +90,7 @@ public class FullTeleOpRed extends LinearOpMode {
                 currentVoltage = voltageSensor.getVoltage();
                 lastVoltageCheck.reset();
             }
+            telemetry.addData("DRIVE MODE", drivetrain.driveMode);
             telemetry.addData("Loops per second", 1 / loopTimer.seconds());
             telemetry.addData("High time (ms)", highestTime[0] + "; at " + highestTime[1]);
             telemetry.addData("STATE", actionHandler.currentActionState);

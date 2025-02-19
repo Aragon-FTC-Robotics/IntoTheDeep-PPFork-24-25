@@ -27,11 +27,11 @@ public class Drivetrain_robotcentric {
     /** This method is call once when init is played, it initializes the follower **/
     public void buildPaths() {
         scorepath = drive.pathBuilder()
-                .addPath(new Path(new BezierLine(new Point(startPose), new Point(wallPose))))
+                .addPath(new Path(new BezierLine(new Point(wallPose), new Point(scorePose))))
                 .setConstantHeadingInterpolation(startPose.getHeading())
                 .build();
         returnpath = drive.pathBuilder()
-                .addPath(new Path(new BezierLine(new Point(wallPose), new Point(startPose))))
+                .addPath(new Path(new BezierLine(new Point(scorePose), new Point(wallPose))))
                 .setConstantHeadingInterpolation(startPose.getHeading())
                 .build();
         Constants.setConstants(FConstants.class,LConstants.class);
@@ -56,6 +56,7 @@ public class Drivetrain_robotcentric {
             case MANUAL:
                 gamepadScalar = slowMode ? 0.5 : 1;
                 if (Math.abs(gp1.left_stick_x) >= 0.05 || Math.abs(gp1.left_stick_y) >= 0.05 || Math.abs(gp1.right_stick_x) >= 0.05) {
+                    drive.startTeleopDrive();
                     drive.setTeleOpMovementVectors(-gp1.left_stick_y * gamepadScalar, -gp1.left_stick_x * gamepadScalar, -gp1.right_stick_x * gamepadScalar, true);
                 } else {
                     drive.holdPoint(drive.getPose()); //unpushable robot
