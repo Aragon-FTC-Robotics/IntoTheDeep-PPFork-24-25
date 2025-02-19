@@ -25,7 +25,7 @@ public class Drivetrain_robotcentric {
     public enum DriveMode {SPEC_SCORE, SPEC_RETURN, MANUAL};
     public DriveMode driveMode = DriveMode.MANUAL;
     /** This method is call once when init is played, it initializes the follower **/
-    public void init(HardwareMap hm) {
+    public void buildPaths() {
         scorepath = drive.pathBuilder()
                 .addPath(new Path(new BezierLine(new Point(startPose), new Point(wallPose))))
                 .setConstantHeadingInterpolation(startPose.getHeading())
@@ -35,8 +35,14 @@ public class Drivetrain_robotcentric {
                 .setConstantHeadingInterpolation(startPose.getHeading())
                 .build();
         Constants.setConstants(FConstants.class,LConstants.class);
+    }
+    public void init(HardwareMap hm) {
+        Constants.setConstants(FConstants.class, LConstants.class);
         drive = new Follower(hm);
         drive.setStartingPose(startPose);
+        drive.setMaxPower(0.85);
+        buildPaths();
+
     }
 
     /** This method is called once at the start of the OpMode. **/
