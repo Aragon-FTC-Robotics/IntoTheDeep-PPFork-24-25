@@ -55,12 +55,7 @@ public class Drivetrain_robotcentric {
         switch (driveMode) {
             case MANUAL:
                 gamepadScalar = slowMode ? 0.5 : 1;
-                if (Math.abs(gp1.left_stick_x) >= 0.05 || Math.abs(gp1.left_stick_y) >= 0.05 || Math.abs(gp1.right_stick_x) >= 0.05) {
-                    drive.startTeleopDrive();
-                    drive.setTeleOpMovementVectors(-gp1.left_stick_y * gamepadScalar, -gp1.left_stick_x * gamepadScalar, -gp1.right_stick_x * gamepadScalar, true);
-                } else {
-                    drive.holdPoint(drive.getPose()); //unpushable robot
-                }
+                drive.setTeleOpMovementVectors(-gp1.left_stick_y * gamepadScalar, -gp1.left_stick_x * gamepadScalar, -gp1.right_stick_x * gamepadScalar, true);
                 break;
             case SPEC_SCORE:
                 drive.followPath(scorepath, false);

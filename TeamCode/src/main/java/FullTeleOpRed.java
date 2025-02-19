@@ -76,9 +76,9 @@ public class FullTeleOpRed extends LinearOpMode {
             } else {
                 drivetrain.slowModeOFF();
             }
-            if (gp1.dpad_up && drivetrain.driveMode == Drivetrain_robotcentric.DriveMode.MANUAL) {
-                drivetrain.startSpecScoring();
-            }
+//            if (gp1.dpad_up && drivetrain.driveMode == Drivetrain_robotcentric.DriveMode.MANUAL) {
+//                drivetrain.startSpecScoring();
+//            }
             extendo.Loop(currentVoltage);
             intake.Loop(gp1, gp2); //Gamepad needed to rumble
             intakeWrist.Loop();
