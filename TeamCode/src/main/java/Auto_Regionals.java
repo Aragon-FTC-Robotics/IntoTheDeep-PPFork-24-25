@@ -35,19 +35,19 @@ public class Auto_Regionals extends OpMode {
     private int pathState = 0;
 
 
-    private static final Pose STARTPOSE = new Pose(6.75, 60, Math.toRadians(180));
+    private static final Pose STARTPOSE = new Pose(6.75, 61, Math.toRadians(180));
     private static final Pose PRELOADPOSE = new Pose(45, 67, Math.toRadians(180));
     private static final Pose PREPARE1POSE = new Pose(57,34,Math.toRadians(180));
     private static final Pose PREPARE1CONTROL = new Pose(19, 69);
     private static final Pose PREPARE1CONTROL2 = new Pose(24, 28);
     private static final Pose PUSH1POSE = new Pose(20,23,Math.toRadians(180));
-    private static final Pose PUSH1CONTROL = new Pose(65,16);
+    private static final Pose PUSH1CONTROL = new  Pose(65,16);
     private static final Pose PREPARE2POSE = new Pose(54, 14.7, Math.toRadians(180));;
-    private static final Pose PREPARE2CONTROL = new Pose(88,15);
-    private static final Pose PUSH2POSE = new Pose(20, 15);
-    private static final Pose PREPARE3POSE = new Pose(54, 14, Math.toRadians(180));
-    private static final Pose PREPARE3CONTROL = new Pose(67, 16);
-    private static final Pose PUSH3POSE = new Pose(8.3, 14, Math.toRadians(180));
+    private static final Pose PREPARE2CONTROL = new Pose(68,32);
+    private static final Pose PUSH2POSE = new Pose(20, 17);
+    private static final Pose PREPARE3POSE = new Pose(54, 17, Math.toRadians(180));
+    private static final Pose PREPARE3CONTROL = new Pose(66, 32);
+    private static final Pose PUSH3POSE = new Pose(8.3, 13, Math.toRadians(180));
     private static final Pose SCORE1MID = new Pose(12, 33, Math.toRadians(240));
     //Push3 -> score1 mid -> score1pose (with score1control)
     private static final Pose SCORE1CONTROL = new Pose(22, 77);
@@ -146,6 +146,12 @@ public class Auto_Regionals extends OpMode {
                 if(follower.getCurrentTValue() > 0.2) {
                     bar.setState(Bar.BarState.WALL);
                     wrist.setState(Wrist.wristState.WALL);
+                    setPathState(401);
+                }
+                break;
+            case 401: // slow down bot so it doesn't slam
+                if(follower.getCurrentTValue() > 0.8){
+                    follower.setMaxPower(0.7);
                     setPathState(4);
                 }
                 break;
@@ -160,20 +166,20 @@ public class Auto_Regionals extends OpMode {
                     bar.setState(Bar.BarState.CLIP);
                     wrist.setState(Wrist.wristState.CLIP);
                     slides.setTargetPos(Slides.MED);
-                    follower.setMaxPower(0.85);
+                    follower.setMaxPower(0.8);
                     follower.followPath(score1);
                     setPathState(6);
                 }
                 break;
             case 6: //let go of clip after clipped
-                if (Math.abs(follower.getPose().getX() - SCORE1POSE.getX()) < 5){
+                if (Math.abs(follower.getPose().getX() - SCORE1POSE.getX()) < 10){
                     claw.setState(Claw.ClawState.OPEN);
                     follower.followPath(score1ToWall);
                     setPathState(7);
                 }
                 break;
             case 7: // get ready to grab 2nd clip
-                if (follower.getCurrentTValue() > 0.25) {
+                if (follower.getCurrentTValue() > 0.5) {
                     bar.setState(Bar.BarState.WALL);
                     wrist.setState(Wrist.wristState.WALL);
                     slides.setTargetPos(Slides.GROUND);
@@ -204,7 +210,7 @@ public class Auto_Regionals extends OpMode {
                 }
                 break;
             case 11: // get ready for clip #3
-                if (follower.getCurrentTValue() > 0.25) {
+                if (follower.getCurrentTValue() > 0.5) {
                     bar.setState(Bar.BarState.WALL);
                     wrist.setState(Wrist.wristState.WALL);
                     slides.setTargetPos(Slides.GROUND);
@@ -235,7 +241,7 @@ public class Auto_Regionals extends OpMode {
                 }
                 break;
             case 15: // go to grab clip #4
-                if (follower.getCurrentTValue() > 0.25) {
+                if (follower.getCurrentTValue() > 0.5) {
                     bar.setState(Bar.BarState.WALL);
                     wrist.setState(Wrist.wristState.WALL);
                     slides.setTargetPos(Slides.GROUND);
@@ -266,7 +272,7 @@ public class Auto_Regionals extends OpMode {
                 }
                 break;
             case 19: // return & get ready for teleop
-                if (follower.getCurrentTValue() > 0.25) {
+                if (follower.getCurrentTValue() > 0.5) {
                     bar.setState(Bar.BarState.PARK);
                     wrist.setState(Wrist.wristState.PARK);
                     slides.setTargetPos(Slides.GROUND);
