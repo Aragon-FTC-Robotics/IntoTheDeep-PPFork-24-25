@@ -67,8 +67,6 @@ public class Drivetrain_robotcentric {
                     driveMode = DriveMode.MANUAL;
                 }
                 break;
-
-
         }
         drive.update();
     }
