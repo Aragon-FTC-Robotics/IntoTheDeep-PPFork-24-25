@@ -45,9 +45,9 @@ public class Auto_Regionals extends OpMode {
     private static final Pose PREPARE2POSE = new Pose(54, 14.7, Math.toRadians(180));;
     private static final Pose PREPARE2CONTROL = new Pose(68,32);
     private static final Pose PUSH2POSE = new Pose(20, 17);
-    private static final Pose PREPARE3POSE = new Pose(54, 17, Math.toRadians(180));
-    private static final Pose PREPARE3CONTROL = new Pose(66, 32);
-    private static final Pose PUSH3POSE = new Pose(10, 13, Math.toRadians(180));
+    private static final Pose PREPARE3POSE = new Pose(56, 6.5, Math.toRadians(180));
+    private static final Pose PREPARE3CONTROL = new Pose(68, 22);
+    private static final Pose PUSH3POSE = new Pose(10, 6.5, Math.toRadians(180));
     private static final Pose SCORE1MID = new Pose(12, 33, Math.toRadians(240));
     //Push3 -> score1 mid -> score1pose (with score1control)
     private static final Pose SCORE1CONTROL = new Pose(22, 77);
