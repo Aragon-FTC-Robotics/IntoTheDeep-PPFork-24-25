@@ -29,7 +29,7 @@ public class Drivetrain {
         rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
-
+    public void start(){};
     public void slowModeON(){
         slowMode = true;
     }

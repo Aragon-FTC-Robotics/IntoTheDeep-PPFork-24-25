@@ -1,3 +1,4 @@
+import android.text.style.BackgroundColorSpan;
 import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -17,6 +18,7 @@ public class ActionHandler {
     private IntakeWrist intakeWrist;
     private Colorsensor colorSensor;
     private LEDlight light;
+    private Drivetrain_robotcentric drive;
 
     private static boolean intaking, transferring = false;
     private static boolean extendoout = false;
@@ -25,12 +27,16 @@ public class ActionHandler {
 
     private ElapsedTime timer = new ElapsedTime();
     private ElapsedTime intakeTimer = new ElapsedTime();
+    private ElapsedTime clipTimer = new ElapsedTime();
     private boolean waitingForSecondCheck = false;
 
     public ColorState currentColor = ColorState.NOTHING;
     enum ColorState{
         NOTHING, BLUE, RED, YELLOW
     }
+
+    public Drivetrain_robotcentric.DriveMode currentDriveMode;
+    public Drivetrain_robotcentric.DriveMode previousDriveMode;
 
     public ActionState currentActionState = ActionState.IDLE;
 
@@ -53,7 +59,7 @@ public class ActionHandler {
         THROW1, THROWGRAB
     }
 
-    public void init(Slides s, Extendo e, Bar b, Wrist w, Intake f, Claw c, IntakeWrist iw, Colorsensor cs, LEDlight l, String alliance) {
+    public void init(Slides s, Extendo e, Bar b, Wrist w, Intake f, Claw c, IntakeWrist iw, Colorsensor cs, LEDlight l, Drivetrain_robotcentric d, String alliance) {
         slides = s;
         extendo = e;
         bar = b;
@@ -63,6 +69,7 @@ public class ActionHandler {
         intakeWrist = iw;
         colorSensor = cs;
         light = l;
+        drive = d;
         this.alliance = alliance;
         bar.setState(Bar.BarState.WALL);
         claw.setState(Claw.ClawState.CLOSE);
@@ -376,6 +383,30 @@ public class ActionHandler {
         }
     }
 
+    public void updateAutoScoring() {
+        currentDriveMode = drive.driveMode;
+        switch (currentDriveMode) {
+            case SPEC_SCORE:
+                if (previousDriveMode != currentDriveMode) {
+                    clippos();
+                }
+                break;
+            case SPEC_RETURN:
+                if (previousDriveMode != currentDriveMode) {
+                    clipTimer.reset();
+                }
+                if (clipTimer.seconds() > 0.35) {
+                    claw.setState(Claw.ClawState.OPEN);
+                }
+                if (clipTimer.seconds() > 0.7) {
+                    slides.setTargetPos(Slides.GROUND);
+                    bar.setState(Bar.BarState.WALL);
+                    wrist.setState(Wrist.wristState.WALL);
+                }
+                break;
+        }
+        previousDriveMode = currentDriveMode;
+    }
     private void wallPickup() {
         currentActionState = ActionState.WALLPICKUP;
         timer.reset();

@@ -52,7 +52,7 @@ public class FullTeleOpRed extends LinearOpMode {
         slides.DANGEROUS_RESET_ENCODERS();
         extendo.DANGEROUS_RESET_ENCODERS();
         voltageSensor = hardwareMap.get(VoltageSensor.class, "Control Hub");
-        actionHandler.init(slides,extendo,bar,wrist,intake,claw,intakeWrist,colorsensor,led, "red");
+        actionHandler.init(slides,extendo,bar,wrist,intake,claw,intakeWrist,colorsensor,led, drivetrain, "red");
 
         gp1 = gamepad1;
         gp2 = gamepad2;
@@ -70,11 +70,14 @@ public class FullTeleOpRed extends LinearOpMode {
             bar.Loop();
             colorsensor.Loop();
             claw.Loop();
-            drivetrain.Loop(gp1); //Gamepad inputs handled by class
+            drivetrain.Loop(gp1, gp2); //Gamepad inputs handled by class
             if (slides.getLPos() > 2200) {
                 drivetrain.slowModeON();
             } else {
                 drivetrain.slowModeOFF();
+            }
+            if (gp1.dpad_up && drivetrain.driveMode == Drivetrain_robotcentric.DriveMode.MANUAL) {
+                drivetrain.startSpecScoring();
             }
             extendo.Loop(currentVoltage);
             intake.Loop(gp1, gp2); //Gamepad needed to rumble
