@@ -173,6 +173,7 @@ public class ActionHandler {
             bar.setState(Bar.BarState.NEUTRAL);
             wrist.setState(Wrist.wristState.NEUTRAL);
             intakeWrist.setState(IntakeWrist.intakeWristState.IN);
+            intake.setState(Intake.intakeState.STOP);
             extendo.setTargetPos(Extendo.MIN);
             extendoout = false;
         }
@@ -180,6 +181,9 @@ public class ActionHandler {
             intake.setState(Intake.intakeState.OUT);
             intaking = false;
             currentColor = ColorState.NOTHING;
+        }
+        if (gp2.touchpad_finger_1 && gp2.touchpad_finger_2) {
+            slides.setTargetPos(Slides.CLIMB);
         }
 
         //spit

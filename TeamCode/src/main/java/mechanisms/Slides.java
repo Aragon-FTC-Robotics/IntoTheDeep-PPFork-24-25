@@ -17,6 +17,7 @@ public class Slides {
     public static final int GROUND = -30;
     public static final int LOW = 200;
     public static final int MED = 2000;
+    public static final int CLIMB = 1300;
     public static final int HIGH = 2900;
     public int targetPos = 0;
     double adjustedP;
