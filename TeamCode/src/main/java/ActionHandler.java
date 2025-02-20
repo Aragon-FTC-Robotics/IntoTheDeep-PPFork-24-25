@@ -129,6 +129,8 @@ public class ActionHandler {
         if (gp1.left_bumper && !transferring) {
             extendo.setTargetPos(Extendo.MIN);
             claw.setState(Claw.ClawState.CLOSE);
+            bar.setState(Bar.BarState.NEUTRAL);
+            wrist.setState(Wrist.wristState.NEUTRAL);
             extendoout = false;
             transfer();
             transferring = true;
@@ -166,6 +168,9 @@ public class ActionHandler {
 //            }
 //        }
         if (gp1.left_trigger > 0.8){
+            claw.setState(Claw.ClawState.CLOSE);
+            bar.setState(Bar.BarState.NEUTRAL);
+            wrist.setState(Wrist.wristState.NEUTRAL);
             intakeWrist.setState(IntakeWrist.intakeWristState.IN);
             extendo.setTargetPos(Extendo.MIN);
             extendoout = false;
