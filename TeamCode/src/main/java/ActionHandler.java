@@ -153,6 +153,7 @@ public class ActionHandler {
 
         //extendo
         if (gp1.right_bumper){
+            claw.setState(Claw.ClawState.CLOSE);
             extendo.setTargetPos(Extendo.MAX);
             extendoout = true;
         }
