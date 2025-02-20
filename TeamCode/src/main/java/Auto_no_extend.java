@@ -58,8 +58,119 @@ public class Auto_no_extend extends OpMode {
     private Timer pathTime, totalTime;
     private int pathState = 0;
     private PoseUpdater poseUpdater;
+    private PathChain scorePreload, prepare1, scoot1, score1, prepare2, scoot2, score2, prepare3, scoot3, score3, park;
+    private void buildPaths() {
+        scorePreload = follower.pathBuilder()
+                .addPath(
+                        new BezierLine(
+                                new Point(7.065, 108.000, Point.CARTESIAN),
+                                new Point(10.000, 123.000, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(-90), Math.toRadians(-90))
+                .build();
 
+        prepare1 = follower.pathBuilder()
+                .addPath(
+                        new BezierLine(
+                                new Point(10.000, 123.000, Point.CARTESIAN),
+                                new Point(24.000, 121.000, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(-90), Math.toRadians(0))
+                .build();
 
+        scoot1 = follower.pathBuilder()
+                .addPath(
+                        new BezierLine(
+                                new Point(24.000, 121.000, Point.CARTESIAN),
+                                new Point(50.000, 121.000, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .build();
+
+        score1 = follower.pathBuilder()
+                .addPath(
+                        new BezierLine(
+                                new Point(50.000, 121.000, Point.CARTESIAN),
+                                new Point(15.000, 126.000, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-45))
+                .build();
+
+        prepare2 = follower.pathBuilder()
+                .addPath(
+                        new BezierLine(
+                                new Point(15.000, 126.000, Point.CARTESIAN),
+                                new Point(24.000, 131.000, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0))
+                .build();
+
+        scoot2 = follower.pathBuilder()
+                .addPath(
+                        new BezierLine(
+                                new Point(24.000, 131.000, Point.CARTESIAN),
+                                new Point(50.000, 131.000, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .build();
+
+        score2 = follower.pathBuilder()
+                .addPath(
+                        new BezierLine(
+                                new Point(50.000, 131.000, Point.CARTESIAN),
+                                new Point(15.000, 126.000, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-45))
+                .build();
+
+        prepare3 = follower.pathBuilder()
+                .addPath(
+                        new BezierLine(
+                                new Point(15.000, 126.000, Point.CARTESIAN),
+                                new Point(32.000, 130.000, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(50))
+                .build();
+
+        scoot3 = follower.pathBuilder()
+                .addPath(
+                        new BezierLine(
+                                new Point(32.000, 130.000, Point.CARTESIAN),
+                                new Point(39.000, 135.000, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(50), Math.toRadians(50))
+                .build();
+
+       score3 = follower.pathBuilder()
+                .addPath(
+                        new BezierLine(
+                                new Point(39.000, 135.000, Point.CARTESIAN),
+                                new Point(15.000, 126.000, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(50), Math.toRadians(-45))
+                .build();
+
+        park = follower.pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                new Point(15.000, 126.000, Point.CARTESIAN),
+                                new Point(70.000, 130.000, Point.CARTESIAN),
+                                new Point(64.000, 95.000, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(90))
+                .build();
+    }
     private void updatePaths() {
         switch (pathState) {
             case 0:
@@ -68,21 +179,21 @@ public class Auto_no_extend extends OpMode {
                 wrist.setState(Wrist.wristState.BUCKET);
                 claw.setState(Claw.ClawState.CLOSE); //holding sample the other way
                 extendo.setTargetPos(-100); // avoid warping
-                follower.followPath(Auto_no_extend_paths.scorePreload); //Start -> preload score
+                follower.followPath(scorePreload); //Start -> preload score
                 setPathState(1);
                 break;
             case 1:
-                if (!follower.isBusy() && pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (!follower.isBusy() && pathTime.getElapsedTimeSeconds() > 1) {
                     claw.setState(Claw.ClawState.OPEN);
                     setPathState(2);
                 }
                 break;
             case 2:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 1) {
                     slides.setTargetPos(Slides.GROUND);
                     bar.setState(Bar.BarState.NEUTRAL);
                     wrist.setState(Wrist.wristState.AUTOTRANSFER);
-                    follower.followPath(Auto_no_extend_paths.prepare1, true); //preload score -> samp1
+                    follower.followPath(prepare1, true); //preload score -> samp1
                     setPathState(3);
                 }
                 break;
@@ -90,57 +201,57 @@ public class Auto_no_extend extends OpMode {
                 if (!follower.isBusy()) {
                     intakeWrist.setState(SUPEROUT);
                     intake.setState(IN);
-                    follower.followPath(Auto_no_extend_paths.scoot1);
+                    follower.followPath(scoot1);
                     setPathState(4);
                 }
                 break;
             case 4:
                 if (colorsensor.sensorIsYellow() || !follower.isBusy()) {
                     intake.setState(STOP);
-                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
-                    claw.setState(Claw.ClawState.CLOSE);
-                    follower.followPath(Auto_no_extend_paths.score1);
+                    intakeWrist.setState(IntakeWrist.intakeWristState.TRANSFER);
+                    follower.followPath(score1);
                     setPathState(5);
                 }
                 break;
             case 5:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
                     bar.setState(Bar.BarState.AUTOTRANSFER);
                     wrist.setState(Wrist.wristState.AUTOTRANSFER);
                     setPathState(6);
                 }
                 break;
             case 6:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
                     claw.setState(Claw.ClawState.CLOSE);
                     setPathState(7);
                 }
                 break;
             case 7:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
+                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                     slides.setTargetPos(Slides.HIGH);
                     setPathState(8);
                 }
                 break;
             case 8:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
                     bar.setState(Bar.BarState.BUCKET);
                     wrist.setState(Wrist.wristState.BUCKET);
                     setPathState(9);
                 }
                 break;
             case 9:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
                     claw.setState(Claw.ClawState.OPEN);
                     setPathState(10);
                 }
                 break;
             case 10:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
                     slides.setTargetPos(Slides.GROUND);
                     bar.setState(Bar.BarState.NEUTRAL);
                     wrist.setState(Wrist.wristState.AUTOTRANSFER);
-                    follower.followPath(Auto_no_extend_paths.prepare2, true); //preload score -> samp1
+                    follower.followPath(prepare2, true); //preload score -> samp1
                     setPathState(11);
                 }
                 break;
@@ -148,57 +259,57 @@ public class Auto_no_extend extends OpMode {
                 if (!follower.isBusy()) {
                     intakeWrist.setState(SUPEROUT);
                     intake.setState(IN);
-                    follower.followPath(Auto_no_extend_paths.scoot2);
+                    follower.followPath(scoot2);
                     setPathState(12);
                 }
                 break;
             case 12:
                 if (colorsensor.sensorIsYellow() || !follower.isBusy()) {
                     intake.setState(STOP);
-                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
-                    claw.setState(Claw.ClawState.CLOSE);
-                    follower.followPath(Auto_no_extend_paths.score2);
+                    intakeWrist.setState(IntakeWrist.intakeWristState.TRANSFER);
+                    follower.followPath(score2);
                     setPathState(13);
                 }
                 break;
             case 13:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
                     bar.setState(Bar.BarState.AUTOTRANSFER);
                     wrist.setState(Wrist.wristState.AUTOTRANSFER);
                     setPathState(14);
                 }
                 break;
             case 14:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
                     claw.setState(Claw.ClawState.CLOSE);
                     setPathState(15);
                 }
                 break;
             case 15:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
+                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                     slides.setTargetPos(Slides.HIGH);
                     setPathState(16);
                 }
                 break;
             case 16:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
                     bar.setState(Bar.BarState.BUCKET);
                     wrist.setState(Wrist.wristState.BUCKET);
                     setPathState(17);
                 }
                 break;
             case 17:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
                     claw.setState(Claw.ClawState.OPEN);
                     setPathState(18);
                 }
                 break;
             case 18:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
                     slides.setTargetPos(Slides.GROUND);
                     bar.setState(Bar.BarState.NEUTRAL);
                     wrist.setState(Wrist.wristState.AUTOTRANSFER);
-                    follower.followPath(Auto_no_extend_paths.prepare3, true); //preload score -> samp1
+                    follower.followPath(prepare3, true); //preload score -> samp1
                     setPathState(19);
                 }
                 break;
@@ -206,57 +317,57 @@ public class Auto_no_extend extends OpMode {
                 if (!follower.isBusy()) {
                     intakeWrist.setState(SUPEROUT);
                     intake.setState(IN);
-                    follower.followPath(Auto_no_extend_paths.scoot3);
+                    follower.followPath(scoot3);
                     setPathState(20);
                 }
                 break;
             case 20:
                 if (colorsensor.sensorIsYellow() || !follower.isBusy()) {
                     intake.setState(STOP);
-                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
-                    claw.setState(Claw.ClawState.CLOSE);
-                    follower.followPath(Auto_no_extend_paths.score3);
+                    intakeWrist.setState(IntakeWrist.intakeWristState.TRANSFER);
+                    follower.followPath(score3);
                     setPathState(21);
                 }
                 break;
             case 21:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
                     bar.setState(Bar.BarState.AUTOTRANSFER);
                     wrist.setState(Wrist.wristState.AUTOTRANSFER);
                     setPathState(22);
                 }
                 break;
             case 22:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
                     claw.setState(Claw.ClawState.CLOSE);
                     setPathState(23);
                 }
                 break;
             case 23:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
+                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                     slides.setTargetPos(Slides.HIGH);
                     setPathState(24);
                 }
                 break;
             case 24:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
                     bar.setState(Bar.BarState.BUCKET);
                     wrist.setState(Wrist.wristState.BUCKET);
                     setPathState(25);
                 }
                 break;
             case 25:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
                     claw.setState(Claw.ClawState.OPEN);
                     setPathState(26);
                 }
                 break;
             case 26:
-                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 2) {
                     slides.setTargetPos(Slides.GROUND);
                     bar.setState(Bar.BarState.PARK);
                     wrist.setState(Wrist.wristState.PARK);
-                    follower.followPath(Auto_no_extend_paths.park);
+                    follower.followPath(park);
                     setPathState(-1);
                 }
                 break;
@@ -274,12 +385,11 @@ public class Auto_no_extend extends OpMode {
         totalTime.resetTimer();
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap);
-        follower.setStartingPose(new Pose(7.065, 108.000, -90));
-        follower.setMaxPower(1);
+        follower.setStartingPose(new Pose(7.065, 108.000, Math.toRadians(-90)));
+        follower.setMaxPower(0.6);
         poseUpdater = new PoseUpdater(hardwareMap);
-        poseUpdater.setStartingPose(new Pose(7.065, 108.000, -90));
-
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        buildPaths();
 
         bar = new Bar();
         claw = new Claw();
