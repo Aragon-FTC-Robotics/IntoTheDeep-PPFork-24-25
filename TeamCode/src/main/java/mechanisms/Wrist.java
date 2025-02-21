@@ -10,7 +10,7 @@ public class Wrist {
     public wristState currentState = wristState.NEUTRAL;
 
     public final double TRANSFER = 0.055; //as of feb 10
-    public final double AUTOTRANSFER = 0.26;
+    public final double AUTOTRANSFER = 0.055;
     public final double AUTOINIT = 0;
     public final double WALL = 0.24;
     public final double BUCKET = 0.77;
