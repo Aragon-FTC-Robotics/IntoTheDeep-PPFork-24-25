@@ -146,7 +146,6 @@ public class ActionHandler {
         if (gp2.right_bumper){
             claw.setState(Claw.ClawState.OPEN);
         }
-
         if (gp2.dpad_down && !transferring) {
             slidesDown();
         }
