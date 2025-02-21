@@ -201,7 +201,7 @@ public class Auto_no_extend extends OpMode {
                 if (!follower.isBusy()) {
                     intakeWrist.setState(SUPEROUT);
                     intake.setState(IN);
-                    follower.followPath(scoot1);
+                    follower.followPath(scoot1, 0.4, false);
                     setPathState(4);
                 }
                 break;
@@ -259,7 +259,7 @@ public class Auto_no_extend extends OpMode {
                 if (!follower.isBusy()) {
                     intakeWrist.setState(SUPEROUT);
                     intake.setState(IN);
-                    follower.followPath(scoot2);
+                    follower.followPath(scoot2, 0.4, false);
                     setPathState(12);
                 }
                 break;
@@ -317,7 +317,7 @@ public class Auto_no_extend extends OpMode {
                 if (!follower.isBusy()) {
                     intakeWrist.setState(SUPEROUT);
                     intake.setState(IN);
-                    follower.followPath(scoot3);
+                    follower.followPath(scoot3, 0.4, false);
                     setPathState(20);
                 }
                 break;
