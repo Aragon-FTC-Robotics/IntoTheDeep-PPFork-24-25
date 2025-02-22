@@ -20,7 +20,7 @@ import mechanisms.Wrist;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 
-@Autonomous(name = "Regional auo", group = "Auto")
+@Autonomous(name = "AUTO clip pushing + relocalization", group = "Auto")
 public class Auto_Regionals extends OpMode {
     private Bar bar;
     private Claw claw;

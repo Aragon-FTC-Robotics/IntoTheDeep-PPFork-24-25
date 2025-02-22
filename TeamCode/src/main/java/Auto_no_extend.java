@@ -42,7 +42,7 @@ import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 
 @Config
-@Autonomous(name = "New bucket auto", group = "Auto")
+@Autonomous(name = "AUTO bucket no extend", group = "Auto")
 public class Auto_no_extend extends OpMode {
     private Bar bar;
     private Claw claw;
