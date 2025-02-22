@@ -40,30 +40,41 @@ public class Auto_Regionals extends OpMode {
     private static final Pose PREPARE1POSE = new Pose(57,34,Math.toRadians(180));
     private static final Pose PREPARE1CONTROL = new Pose(19, 69);
     private static final Pose PREPARE1CONTROL2 = new Pose(24, 28);
-    private static final Pose PUSH1POSE = new Pose(18,23,Math.toRadians(180));
+    private static final Pose PUSH1POSE = new Pose(17,23,Math.toRadians(180));
     private static final Pose PUSH1CONTROL = new Pose(65,16);
     private static final Pose PREPARE2POSE = new Pose(54, 14.7, Math.toRadians(180));;
     private static final Pose PREPARE2CONTROL = new Pose(68,32);
     private static final Pose PUSH2POSE = new Pose(20, 17);
     private static final Pose PREPARE3POSE = new Pose(56, 9.5, Math.toRadians(180));
     private static final Pose PREPARE3CONTROL = new Pose(68, 22);
-    private static final Pose PUSH3POSE = new Pose(10, 9.5, Math.toRadians(178));
+    private static final Pose PUSH3POSE = new Pose(7, 9.5, Math.toRadians(180));
     private static final Pose SCORE1MID = new Pose(12, 33, Math.toRadians(240));
     //Push3 -> score1 mid -> score1pose (with score1control)
     private static final Pose SCORE1CONTROL = new Pose(22, 77);
-    private static final Pose SCORE1POSE = new Pose(39, 72.6, Math.toRadians(180));
+    private static final Pose SCORE1POSE = new Pose(50, 72.6, Math.toRadians(180)); //x was 45
     private static final Pose WALLPOSE = new Pose(7.8, 24, Math.toRadians(180));
     private static final Pose SCORECONTROL = new Pose(19, 36);
     private static final Pose SCORECONTROL2 = new Pose(14, 94);
-    private static final Pose SCORETOWALLCONTROL = new Pose(16, 67);
-    private static final Pose SCORETOWALLCONTROL2 = new Pose(36, 17);
-    private static final Pose SCORE2POSE = new Pose(43.1, 72.6+2, Math.toRadians(180));
-    private static final Pose SCORE3POSE =new Pose(43.1, 72.6+4, Math.toRadians(180));
-    private static final Pose SCORE4POSE = new Pose(43.1, 72.6+6, Math.toRadians(180));
-    private static final Pose PARKCONTROL = new Pose(23, 82);
-    private static final Pose PARK = new Pose(7, 16, Math.toRadians(-90));
+    private static final Pose SCORETOWALLCONTROL = new Pose(100 - (29), 67); //was 16    or    score (45) - 16
+    private static final Pose SCORETOWALLCONTROL2 = new Pose(100 - (9), 17); // was 36
+    private static final Pose SCORE2POSE = new Pose(102, 72.6+2, Math.toRadians(180)); //x was 45
+    private static final Pose SCORE3POSE =new Pose(102, 72.6+4, Math.toRadians(180)); //x was 45
+    private static final Pose SCORE4POSE = new Pose(102, 72.6+6, Math.toRadians(180)); //x was 45
+//    private static final Pose PARKCONTROL = new Pose(23, 82);
+    private static final Pose PARK = new Pose(100 - 38, 16, Math.toRadians(-90));
 
-    private static final Pose GOHOME = new Pose(36,73, Math.toRadians(180));
+    private static final Pose GOHOME = new Pose(36,73, Math.toRadians(180)); //UNUSED
+    private static final Pose AFTERCLIPSCORE1POSE = new Pose(100, 72.6, Math.toRadians(180));
+    private static final Pose AFTERCLIPSCORE2POSE = new Pose(100, 72.6 + 2, Math.toRadians(180));
+    private static final Pose AFTERCLIPSCORE3POSE = new Pose(100, 72.6 + 4, Math.toRadians(180));
+    private static final Pose AFTERCLIPSCORE4POSE = new Pose(100, 72.6 + 6, Math.toRadians(180));
+    private static final Pose AFTERCLIPWALL = new Pose(100 - (37.2) + 15, 24, Math.toRadians(180));
+
+    private static final Pose AFTERSCORETOWALLCONTROL = new Pose(100 - (29), 67);
+    private static final Pose AFTERSCORETOWALLCONTROL2 = new Pose(100 - (5), 17);
+
+    private static final Pose AFTERSCORECONTROL = new Pose(100 - (5), 17); //45 (score) -
+    private static final Pose AFTERSCORECONTROL2 = new Pose(100 - (29), 67);
 
     private PathChain scorePreload, pushSample1, pushSample2, pushSample3, score1, score1ToWall, score2, score2ToWall, score3, score3ToWall, score4, park, gohome;
 
@@ -98,36 +109,36 @@ public class Auto_Regionals extends OpMode {
                 .setLinearHeadingInterpolation(SCORE1MID.getHeading(), SCORE1POSE.getHeading())
                 .build();
         score1ToWall = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(SCORE1POSE), new Point(SCORETOWALLCONTROL), new Point(SCORETOWALLCONTROL2), new Point(WALLPOSE))))
-                .setLinearHeadingInterpolation(SCORE1POSE.getHeading(), WALLPOSE.getHeading())
+                .addPath(new Path(new BezierCurve(new Point(AFTERCLIPSCORE1POSE), new Point(AFTERSCORETOWALLCONTROL), new Point(AFTERSCORETOWALLCONTROL2), new Point(AFTERCLIPWALL))))
+                .setLinearHeadingInterpolation(AFTERCLIPSCORE1POSE.getHeading(), AFTERCLIPWALL.getHeading())
                 .build();
         score2 = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCORECONTROL), new Point(SCORECONTROL2), new Point(SCORE2POSE))))
+                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(AFTERSCORECONTROL), new Point(AFTERSCORECONTROL2), new Point(SCORE2POSE))))
                 .setLinearHeadingInterpolation(WALLPOSE.getHeading(), SCORE2POSE.getHeading())
                 .build();
         score2ToWall = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(SCORE2POSE), new Point(SCORETOWALLCONTROL), new Point(SCORETOWALLCONTROL2), new Point(WALLPOSE))))
+                .addPath(new Path(new BezierCurve(new Point(AFTERCLIPSCORE2POSE), new Point(SCORETOWALLCONTROL), new Point(SCORETOWALLCONTROL2), new Point(AFTERCLIPWALL))))
                 .setLinearHeadingInterpolation(SCORE2POSE.getHeading(), WALLPOSE.getHeading())
                 .build();
         score3 = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCORECONTROL), new Point(SCORECONTROL2), new Point(SCORE3POSE))))
+                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(AFTERSCORECONTROL), new Point(AFTERSCORECONTROL2), new Point(SCORE3POSE))))
                 .setLinearHeadingInterpolation(WALLPOSE.getHeading(), SCORE3POSE.getHeading())
                 .build();
         score3ToWall = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(SCORE3POSE), new Point(SCORETOWALLCONTROL), new Point(SCORETOWALLCONTROL2), new Point(WALLPOSE))))
+                .addPath(new Path(new BezierCurve(new Point(AFTERCLIPSCORE3POSE), new Point(SCORETOWALLCONTROL), new Point(SCORETOWALLCONTROL2), new Point(AFTERCLIPWALL))))
                 .setLinearHeadingInterpolation(SCORE3POSE.getHeading(), WALLPOSE.getHeading())
                 .build();
         score4 = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(SCORECONTROL), new Point(SCORECONTROL2), new Point(SCORE4POSE))))
+                .addPath(new Path(new BezierCurve(new Point(WALLPOSE), new Point(AFTERSCORECONTROL), new Point(AFTERSCORECONTROL2), new Point(SCORE4POSE))))
                 .setLinearHeadingInterpolation(WALLPOSE.getHeading(), SCORE3POSE.getHeading())
                 .build();
         park = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(SCORE4POSE), new Point(PARKCONTROL), new Point(PARK))))
+                .addPath(new Path(new BezierLine(new Point(AFTERCLIPSCORE4POSE), new Point(PARK))))
                 .setLinearHeadingInterpolation(SCORE4POSE.getHeading(), PARK.getHeading())
                 .build();
 
         gohome = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(GOHOME), new Point(SCORETOWALLCONTROL), new Point(SCORETOWALLCONTROL2), new Point(WALLPOSE))))
+                .addPath(new Path(new BezierCurve(new Point(GOHOME), new Point(SCORETOWALLCONTROL), new Point(SCORETOWALLCONTROL2), new Point(AFTERCLIPWALL))))
                 .setLinearHeadingInterpolation(GOHOME.getHeading(), WALLPOSE.getHeading())
                 .build();
     }
@@ -149,7 +160,7 @@ public class Auto_Regionals extends OpMode {
                 }
                 break;
             case 2: //open claw
-                if (pathTime.getElapsedTimeSeconds() > 0.44) { /// find exact timing
+                if (Math.abs(follower.getPose().getX() - PRELOADPOSE.getX()) > 7) { /// find exact timing
                     claw.setState(Claw.ClawState.OPEN);
                     setPathState(3);
                 }
@@ -180,23 +191,30 @@ public class Auto_Regionals extends OpMode {
                 }
                 break;
             case 5: // get into position/move to bar/clip
-                if (pathTime.getElapsedTimeSeconds() > 0.35) {
-                    bar.setState(Bar.BarState.CLIP);
-                    wrist.setState(Wrist.wristState.CLIP);
-                    slides.setTargetPos(Slides.MED);
+                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                    bar.setState(Bar.BarState.DTCLIP1);
+                    wrist.setState(Wrist.wristState.DTCLIP);
                     follower.followPath(score1);
                     setPathState(6);
                 }
                 break;
             case 6: //let go of clip after clipped
-                if (Math.abs(follower.getPose().getX() - SCORE1POSE.getX()) < 8){
-                    claw.setState(Claw.ClawState.OPEN);
+                if (follower.isRobotStuck() || !follower.isBusy()){
+                    bar.setState(Bar.BarState.DTCLIP2);
+                    follower.breakFollowing();
+                    follower.setPose(new Pose(100, follower.getPose().getY(), follower.getPose().getHeading()));
                     follower.followPath(score1ToWall);
+                    setPathState(601);
+                }
+                break;
+            case 601:
+                if (follower.getCurrentTValue() > 0.1) {
+                    claw.setState(Claw.ClawState.OPEN);
                     setPathState(7);
                 }
                 break;
             case 7: // get ready to grab 2nd clip
-                if (follower.getCurrentTValue() > 0.3) {
+                if (pathTime.getElapsedTimeSeconds() > 0.75) {
                     bar.setState(Bar.BarState.WALL);
                     wrist.setState(Wrist.wristState.WALL);
                     slides.setTargetPos(Slides.GROUND);
@@ -210,30 +228,30 @@ public class Auto_Regionals extends OpMode {
                 }
                 break;
             case 9: // go to clip 2nd clip
-                if (pathTime.getElapsedTimeSeconds() > 0.35) {
-                    bar.setState(Bar.BarState.CLIP);
-                    wrist.setState(Wrist.wristState.CLIP);
-                    slides.setTargetPos(Slides.MED);
+                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                    bar.setState(Bar.BarState.DTCLIP1);
+                    wrist.setState(Wrist.wristState.DTCLIP);
                     follower.followPath(score2);
                     setPathState(10);
                 }
                 break;
             case 10: // let go of clip
-                if (Math.abs(follower.getPose().getX() - SCORE2POSE.getX()) < 8){
-                    claw.setState(Claw.ClawState.OPEN);
+                if (follower.isRobotStuck() || !follower.isBusy()){
+                    follower.breakFollowing();
+                    follower.setPose(new Pose(100, follower.getPose().getY(), follower.getPose().getHeading()));
+                    bar.setState(Bar.BarState.DTCLIP2);
                     follower.followPath(score2ToWall);
                     setPathState(1001);
                 }
                 break;
             case 1001:
-                if(follower.isRobotStuck()){
-                    follower.followPath(gohome);
-                    setPathState(11);
-                }else {
+                if(follower.getCurrentTValue() > 0.03){
+                    claw.setState(Claw.ClawState.OPEN);
                     setPathState(11);
                 }
+                break;
             case 11: // get ready for clip #3
-                if (follower.getCurrentTValue() > 0.3) {
+                if (pathTime.getElapsedTimeSeconds() > 0.5) {
                     bar.setState(Bar.BarState.WALL);
                     wrist.setState(Wrist.wristState.WALL);
                     slides.setTargetPos(Slides.GROUND);
@@ -241,76 +259,74 @@ public class Auto_Regionals extends OpMode {
                 }
                 break;
             case 12: // grab clip #3
-                if (!follower.isBusy()) { /// make sure it works
+                if (!follower.isBusy()) { // make sure it works
                     claw.setState(Claw.ClawState.CLOSE);
                     setPathState(13);
                 }
                 break;
             case 13: // go to clip #3
-                if (pathTime.getElapsedTimeSeconds() > 0.35) {
-                    bar.setState(Bar.BarState.CLIP);
-                    wrist.setState(Wrist.wristState.CLIP);
-                    slides.setTargetPos(Slides.MED);
+                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                    bar.setState(Bar.BarState.DTCLIP1);
+                    wrist.setState(Wrist.wristState.DTCLIP);
                     follower.followPath(score3);
                     setPathState(14);
                 }
                 break;
             case 14: // let go of clip
-                if (Math.abs(follower.getPose().getX() - SCORE3POSE.getX()) < 8){
-                    claw.setState(Claw.ClawState.OPEN);
+                if (follower.isRobotStuck() || !follower.isBusy()){
+                    follower.breakFollowing();
+                    follower.setPose(new Pose(100, follower.getPose().getY(), follower.getPose().getHeading()));
+                    bar.setState(Bar.BarState.DTCLIP2);
                     follower.followPath(score3ToWall);
-                    setPathState(15);
+                    setPathState(1401);
                 }
                 break;
             case 1401:
-                if(follower.isRobotStuck()){
-                    follower.followPath(gohome);
-                    setPathState(15);
-                }else {
+                if (follower.getCurrentTValue() > 0.03) {
+                    claw.setState(Claw.ClawState.OPEN);
                     setPathState(15);
                 }
+                break;
             case 15: // go to grab clip #4
-                if (follower.getCurrentTValue() > 0.3) {
+                if (pathTime.getElapsedTimeSeconds() > 0.5) {
                     bar.setState(Bar.BarState.WALL);
                     wrist.setState(Wrist.wristState.WALL);
-                    slides.setTargetPos(Slides.GROUND);
                     setPathState(16);
                 }
                 break;
             case 16: // grab #4
-                if (!follower.isBusy()) { /// make sure it works
+                if (!follower.isBusy()) { // make sure it works
                     claw.setState(Claw.ClawState.CLOSE);
                     setPathState(17);
                 }
                 break;
             case 17: // go to clip #4
-                if (pathTime.getElapsedTimeSeconds() > 0.35) {
-                    bar.setState(Bar.BarState.CLIP);
-                    wrist.setState(Wrist.wristState.CLIP);
-                    slides.setTargetPos(Slides.MED);
+                if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                    bar.setState(Bar.BarState.DTCLIP1);
+                    wrist.setState(Wrist.wristState.DTCLIP);
                     follower.followPath(score4);
                     setPathState(18);
                 }
                 break;
             case 18: // let go of clip
-                if (Math.abs(follower.getPose().getX() - SCORE4POSE.getX()) < 8){
-                    claw.setState(Claw.ClawState.OPEN);
+                if (follower.isRobotStuck() || !follower.isBusy()){
+                    follower.breakFollowing();
+                    follower.setPose(new Pose(100, follower.getPose().getY(), follower.getPose().getHeading()));
+                    bar.setState(Bar.BarState.DTCLIP2);
                     follower.followPath(park);
-                    setPathState(19);
+                    setPathState(1801);
                 }
                 break;
             case 1801:
-                if(follower.isRobotStuck()){
-                    follower.followPath(gohome);
-                    setPathState(19);
-                }else {
+                if(follower.getCurrentTValue() > 0.03) {
+                    claw.setState(Claw.ClawState.OPEN);
                     setPathState(19);
                 }
+                break;
             case 19: // return & get ready for teleop
-                if (follower.getCurrentTValue() > 0.5) {
+                if (pathTime.getElapsedTimeSeconds() > 0.5) {
                     bar.setState(Bar.BarState.PARK);
                     wrist.setState(Wrist.wristState.PARK);
-                    slides.setTargetPos(Slides.GROUND);
                     setPathState(-1);
                 }
                 break;
@@ -371,6 +387,8 @@ public class Auto_Regionals extends OpMode {
         extendo.Loop(currentVoltage);
         slides.Loop(currentVoltage);
         telemetry.update();
+
+        follower.update();
     }
     @Override
     public void start() {

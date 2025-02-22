@@ -23,6 +23,7 @@ import com.pedropathing.util.DashboardPoseTracker;
 import com.pedropathing.util.Drawing;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -38,7 +39,7 @@ import mechanisms.Slides;
 import mechanisms.Wrist;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
-
+@Disabled
 @Config
 @Autonomous(name = "🦷🗑️ NO COLOR bucket", group = "Auto")
 public class Auto_0_4_Colorless extends OpMode {

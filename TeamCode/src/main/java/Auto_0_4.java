@@ -18,6 +18,7 @@ import com.pedropathing.localization.*;
 import com.pedropathing.pathgen.*;
 import com.pedropathing.util.*;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -25,6 +26,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import mechanisms.*;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
+@Disabled
 @Config
 @Autonomous(name = "\uD83E\uDEA3\uD83D\uDDD1\uFE0F Bucket Auto", group = "Auto")
 public class Auto_0_4 extends OpMode {

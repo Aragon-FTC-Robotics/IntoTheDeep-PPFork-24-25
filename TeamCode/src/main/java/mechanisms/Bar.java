@@ -10,16 +10,16 @@ public class Bar {
     public enum BarState {TRANSFER, AUTOTRANSFER, AUTOINIT, WALL, BUCKET, CLIP, AUTOCLIP, NEUTRAL, PARK, DTCLIP1, DTCLIP2, DTWALL, DTWALLSILLY, DTFIRSTCLIP}
     public BarState currentState = BarState.NEUTRAL;
     public double DISPLACEDTICKS = 0.00; //1 tick = 0.02
-    public final double TRANSFER = 0.82 + DISPLACEDTICKS; //as of jan 25
-    public final double AUTOTRANSFER = 0.82 + DISPLACEDTICKS;
+    public final double TRANSFER = 0.83 + DISPLACEDTICKS; //as of jan 25
+    public final double AUTOTRANSFER = 0.83 + DISPLACEDTICKS;
     public final double AUTOINIT = 0.723 + DISPLACEDTICKS;
     public final double WALL = 0.92 + DISPLACEDTICKS; //new
     public final double BUCKET = 0.25 + DISPLACEDTICKS;
     public final double CLIP = 0 + DISPLACEDTICKS;
     public final double AUTOCLIP = 0.585 + DISPLACEDTICKS;
     public final double NEUTRAL = 0.6 + DISPLACEDTICKS;
-    public final double DTCLIP1 = 0.13 + DISPLACEDTICKS;
-    public final double DTCLIP2 = 0.29 + DISPLACEDTICKS; //og 25
+    public final double DTCLIP1 = 0.1 + DISPLACEDTICKS;
+    public final double DTCLIP2 = 0.23 + DISPLACEDTICKS; //og 25
     public final double PARK = 0.41 + DISPLACEDTICKS;
     public final double DTWALL = 0.87 + DISPLACEDTICKS;
     public final double DTWALLSILLY = 0.94 + DISPLACEDTICKS;

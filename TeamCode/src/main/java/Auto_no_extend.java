@@ -74,61 +74,63 @@ public class Auto_no_extend extends OpMode {
                 .addPath(
                         new BezierLine(
                                 new Point(15, 126.500, Point.CARTESIAN),
-                                new Point(24, 113, Point.CARTESIAN)
+                                new Point(24, 106, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(20))
+                .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(30))
                 .build();
 
         scoot1 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(24, 113, Point.CARTESIAN),
-                                new Point(50, 123, Point.CARTESIAN)
+                                new Point(24, 106, Point.CARTESIAN),
+                                new Point(50, 125, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(20), Math.toRadians(20))
+                .setLinearHeadingInterpolation(Math.toRadians(30), Math.toRadians(30))
+                .setZeroPowerAccelerationMultiplier(6)
                 .build();
 
         score1 = follower.pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Point(50.000, 123, Point.CARTESIAN),
+                                new Point(50.000, 125, Point.CARTESIAN),
                                 new Point(33, 108, Point.CARTESIAN),
                                 new Point(15.000, 126.000, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(20), Math.toRadians(-45))
+                .setLinearHeadingInterpolation(Math.toRadians(30), Math.toRadians(-45))
                 .build();
 
         prepare2 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
                                 new Point(15.000, 126.000, Point.CARTESIAN),
-                                new Point(24.000, 123, Point.CARTESIAN)
+                                new Point(24.000, 116, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(20))
+                .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(30))
                 .build();
 
         scoot2 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(24.000, 123, Point.CARTESIAN),
-                                new Point(50.000, 133, Point.CARTESIAN)
+                                new Point(24.000, 116, Point.CARTESIAN),
+                                new Point(50.000, 135, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(20), Math.toRadians(20))
+                .setLinearHeadingInterpolation(Math.toRadians(30), Math.toRadians(30))
+                .setZeroPowerAccelerationMultiplier(6)
                 .build();
 
         score2 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(50.000, 133, Point.CARTESIAN),
+                                new Point(50.000, 135, Point.CARTESIAN),
                                 new Point(15.000, 126.000, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(20), Math.toRadians(-45))
+                .setLinearHeadingInterpolation(Math.toRadians(30), Math.toRadians(-45))
                 .build();
 
         prepare3 = follower.pathBuilder()
@@ -149,6 +151,7 @@ public class Auto_no_extend extends OpMode {
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(50), Math.toRadians(50))
+                .setZeroPowerAccelerationMultiplier(6)
                 .build();
 
        score3 = follower.pathBuilder()
@@ -234,13 +237,13 @@ public class Auto_no_extend extends OpMode {
                 break;
             case 7:
                 if (pathTime.getElapsedTimeSeconds() > 0.75) {
-                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                     slides.setTargetPos(Slides.HIGH);
                     setPathState(8);
                 }
                 break;
             case 8:
                 if (pathTime.getElapsedTimeSeconds() > 1) {
+                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                     bar.setState(Bar.BarState.BUCKET);
                     wrist.setState(Wrist.wristState.BUCKET);
                     setPathState(9);
@@ -292,7 +295,6 @@ public class Auto_no_extend extends OpMode {
                 break;
             case 15:
                 if (pathTime.getElapsedTimeSeconds() > 0.5) {
-                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                     slides.setTargetPos(Slides.HIGH);
                     setPathState(16);
                 }
@@ -301,6 +303,7 @@ public class Auto_no_extend extends OpMode {
                 if (pathTime.getElapsedTimeSeconds() > 1) {
                     bar.setState(Bar.BarState.BUCKET);
                     wrist.setState(Wrist.wristState.BUCKET);
+                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                     setPathState(17);
                 }
                 break;
@@ -350,7 +353,6 @@ public class Auto_no_extend extends OpMode {
                 break;
             case 23:
                 if (pathTime.getElapsedTimeSeconds() > 0.5) {
-                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                     slides.setTargetPos(Slides.HIGH);
                     setPathState(24);
                 }
@@ -359,6 +361,7 @@ public class Auto_no_extend extends OpMode {
                 if (pathTime.getElapsedTimeSeconds() > 1) {
                     bar.setState(Bar.BarState.BUCKET);
                     wrist.setState(Wrist.wristState.BUCKET);
+                    intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                     setPathState(25);
                 }
                 break;
@@ -379,8 +382,8 @@ public class Auto_no_extend extends OpMode {
             case 27:
                 if (pathTime.getElapsedTimeSeconds() > 1) {
                     slides.setTargetPos(Slides.GROUND);
-                    bar.setState(Bar.BarState.PARK);
-                    wrist.setState(Wrist.wristState.PARK);
+                    bar.setState(Bar.BarState.BUCKET);
+                    wrist.setState(Wrist.wristState.BUCKET);
                     setPathState(-1);
                 }
                 break;
@@ -438,6 +441,12 @@ public class Auto_no_extend extends OpMode {
         totalTime.resetTimer();
         setPathState(0);
     }
+
+    @Override
+    public void init_loop(){
+        follower.update();
+    }
+
     @Override
     public void loop() {
         follower.update();
