@@ -13,7 +13,7 @@ public class Bar {
     public final double TRANSFER = 0.83 + DISPLACEDTICKS; //as of jan 25
     public final double AUTOTRANSFER = 0.83 + DISPLACEDTICKS;
     public final double AUTOINIT = 0.723 + DISPLACEDTICKS;
-    public final double WALL = 0.92 + DISPLACEDTICKS; //new
+    public final double WALL = 0.95 + DISPLACEDTICKS; //new
     public final double BUCKET = 0.25 + DISPLACEDTICKS;
     public final double CLIP = 0 + DISPLACEDTICKS;
     public final double AUTOCLIP = 0.585 + DISPLACEDTICKS;

@@ -19,7 +19,7 @@ import mechanisms.Wrist;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 
-@Autonomous(name = "Clip intake auto", group = "Auto")
+@Autonomous(name = "AUTO \uD83E\uDD21\uD83D\uDCCE Clip intake", group = "Auto")
 public class Auto_clipintake extends OpMode {
     private Bar bar;
     private Claw claw;
@@ -39,7 +39,7 @@ public class Auto_clipintake extends OpMode {
                 .addPath(
                         new BezierLine(
                                 new Point(6.750, 43.000, Point.CARTESIAN),
-                                new Point(41.000, 18.000, Point.CARTESIAN)
+                                new Point(40.000, 17.000, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-30))
@@ -47,7 +47,7 @@ public class Auto_clipintake extends OpMode {
         spit1 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(41.000, 18.000, Point.CARTESIAN),
+                                new Point(40.000, 17.000, Point.CARTESIAN),
                                 new Point(14.000, 23.000, Point.CARTESIAN)
                         )
                 )
@@ -75,15 +75,16 @@ public class Auto_clipintake extends OpMode {
                 .addPath(
                         new BezierCurve(
                                 new Point(14.000, 13.000, Point.CARTESIAN),
-                                new Point(37.000, 20.000, Point.CARTESIAN),
-                                new Point(47, 6.000, Point.CARTESIAN)
+                                new Point(33, 19, Point.CARTESIAN),
+                                new Point(42, 5.5, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-135), Math.toRadians(-80))
+//                .setLinearHeadingInterpolation(Math.toRadians(-135), Math.toRadians(-80))
+                .setTangentHeadingInterpolation()
                 .build();
         spit3 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Point(47, 6.000, Point.CARTESIAN),
+                                new Point(42, 5.5, Point.CARTESIAN),
                                 new Point(14.000, 30.000, Point.CARTESIAN)
                         )
                 )
@@ -93,7 +94,7 @@ public class Auto_clipintake extends OpMode {
                 .addPath(
                         new BezierLine(
                                 new Point(14.000, 30.000, Point.CARTESIAN),
-                                new Point(6.5, 30.000, Point.CARTESIAN)
+                                new Point(6.5, 27, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
@@ -101,8 +102,8 @@ public class Auto_clipintake extends OpMode {
         score1 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(6, 30.000, Point.CARTESIAN),
-                                new Point(37.000, 70.000, Point.CARTESIAN)
+                                new Point(5, 27, Point.CARTESIAN),
+                                new Point(43, 70.000, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
@@ -110,8 +111,8 @@ public class Auto_clipintake extends OpMode {
         return1 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(40, 70, Point.CARTESIAN),
-                                new Point(6, 30, Point.CARTESIAN)
+                                new Point(43, 70, Point.CARTESIAN),
+                                new Point(6, 27, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
@@ -139,13 +140,13 @@ public class Auto_clipintake extends OpMode {
                 }
                 break;
             case 2:
-                if (follower.atParametricEnd() || !follower.isBusy()) {
+                if (follower.atParametricEnd() || !follower.isBusy() || follower.getCurrentTValue() > 0.95) {
                     intake.setState(Intake.intakeState.OUT);
                     setPathState(3);
                 }
                 break;
             case 3:
-                if (pathTime.getElapsedTimeSeconds() > 1) {
+                if (pathTime.getElapsedTimeSeconds() > 0.4) {
                     intakeWrist.setState(IntakeWrist.intakeWristState.SUPEROUT);
                     intake.setState(Intake.intakeState.IN);
                     follower.followPath(prepare2);
@@ -161,13 +162,13 @@ public class Auto_clipintake extends OpMode {
                 }
                 break;
             case 5:
-                if (follower.atParametricEnd() || !follower.isBusy()) {
+                if (follower.atParametricEnd() || !follower.isBusy() || follower.getCurrentTValue() > 0.95) {
                     intake.setState(Intake.intakeState.OUT);
                     setPathState(6);
                 }
                 break;
             case 6:
-                if (pathTime.getElapsedTimeSeconds() > 1) {
+                if (pathTime.getElapsedTimeSeconds() > 0.4) {
                     intakeWrist.setState(IntakeWrist.intakeWristState.SUPEROUT);
                     intake.setState(Intake.intakeState.IN);
                     follower.followPath(prepare3);
@@ -210,6 +211,7 @@ public class Auto_clipintake extends OpMode {
             case 10:
                 if (scoredspecimens == 5) {setPathState(-1);}
                 if (!follower.isBusy()) {
+                    follower.breakFollowing();
                     claw.setState(Claw.ClawState.CLOSE);
                     setPathState(11);
                 }
@@ -223,14 +225,14 @@ public class Auto_clipintake extends OpMode {
                 }
                 break;
             case 12:
-                if (follower.atParametricEnd() || !follower.isBusy()) {
+                if (follower.atParametricEnd() || !follower.isBusy() || follower.isRobotStuck()) {
                     bar.setState(Bar.BarState.DTCLIP2);
                     follower.followPath(return1, 0.8, true);
                     setPathState(13);
                 }
                 break;
             case 13:
-                if (follower.getCurrentTValue() > 0.06) {
+                if (pathTime.getElapsedTimeSeconds() > 0.65) { //TODO: Find grood time for releasing specimen
                     claw.setState(Claw.ClawState.OPEN);
                     scoredspecimens++;
                     setPathState(14);
@@ -260,7 +262,7 @@ public class Auto_clipintake extends OpMode {
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap);
         follower.setStartingPose(new Pose(6.750, 43.000, Math.toRadians(0)));
-        follower.setMaxPower(0.85);
+        follower.setMaxPower(1);
         buildPaths();
 
         bar = new Bar();
