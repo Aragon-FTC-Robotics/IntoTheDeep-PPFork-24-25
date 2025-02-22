@@ -104,8 +104,8 @@ public class ActionHandler {
         if (gp2.y && !transferring) {
             clippos();
         }
-        if (gp2.a && !transferring) {
-            clip_down();
+        if (gp2.a) {
+            slides.setTargetPos(Slides.CLIMB);
         }
         if (gp2.b){
             bar.setState(Bar.BarState.NEUTRAL);
@@ -180,9 +180,6 @@ public class ActionHandler {
             intake.setState(Intake.intakeState.OUT);
             intaking = false;
             currentColor = ColorState.NOTHING;
-        }
-        if (gp2.touchpad_finger_1 && gp2.touchpad_finger_2) {
-            slides.setTargetPos(Slides.CLIMB);
         }
 
         //spit
@@ -287,12 +284,12 @@ public class ActionHandler {
                 break;
 
             //clipping
-            case CLIP:
-                if (elapsedMs >= 200) {
-                    claw.setState(Claw.ClawState.OPEN);
-                    currentActionState = ActionState.IDLE;
-                }
-                break;
+//            case CLIP:
+//                if (elapsedMs >= 200) {
+//                    claw.setState(Claw.ClawState.OPEN);
+//                    currentActionState = ActionState.IDLE;
+//                }
+//                break;
 
             //reset extendo
             case RESETEXTENDO:
@@ -423,11 +420,6 @@ public class ActionHandler {
     public void clippos() {
         slides.setTargetPos(Slides.MED);
         currentActionState = ActionState.CLIPPOS;
-        timer.reset();
-    }
-    public void clip_down(){
-        slides.setTargetPos(Slides.GROUND);
-        currentActionState = ActionState.CLIP;
         timer.reset();
     }
 
