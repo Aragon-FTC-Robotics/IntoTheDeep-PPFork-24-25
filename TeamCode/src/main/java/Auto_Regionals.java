@@ -44,7 +44,7 @@ public class Auto_Regionals extends OpMode {
     private static final Pose PUSH1CONTROL = new Pose(65,16);
     private static final Pose PREPARE2POSE = new Pose(54, 14.7, Math.toRadians(180));;
     private static final Pose PREPARE2CONTROL = new Pose(68,32);
-    private static final Pose PUSH2POSE = new Pose(20, 17);
+    private static final Pose PUSH2POSE = new Pose(20, 17, Math.toRadians(180));
     private static final Pose PREPARE3POSE = new Pose(56, 9.5, Math.toRadians(180));
     private static final Pose PREPARE3CONTROL = new Pose(68, 22);
     private static final Pose PUSH3POSE = new Pose(7, 9.5, Math.toRadians(180));
@@ -145,7 +145,7 @@ public class Auto_Regionals extends OpMode {
     private void updatePaths() {
         switch (pathState) {
             case 0: //clip #1
-                extendo.setTargetPos(-200);
+                extendo.setTargetPos(-100);
                 intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                 bar.setState(Bar.BarState.DTCLIP1);
                 wrist.setState(Wrist.wristState.DTCLIP);
@@ -160,7 +160,7 @@ public class Auto_Regionals extends OpMode {
                 }
                 break;
             case 2: //open claw
-                if (Math.abs(follower.getPose().getX() - PRELOADPOSE.getX()) > 7) { /// find exact timing
+                if (Math.abs(follower.getPose().getX() - PRELOADPOSE.getX()) > 7.5) { /// find exact timing
                     claw.setState(Claw.ClawState.OPEN);
                     setPathState(3);
                 }
@@ -169,18 +169,17 @@ public class Auto_Regionals extends OpMode {
                 if(follower.getCurrentTValue() > 0.2) {
                     bar.setState(Bar.BarState.WALL);
                     wrist.setState(Wrist.wristState.WALL);
-                    follower.setMaxPower(0.75);
                     setPathState(301);
                 }
                 break;
             case 301:
-                if (!follower.isBusy()){
+                if (follower.atParametricEnd() && follower.getCurrentPathNumber() > 0){
                     follower.followPath(pushSample2);
                     setPathState(302);
                 }
                 break;
             case 302:
-                if (!follower.isBusy()){
+                if (follower.atParametricEnd() && follower.getCurrentPathNumber() > 0){
                     follower.followPath(pushSample3);
                     setPathState(4);
                 }

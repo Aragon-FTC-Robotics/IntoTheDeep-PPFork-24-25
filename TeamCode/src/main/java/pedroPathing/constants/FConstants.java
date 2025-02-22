@@ -27,7 +27,7 @@ public class FConstants {
         FollowerConstants.xMovement = 76.10065606800222;
         FollowerConstants.yMovement = 61.94895697437406;
 
-        FollowerConstants.forwardZeroPowerAcceleration = -36.95474453080396;
+        FollowerConstants.forwardZeroPowerAcceleration = -38.223135130196724;
         FollowerConstants.lateralZeroPowerAcceleration = -70.9109666196431;
 
         FollowerConstants.translationalPIDFCoefficients.setCoefficients(0.1,0,0,0);
@@ -38,17 +38,17 @@ public class FConstants {
         FollowerConstants.useSecondaryHeadingPID = false;
         FollowerConstants.secondaryHeadingPIDFCoefficients.setCoefficients(2,0,0.1,0); // Not being used, @see useSecondaryHeadingPID
 
-        FollowerConstants.drivePIDFCoefficients.setCoefficients(0.02,0,0.001,0,0);
+        FollowerConstants.drivePIDFCoefficients.setCoefficients(0.010,0,0.0012,0,0);
         FollowerConstants.useSecondaryDrivePID = true;
         FollowerConstants.secondaryDrivePIDFCoefficients.setCoefficients(0.02,0,0.000079,0.6,0); // Not being used, @see useSecondaryDrivePID
 
-        FollowerConstants.zeroPowerAccelerationMultiplier = 4;
+        FollowerConstants.zeroPowerAccelerationMultiplier = 5.5;
         FollowerConstants.centripetalScaling = 0.00030;
 
         FollowerConstants.pathEndTimeoutConstraint = 500; //Up this number?
         FollowerConstants.pathEndTValueConstraint = 0.995;
-        FollowerConstants.pathEndVelocityConstraint = 0.1; //Up this number?
-        FollowerConstants.pathEndTranslationalConstraint = 0.1;
+        FollowerConstants.pathEndVelocityConstraint = 0.05; //Up this number?
+        FollowerConstants.pathEndTranslationalConstraint = 0.05;
         FollowerConstants.pathEndHeadingConstraint = 0.007;
 
         FollowerConstants.useBrakeModeInTeleOp = true;
