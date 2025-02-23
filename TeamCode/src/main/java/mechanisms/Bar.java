@@ -19,7 +19,7 @@ public class Bar {
     public final double AUTOCLIP = 0.585 + DISPLACEDTICKS;
     public final double NEUTRAL = 0.6 + DISPLACEDTICKS;
     public final double DTCLIP1 = 0.1 + DISPLACEDTICKS;
-    public final double DTCLIP2 = 0.23 + DISPLACEDTICKS; //og 25
+    public final double DTCLIP2 = 0.3 + DISPLACEDTICKS; //og 25
     public final double PARK = 0.41 + DISPLACEDTICKS;
     public final double DTWALL = 0.87 + DISPLACEDTICKS;
     public final double DTWALLSILLY = 0.94 + DISPLACEDTICKS;

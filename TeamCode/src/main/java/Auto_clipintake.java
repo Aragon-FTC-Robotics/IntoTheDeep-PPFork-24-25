@@ -7,6 +7,7 @@ import com.pedropathing.localization.Pose;
 import com.pedropathing.pathgen.*;
 import com.pedropathing.util.*;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 import mechanisms.Bar;
@@ -18,7 +19,7 @@ import mechanisms.Slides;
 import mechanisms.Wrist;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
-
+@Disabled
 @Autonomous(name = "AUTO \uD83E\uDD21\uD83D\uDCCE Clip", group = "Auto")
 public class Auto_clipintake extends OpMode {
     private Bar bar;

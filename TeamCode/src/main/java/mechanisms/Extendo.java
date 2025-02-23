@@ -17,7 +17,7 @@ public class Extendo {
     public static double p=0.010, i=0, d=0.00015, f=0;
     private DcMotorEx extendo;
 //    public enum extendoState {IN, OUT, MED};
-    public static final int MAX = 1500;
+    public static final int MAX = 2000;
     public static final int MIN = -250;
     public static final int MED = 900;
     private int targetPos = 0;

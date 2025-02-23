@@ -53,8 +53,6 @@ public class FullTeleOpBlue extends LinearOpMode {
         slides.init(hardwareMap);
         wrist.init(hardwareMap);
         led.init(hardwareMap);
-        slides.DANGEROUS_RESET_ENCODERS();
-        extendo.DANGEROUS_RESET_ENCODERS();
         voltageSensor = hardwareMap.get(VoltageSensor.class, "Control Hub");
         actionHandler.init(slides,extendo,bar,wrist,intake,claw,intakeWrist,colorsensor,led, drivetrain, "blue");
 

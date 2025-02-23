@@ -156,12 +156,17 @@ public class Auto_Regionals extends OpMode {
             case 1: //leaving
                 if (Math.abs(follower.getPose().getX() - PRELOADPOSE.getX()) < 4.5) {
                     bar.setState(Bar.BarState.DTCLIP2);
+                    setPathState(101);
+                }
+                break;
+            case 101:
+                if (pathTime.getElapsedTimeSeconds() > 1) {
                     follower.followPath(pushSample1);
                     setPathState(2);
                 }
                 break;
             case 2: //open claw
-                if (Math.abs(follower.getPose().getX() - PRELOADPOSE.getX()) > 7.5) { /// find exact timing
+                if (pathTime.getElapsedTimeSeconds() > 0.8) { /// find exact timing
                     claw.setState(Claw.ClawState.OPEN);
                     setPathState(3);
                 }

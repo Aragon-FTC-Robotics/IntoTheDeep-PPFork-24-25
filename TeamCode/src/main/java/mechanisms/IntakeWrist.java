@@ -9,7 +9,7 @@ public class IntakeWrist {
     public intakeWristState currentState = intakeWristState.IN;
     public final double IN = 0.16;
     public final double OUT = 0.95; //Extendo out
-    public final double SUPEROUT = 0.98; //Extendo in
+    public final double SUPEROUT = 0.9; //Extendo in
     public final double SUPERALMOSTOUT = 0.85;
     public final double TRANSFER = 0.38;
     public final double WALLALIGN = 0.54;
