@@ -11,7 +11,7 @@ import java.util.Map;
 
 import mechanisms.*;
 
-@TeleOp(name="🦐🩸Red Teleop", group="!!!")
+@TeleOp(name="TELEOP 🦐🩸Red", group="!!!")
 public class FullTeleOpRed extends LinearOpMode {
     public Bar bar = new Bar();
     public Claw claw = new Claw();

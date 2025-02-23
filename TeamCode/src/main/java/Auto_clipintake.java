@@ -19,7 +19,7 @@ import mechanisms.Wrist;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 
-@Autonomous(name = "AUTO \uD83E\uDD21\uD83D\uDCCE Clip intake", group = "Auto")
+@Autonomous(name = "AUTO \uD83E\uDD21\uD83D\uDCCE Clip", group = "Auto")
 public class Auto_clipintake extends OpMode {
     private Bar bar;
     private Claw claw;

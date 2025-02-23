@@ -42,7 +42,7 @@ import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 
 @Config
-@Autonomous(name = "AUTO bucket no extend", group = "Auto")
+@Autonomous(name = "AUTO Bucket", group = "Auto")
 public class Auto_no_extend extends OpMode {
     private Bar bar;
     private Claw claw;
@@ -75,7 +75,7 @@ public class Auto_no_extend extends OpMode {
                 .addPath(
                         new BezierLine(
                                 new Point(15, 123.500, Point.CARTESIAN),
-                                new Point(24, 105, Point.CARTESIAN)
+                                new Point(24, 102, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(30))
@@ -84,7 +84,7 @@ public class Auto_no_extend extends OpMode {
         scoot1 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(24, 105, Point.CARTESIAN),
+                                new Point(24, 102, Point.CARTESIAN),
                                 new Point(50, 124, Point.CARTESIAN)
                         )
                 )

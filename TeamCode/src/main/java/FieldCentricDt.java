@@ -1,3 +1,4 @@
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -12,7 +13,7 @@ import mechanisms.Intake;
 import mechanisms.IntakeWrist;
 import mechanisms.Slides;
 import mechanisms.Wrist;
-
+@Disabled
 @TeleOp(name="field centirc..... hello..........", group="Linear OpMode")
 public class FieldCentricDt extends LinearOpMode {
     public Drivetrain drivetrain = new Drivetrain();

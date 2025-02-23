@@ -15,7 +15,7 @@ import mechanisms.LEDlight;
 import mechanisms.Slides;
 import mechanisms.Wrist;
 
-@TeleOp(name="🥶🐳Brue Teleop", group="!!!")
+@TeleOp(name="TELEOP 🥶🐳Brue", group="!!!")
 public class FullTeleOpBlue extends LinearOpMode {
     public Bar bar = new Bar();
     public Claw claw = new Claw();
@@ -56,7 +56,7 @@ public class FullTeleOpBlue extends LinearOpMode {
         slides.DANGEROUS_RESET_ENCODERS();
         extendo.DANGEROUS_RESET_ENCODERS();
         voltageSensor = hardwareMap.get(VoltageSensor.class, "Control Hub");
-        actionHandler.init(slides,extendo,bar,wrist,intake,claw,intakeWrist,colorsensor,led, drivetrain, "red");
+        actionHandler.init(slides,extendo,bar,wrist,intake,claw,intakeWrist,colorsensor,led, drivetrain, "blue");
 
         gp1 = gamepad1;
         gp2 = gamepad2;
