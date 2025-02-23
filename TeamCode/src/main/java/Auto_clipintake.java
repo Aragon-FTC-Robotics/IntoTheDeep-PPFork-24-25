@@ -33,13 +33,13 @@ public class Auto_clipintake extends OpMode {
     private Timer pathTime, totalTime, loopTime;
     private int pathState = 0;
     int scoredspecimens = 0;
-    private PathChain prepare1, spit1, prepare2, spit2, prepare3, spit3, spit3towall, score1, return1, score2, return2, score3, return3, score4, return4, score5, return5;
+    private PathChain prepare1, spit1, prepare2, spit2, prepare3, spit3, spit3towall, score1, return1, spit2towall, return2, score3, return3, score4, return4, score5, return5;
     private void buildPaths() {
         prepare1 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
                                 new Point(6.750, 43.000, Point.CARTESIAN),
-                                new Point(40.000, 17.000, Point.CARTESIAN)
+                                new Point(40.000, 18.000, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-30))
@@ -88,13 +88,23 @@ public class Auto_clipintake extends OpMode {
                                 new Point(14.000, 30.000, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-80), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(180))
+//                .setTangentHeadingInterpolation()
+                .build();
+        spit2towall = follower.pathBuilder()
+                .addPath(
+                        new BezierLine(
+                                new Point(14.000, 13.000, Point.CARTESIAN),
+                                new Point(8, 13, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
                 .build();
         spit3towall = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
                                 new Point(14.000, 30.000, Point.CARTESIAN),
-                                new Point(6.5, 27, Point.CARTESIAN)
+                                new Point(8, 27, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
@@ -102,19 +112,21 @@ public class Auto_clipintake extends OpMode {
         score1 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(5, 27, Point.CARTESIAN),
-                                new Point(43, 70.000, Point.CARTESIAN)
+                                new Point(5, 33, Point.CARTESIAN),
+                                new Point(43, 68, Point.CARTESIAN)
                         )
                 )
+                .setZeroPowerAccelerationMultiplier(7)
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
                 .build();
         return1 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
                                 new Point(43, 70, Point.CARTESIAN),
-                                new Point(6, 27, Point.CARTESIAN)
+                                new Point(8, 20, Point.CARTESIAN)
                         )
                 )
+                .setZeroPowerAccelerationMultiplier(2)
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
                 .build();
     }
@@ -146,7 +158,7 @@ public class Auto_clipintake extends OpMode {
                 }
                 break;
             case 3:
-                if (pathTime.getElapsedTimeSeconds() > 0.4) {
+                if (pathTime.getElapsedTimeSeconds() > 0.2) {
                     intakeWrist.setState(IntakeWrist.intakeWristState.SUPEROUT);
                     intake.setState(Intake.intakeState.IN);
                     follower.followPath(prepare2);
@@ -158,7 +170,7 @@ public class Auto_clipintake extends OpMode {
                     intake.setState(Intake.intakeState.STOP);
                     intakeWrist.setState(IntakeWrist.intakeWristState.SPIT);
                     follower.followPath(spit2);
-                    setPathState(5);
+                    setPathState(8);
                 }
                 break;
             case 5:
@@ -168,7 +180,7 @@ public class Auto_clipintake extends OpMode {
                 }
                 break;
             case 6:
-                if (pathTime.getElapsedTimeSeconds() > 0.4) {
+                if (pathTime.getElapsedTimeSeconds() > 0.42) {
                     intakeWrist.setState(IntakeWrist.intakeWristState.SUPEROUT);
                     intake.setState(Intake.intakeState.IN);
                     follower.followPath(prepare3);
@@ -190,7 +202,7 @@ public class Auto_clipintake extends OpMode {
                 }
                 break;
             case 9:
-                if (pathTime.getElapsedTimeSeconds() > 1) {
+                if (pathTime.getElapsedTimeSeconds() > 0.2) {
                     intake.setState(Intake.intakeState.STOP);
                     intakeWrist.setState(IntakeWrist.intakeWristState.IN);
                     setPathState(901);
@@ -204,7 +216,7 @@ public class Auto_clipintake extends OpMode {
                 break;
             case 902:
                 if (pathTime.getElapsedTimeSeconds() > 0.5) {
-                    follower.followPath(spit3towall, true);
+                    follower.followPath(spit2towall, true);
                     setPathState(10);
                 }
                 break;
