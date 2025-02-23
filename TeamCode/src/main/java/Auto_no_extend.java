@@ -68,6 +68,7 @@ public class Auto_no_extend extends OpMode {
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-90), Math.toRadians(-45))
+                .setZeroPowerAccelerationMultiplier(5)
                 .build();
 
         prepare1 = follower.pathBuilder()
@@ -220,7 +221,7 @@ public class Auto_no_extend extends OpMode {
                 }
                 break;
             case 4:
-                if (colorsensor.sensorIsYellow() || !follower.isBusy()) {
+                if (colorsensor.sensorIsYellow() || !follower.isBusy() || pathTime.getElapsedTimeSeconds() > 2.3 || follower.isRobotStuck()) {
                     intake.setState(STOP);
                     intakeWrist.setState(IntakeWrist.intakeWristState.TRANSFER);
                     follower.followPath(score1);
@@ -283,7 +284,7 @@ public class Auto_no_extend extends OpMode {
                 }
                 break;
             case 12:
-                if (colorsensor.sensorIsYellow() || !follower.isBusy()) {
+                if (colorsensor.sensorIsYellow() || !follower.isBusy() || follower.isRobotStuck() || pathTime.getElapsedTimeSeconds() > 2.3) {
                     intake.setState(STOP);
                     intakeWrist.setState(IntakeWrist.intakeWristState.TRANSFER);
                     follower.followPath(score2);
