@@ -63,7 +63,7 @@ public class Auto_no_extend extends OpMode {
         scorePreload = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(7.065, 18.00, Point.CARTESIAN),
+                                new Point(7.095, 18.00, Point.CARTESIAN),
                                 new Point(15.000, 123.500, Point.CARTESIAN)
                         )
                 )
@@ -75,7 +75,7 @@ public class Auto_no_extend extends OpMode {
                 .addPath(
                         new BezierLine(
                                 new Point(15, 123.500, Point.CARTESIAN),
-                                new Point(24, 102, Point.CARTESIAN)
+                                new Point(24, 105, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(30))
@@ -84,8 +84,8 @@ public class Auto_no_extend extends OpMode {
         scoot1 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(24, 102, Point.CARTESIAN),
-                                new Point(50, 124, Point.CARTESIAN)
+                                new Point(24, 105, Point.CARTESIAN),
+                                new Point(50, 125, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(30), Math.toRadians(30))
@@ -95,7 +95,7 @@ public class Auto_no_extend extends OpMode {
         score1 = follower.pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Point(50.000, 124, Point.CARTESIAN),
+                                new Point(50.000, 125, Point.CARTESIAN),
                                 new Point(33, 108, Point.CARTESIAN),
                                 new Point(16.000, 123.000, Point.CARTESIAN)
                         )
@@ -107,7 +107,7 @@ public class Auto_no_extend extends OpMode {
                 .addPath(
                         new BezierLine(
                                 new Point(16.000, 123.000, Point.CARTESIAN),
-                                new Point(24.000, 117, Point.CARTESIAN)
+                                new Point(24.000, 116, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(30))
@@ -116,8 +116,8 @@ public class Auto_no_extend extends OpMode {
         scoot2 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(24.000, 117, Point.CARTESIAN),
-                                new Point(50.000, 136, Point.CARTESIAN)
+                                new Point(24.000, 116, Point.CARTESIAN),
+                                new Point(50.000, 135, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(30), Math.toRadians(30))
@@ -127,7 +127,7 @@ public class Auto_no_extend extends OpMode {
         score2 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(50.000, 136, Point.CARTESIAN),
+                                new Point(50.000, 135, Point.CARTESIAN),
                                 new Point(16.000, 123.000, Point.CARTESIAN)
                         )
                 )
@@ -147,8 +147,8 @@ public class Auto_no_extend extends OpMode {
         scoot3 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(36.000, 130.000, Point.CARTESIAN),
-                                new Point(44.000, 137, Point.CARTESIAN)
+                                new Point(35.000, 130.000, Point.CARTESIAN),
+                                new Point(41.000, 137, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(45))
@@ -158,7 +158,7 @@ public class Auto_no_extend extends OpMode {
        score3 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(44.000, 137, Point.CARTESIAN),
+                                new Point(41.000, 137, Point.CARTESIAN),
                                 new Point(16.000, 123.000, Point.CARTESIAN)
                         )
                 )
@@ -193,7 +193,7 @@ public class Auto_no_extend extends OpMode {
                 }
                 break;
             case 1:
-                if (!follower.isBusy() && pathTime.getElapsedTimeSeconds() > 1) {
+                if (!follower.isBusy() && pathTime.getElapsedTimeSeconds() > 1.5) {
                     claw.setState(Claw.ClawState.OPEN);
                     setPathState(2);
                 }

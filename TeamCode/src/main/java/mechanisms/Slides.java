@@ -31,8 +31,8 @@ public class Slides {
         slideLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         slideRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        slideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        slideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        slideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         slideRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
