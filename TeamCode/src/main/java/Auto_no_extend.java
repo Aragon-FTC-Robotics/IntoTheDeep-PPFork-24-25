@@ -121,7 +121,7 @@ public class Auto_no_extend extends OpMode {
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(30), Math.toRadians(30))
-                .setZeroPowerAccelerationMultiplier(6)
+                .setZeroPowerAccelerationMultiplier(8)
                 .build();
 
         score2 = follower.pathBuilder()
@@ -236,7 +236,7 @@ public class Auto_no_extend extends OpMode {
                 }
                 break;
             case 6:
-                if (pathTime.getElapsedTimeSeconds() > 0.8) {
+                if (pathTime.getElapsedTimeSeconds() > 1) {
                     claw.setState(Claw.ClawState.CLOSE);
                     setPathState(7);
                 }
@@ -285,7 +285,6 @@ public class Auto_no_extend extends OpMode {
                 break;
             case 12:
                 if (colorsensor.sensorIsYellow() || !follower.isBusy() || follower.isRobotStuck() || pathTime.getElapsedTimeSeconds() > 2.3) {
-                    intake.setState(STOP);
                     intakeWrist.setState(IntakeWrist.intakeWristState.TRANSFER);
                     follower.followPath(score2);
                     setPathState(13);
@@ -293,13 +292,14 @@ public class Auto_no_extend extends OpMode {
                 break;
             case 13:
                 if (pathTime.getElapsedTimeSeconds() > 0.5) {
+                    intake.setState(STOP);
                     bar.setState(Bar.BarState.AUTOTRANSFER);
                     wrist.setState(Wrist.wristState.AUTOTRANSFER);
                     setPathState(14);
                 }
                 break;
             case 14:
-                if (pathTime.getElapsedTimeSeconds() > 0.8) {
+                if (pathTime.getElapsedTimeSeconds() > 1) {
                     claw.setState(Claw.ClawState.CLOSE);
                     setPathState(15);
                 }
@@ -357,7 +357,7 @@ public class Auto_no_extend extends OpMode {
                 }
                 break;
             case 22:
-                if (pathTime.getElapsedTimeSeconds() > 0.8) {
+                if (pathTime.getElapsedTimeSeconds() > 1) {
                     claw.setState(Claw.ClawState.CLOSE);
                     setPathState(23);
                 }
